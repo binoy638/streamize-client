@@ -13,7 +13,7 @@ const Player: NextPage = () => {
     fluid: true,
     sources: [
       {
-        src: "https://mcloud.backendev.com/video/play/61fb6a2aa361f7031798650b/zigf8",
+        src: "https://api.streamize.backendev.com/video/play/61fb6a2aa361f7031798650b/zigf8",
         type: "video/mp4",
       },
     ],
