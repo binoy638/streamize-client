@@ -1,8 +1,7 @@
-import type { NextPage } from "next";
 import React from "react";
-import VideoJS from "../components/VideoJs";
+import VideoJS from "../VideoJs";
 
-const Player: NextPage = () => {
+const Player = ({ src }: { src: string }) => {
   const playerRef = React.useRef<any>(null);
 
   const videoJsOptions = {
@@ -13,8 +12,7 @@ const Player: NextPage = () => {
     fluid: true,
     sources: [
       {
-        src: "https://api.streamize.backendev.com/video/play/wnruo/xyjux",
-        // src: "http://localhost:8000/video/play/",
+        src: src,
         type: "video/mp4",
       },
     ],
@@ -33,13 +31,7 @@ const Player: NextPage = () => {
     });
   };
 
-  return (
-    <div className="w-full flex justify-center items-center h-screen">
-      <div className="w-7/12">
-        <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
-      </div>
-    </div>
-  );
+  return <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />;
 };
 
 export default Player;

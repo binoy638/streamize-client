@@ -3,8 +3,9 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Provider } from "../@types/store";
+import Searchbar from "../components/search/Searchbar";
+import SearchResults from "../components/search/SearchResults";
 import useSearch from "../hooks/useSearch";
-import { useTypedSelector } from "../hooks/useTypedSelector";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -29,27 +30,11 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Streamize</title>
+        <title>Search: {query}</title>
       </Head>
-      <section className="px-4 py-4 lg:pt-6">
-        {isLoading ? (
-          <div>Loading...</div>
-        ) : error ? (
-          <div>Something went wrong</div>
-        ) : (
-          <div>
-            {data &&
-              data.length > 0 &&
-              data.map((item) => {
-                return (
-                  <div key={item.name}>
-                    <a>{item.name}</a>
-                  </div>
-                );
-              })}
-          </div>
-        )}
-      </section>
+
+      <Searchbar def="search" />
+      <SearchResults isLoading={isLoading} error={error} data={data} />
     </>
   );
 };

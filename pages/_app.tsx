@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 import store from "../store";
+import Layout from "../components/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </QueryClientProvider>
     </Provider>
   );
