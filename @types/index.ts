@@ -13,9 +13,9 @@ export type TorrentStatus =
   | "downloading"
   | "converting"
   | "done"
-  | "error"
-  | "waiting"
-  | "pause";
+  | "error";
+// | "waiting"
+// | "pause";
 
 export interface IVideo {
   name: string;
@@ -25,13 +25,13 @@ export interface IVideo {
   ext: string;
   isConvertable: boolean;
   status: TorrentStatus;
-  convertStatus: {
+  convertStatus?: {
     progress: number;
     state: ConvertState;
   };
 }
 
-export interface IAddedTorrent {
+export interface IAddedTorrentFull {
   _id: string;
   slug: string;
   magnet: string;
@@ -40,7 +40,17 @@ export interface IAddedTorrent {
   size: number;
   files: IVideo[];
   isMultiVideos: boolean;
-  status: TorrentStatus;
+  status: "downloading" | "converting" | "done";
   isMedia: boolean;
   downloadInfo: IDownloadInfo;
 }
+
+export interface IAddedTorrentPartial {
+  _id: string;
+  slug: string;
+  magnet: string;
+  status: "added" | "error";
+  isMedia: boolean;
+}
+
+export type IAddedTorrent = IAddedTorrentFull | IAddedTorrentPartial;

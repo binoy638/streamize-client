@@ -19,7 +19,16 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                   <div className="bg-blue-700 text-white">Torrent Added</div>
                   <div className="truncate">{item.magnet}</div>
                 </div>
-              ) : (
+              ) : item.status === "error" ? (
+                <div>
+                  <div className="bg-red-500 text-white">
+                    Could not download
+                  </div>
+                  <div className="truncate">{item.magnet}</div>
+                </div>
+              ) : item.status === "downloading" ||
+                item.status === "done" ||
+                item.status === "converting" ? (
                 <>
                   <div className="flex justify-between">
                     <Link href={`/${item.slug}`} passHref>
@@ -31,7 +40,6 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                   </div>
                   {item.downloadInfo && (
                     <>
-                      {" "}
                       <div className="w-full bg-gray-200 rounded-full">
                         <div
                           className="bg-green-500 text-xs font-medium text-blue-100 text-center  leading-none "
@@ -46,7 +54,7 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                       </div>
                       <div className="hidden lg:flex justify-start gap-4 ">
                         <p>
-                          Download:{" "}
+                          Download:
                           {prettyBytes(item.downloadInfo.downloadSpeed)}
                           /s
                         </p>
@@ -61,7 +69,7 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                     </>
                   )}
                 </>
-              )}
+              ) : null}
             </div>
           </div>
         );

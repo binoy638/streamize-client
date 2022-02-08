@@ -22,3 +22,11 @@ export interface ISearchBarSlice {
     magnet: string;
   };
 }
+
+export interface IUIState {
+  snackbar: {
+    show: boolean;
+    message: string;
+    type: "success" | "error" | "info";
+  };
+}

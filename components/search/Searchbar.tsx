@@ -47,24 +47,36 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
           {type === "search" ? "Search" : "Add"}
           <SelectorIcon className="h-5 w-5" />
         </button>
-        <input
-          type="text"
-          onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-          placeholder={`${
-            type === "search" ? "Enter movie name" : "Add magnet link"
-          }`}
-          className="w-full border-gray-400 border-t border-b focus:outline-none pl-4"
-        />
-        <button
-          type="submit"
-          className="bg-secondary rounded-r px-4 border-t border-r border-b border-secondary hover:opacity-80"
-        >
-          {type === "search" ? (
-            <SearchIcon className="h-5 w-5" />
-          ) : (
-            <PlusIcon className="h-5 w-5" />
-          )}
-        </button>
+        {type === "search" ? (
+          <>
+            <input
+              type="text"
+              onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+              placeholder="Enter movie name"
+              className="w-full border-gray-400 border-t border-b focus:outline-none pl-4"
+            />
+            <button
+              type="submit"
+              className="bg-secondary rounded-r px-4 border-t border-r border-b border-secondary hover:opacity-80"
+            >
+              <SearchIcon className="h-5 w-5" />
+            </button>
+          </>
+        ) : (
+          <>
+            <input
+              type="text"
+              placeholder="Add magnet link"
+              className="w-full border-gray-400 border-t border-b focus:outline-none pl-4"
+            />
+            <button
+              type="submit"
+              className="bg-secondary rounded-r px-4 border-t border-r border-b border-secondary hover:opacity-80"
+            >
+              <PlusIcon className="h-5 w-5" />
+            </button>
+          </>
+        )}
       </form>
       {type === "search" && showProviderSelector && <ProviderSelector />}
     </div>
