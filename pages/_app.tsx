@@ -1,11 +1,13 @@
 import "../styles/globals.css";
-import { QueryClientProvider, QueryClient } from "react-query";
-import { Provider } from "react-redux";
-import { ReactQueryDevtools } from "react-query/devtools";
+
 import type { AppProps } from "next/app";
 import { useState } from "react";
-import store from "../store";
+import { QueryClient,QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { Provider } from "react-redux";
+
 import Layout from "../components/Layout";
+import store from "../store";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());

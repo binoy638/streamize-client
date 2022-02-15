@@ -1,4 +1,5 @@
 import React from "react";
+
 import { TorrentData } from "../../../@types/store";
 import Error from "./Error";
 import Loading from "./Loading";
@@ -13,11 +14,11 @@ interface SearchResultsProps {
 function SearchResults({ isLoading, error, data }: SearchResultsProps) {
   return isLoading ? (
     <Loading />
-  ) : error ? (
+  ) : (error ? (
     <Error />
   ) : (
     <>{data && data.length > 0 && <Results data={data} />}</>
-  );
+  ));
 }
 
 export default SearchResults;

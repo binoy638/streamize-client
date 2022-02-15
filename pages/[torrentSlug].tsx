@@ -3,6 +3,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+
 import { getTorrent } from "../API";
 import TorrentInfo from "../components/TorrentInfo";
 
@@ -24,9 +25,7 @@ const Torrent: NextPage = () => {
     () => getTorrent(slug),
     {
       refetchInterval: (data) => {
-        if (data && data.status === "done") {
-          return 0;
-        } else return 5000;
+        return data && data.status === "done" ? 0 : 5000;
       },
     }
   );
@@ -39,11 +38,11 @@ const Torrent: NextPage = () => {
       <div>
         {isLoading ? (
           <div>Loading...</div>
-        ) : isError ? (
+        ) : (isError ? (
           <div>Error</div>
         ) : (
           <div>{data && <TorrentInfo data={data} />}</div>
-        )}
+        ))}
       </div>
     </>
   );

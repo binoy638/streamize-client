@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import { IUIState } from "../../@types/store";
 
 const initialState: IUIState = {
@@ -14,11 +15,7 @@ const UISlice = createSlice({
   initialState,
   reducers: {
     toggleSnackbar: (state, action: PayloadAction<"show" | "hide">) => {
-      if (action.payload === "show") {
-        state.snackbar.show = true;
-      } else {
-        state.snackbar.show = false;
-      }
+      state.snackbar.show = action.payload === "show" ? true : false;
     },
     setSnackbarMessage: (
       state,

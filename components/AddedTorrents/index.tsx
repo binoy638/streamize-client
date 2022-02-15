@@ -1,9 +1,10 @@
 import React from "react";
 import { useQuery } from "react-query";
+
 import { getAddedTorrents } from "../../API";
-import Loading from "./Loading";
-import Error from "./Error";
 import Empty from "./Empty";
+import Error from "./Error";
+import Loading from "./Loading";
 import TorrentList from "./TorrentList";
 
 function AddedTorrentList() {
@@ -14,11 +15,11 @@ function AddedTorrentList() {
   );
   return isLoading ? (
     <Loading />
-  ) : error ? (
+  ) : (error ? (
     <Error />
   ) : (
     <>{data && data.length > 0 ? <TorrentList data={data} /> : <Empty />}</>
-  );
+  ));
 }
 
 export default AddedTorrentList;

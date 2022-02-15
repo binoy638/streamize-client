@@ -1,4 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import searchBarSlice from "./slice/searchBar.slice";
 import UISlice from "./slice/UI.slice";
 

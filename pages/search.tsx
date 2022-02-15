@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
 import { Provider } from "../@types/store";
 import Searchbar from "../components/search/Searchbar";
 import SearchResults from "../components/search/SearchResults";

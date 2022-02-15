@@ -1,0 +1,10 @@
+node_modules
+dist
+.next 
+.vscode 
+.prettierignore
+.prettierrc.js 
+tailwind.config.js
+postcss.config.js 
+.eslintrc.js
+.eslintignore

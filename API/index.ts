@@ -46,3 +46,6 @@ export const getTorrent = async (
 export const getVideoLink = (torrentSlug: string, videoSlug: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/play/${torrentSlug}/${videoSlug}`;
 // getVideoLink(slugT, slugV);
+
+export const addMagnetLink = (magnet: string) =>
+  API.post("/torrent", { magnet });

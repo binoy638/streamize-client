@@ -1,34 +1,36 @@
-import Link from "next/link";
-import prettyBytes from "pretty-bytes";
-import React from "react";
-import { IAddedTorrent } from "../../@types";
-import { prettyTime } from "../../utils";
+/* eslint-disable unicorn/no-nested-ternary */
+import Link from 'next/link';
+import prettyBytes from 'pretty-bytes';
+import React from 'react';
+
+import { IAddedTorrent } from '../../@types';
+import { prettyTime } from '../../utils';
 
 function TorrentList({ data }: { data: IAddedTorrent[] }) {
   return (
     <div className="mt-4 lg:mt-6 overflow-hidden flex flex-col gap-4">
-      {data.map((item) => {
+      {data.map(item => {
         return (
           <div
-            className="border-2 rounded cursor-pointer hover:bg-gray-50 pb-1 lg:pb-0"
+            className="border-2 rounded cursor-pointer pb-1 lg:pb-0 "
             key={item.slug}
           >
             <div className="flex flex-col">
-              {item.status === "added" ? (
+              {item.status === 'added' ? (
                 <div className="flex flex-col gap-2">
                   <div className="bg-blue-700 text-white">Torrent Added</div>
                   <div className="truncate">{item.magnet}</div>
                 </div>
-              ) : item.status === "error" ? (
+              ) : item.status === 'error' ? (
                 <div>
                   <div className="bg-red-500 text-white">
                     Could not download
                   </div>
                   <div className="truncate">{item.magnet}</div>
                 </div>
-              ) : item.status === "downloading" ||
-                item.status === "done" ||
-                item.status === "converting" ? (
+              ) : item.status === 'downloading' ||
+                item.status === 'done' ||
+                item.status === 'converting' ? (
                 <>
                   <div className="flex justify-between">
                     <Link href={`/${item.slug}`} passHref>
@@ -46,7 +48,7 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                           style={{
                             width: `${Math.round(
                               item.downloadInfo.progress * 100
-                            )}%`,
+                            )}%`
                           }}
                         >
                           {Math.round(item.downloadInfo.progress * 100)}%

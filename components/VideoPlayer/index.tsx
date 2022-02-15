@@ -1,4 +1,5 @@
 import React from "react";
+
 import VideoJS from "../VideoJs";
 
 const Player = ({ src }: { src: string }) => {

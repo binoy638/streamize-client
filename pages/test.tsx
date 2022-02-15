@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import React from "react";
+
 import VideoJS from "../components/VideoJs";
 
 const Player: NextPage = () => {

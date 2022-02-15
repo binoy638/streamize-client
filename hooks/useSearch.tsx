@@ -1,5 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
+
 import { Provider } from "../@types/store";
 import { searchTorrentAPI } from "../API";
 

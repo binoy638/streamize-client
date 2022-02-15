@@ -1,4 +1,5 @@
 import React from "react";
+
 import { TorrentData } from "../../../@types/store";
 
 function Results({ data }: { data: TorrentData[] }) {

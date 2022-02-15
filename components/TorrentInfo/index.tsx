@@ -1,21 +1,24 @@
-import Link from "next/link";
-import React from "react";
-import { IAddedTorrent } from "../../@types";
+import Link from 'next/link';
+import React from 'react';
+
+import { IAddedTorrent } from '../../@types';
 
 function index({ data }: { data: IAddedTorrent }) {
-  return (
+  return data.status === 'downloading' ||
+    data.status === 'converting' ||
+    data.status === 'done' ? (
     <div>
       <div>{data.name}</div>
       <div>
         <div>Files</div>
         <div>
-          {data.files.map((item) => {
+          {data.files.map(item => {
             return (
               <div key={item.slug}>
                 <Link
                   href={{
-                    pathname: "/[torrentSlug]/[videoSlug]",
-                    query: { torrentSlug: data.slug, videoSlug: item.slug },
+                    pathname: '/[torrentSlug]/[videoSlug]',
+                    query: { torrentSlug: data.slug, videoSlug: item.slug }
                   }}
                   passHref
                 >
@@ -27,6 +30,8 @@ function index({ data }: { data: IAddedTorrent }) {
         </div>
       </div>
     </div>
+  ) : (
+    <div>Torrent added, no info yet</div>
   );
 }
 

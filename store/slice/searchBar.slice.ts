@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
 import { ISearchBarSlice, Provider } from "../../@types/store";
 
 // Define the initial state using that type
@@ -23,14 +24,14 @@ const searchBarSlice = createSlice({
     setSearchProvider: (state, action: PayloadAction<Provider>) => {
       state.search.torrentProvider = action.payload;
     },
-    addMagnetLink: (state, action: PayloadAction<string>) => {
+    setMagnetLink: (state, action: PayloadAction<string>) => {
       //! validate magnet link
       state.add.magnet = action.payload;
     },
   },
 });
 
-export const { setSearchQuery, setSearchProvider, addMagnetLink } =
+export const { setSearchQuery, setSearchProvider, setMagnetLink } =
   searchBarSlice.actions;
 
 export default searchBarSlice.reducer;
