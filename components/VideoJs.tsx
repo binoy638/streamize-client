@@ -60,7 +60,7 @@ export const VideoJS = ({
                 kind="captions"
                 src={getSubtitleLink(sub.fileName)}
                 srcLang={sub.language}
-                label={sub.title}
+                label={sub.language}
               />
             );
           })}
