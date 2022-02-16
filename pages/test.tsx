@@ -1,7 +1,7 @@
-import type { NextPage } from "next";
-import React from "react";
+import type { NextPage } from 'next';
+import React from 'react';
 
-import VideoJS from "../components/VideoJs";
+import VideoJS from '../components/VideoJs';
 
 const Player: NextPage = () => {
   const playerRef = React.useRef<any>(null);
@@ -14,23 +14,23 @@ const Player: NextPage = () => {
     fluid: true,
     sources: [
       {
-        src: "https://api.streamize.backendev.com/video/play/wnruo/xyjux",
+        src: 'http://localhost:8000/video/play/xn6jr',
         // src: "http://localhost:8000/video/play/",
-        type: "video/mp4",
-      },
-    ],
+        type: 'video/mp4'
+      }
+    ]
   };
 
   const handlePlayerReady = (player: videojs.VideoJsPlayer) => {
     playerRef.current = player;
 
     // you can handle player events here
-    player.on("waiting", () => {
-      console.log("player is waiting");
+    player.on('waiting', () => {
+      console.log('player is waiting');
     });
 
-    player.on("dispose", () => {
-      console.log("player will dispose");
+    player.on('dispose', () => {
+      console.log('player will dispose');
     });
   };
 

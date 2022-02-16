@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import VideoJS from "../VideoJs";
+import { ISubtitle } from '../../@types';
+import VideoJS from '../VideoJs';
 
-const Player = ({ src }: { src: string }) => {
+const Player = ({ src, subtitle }: { src: string; subtitle: ISubtitle[] }) => {
   const playerRef = React.useRef<any>(null);
 
   const videoJsOptions = {
@@ -14,25 +15,31 @@ const Player = ({ src }: { src: string }) => {
     sources: [
       {
         src: src,
-        type: "video/mp4",
-      },
-    ],
+        type: 'video/mp4'
+      }
+    ]
   };
 
   const handlePlayerReady = (player: videojs.VideoJsPlayer) => {
     playerRef.current = player;
 
     // you can handle player events here
-    player.on("waiting", () => {
-      console.log("player is waiting");
+    player.on('waiting', () => {
+      console.log('player is waiting');
     });
 
-    player.on("dispose", () => {
-      console.log("player will dispose");
+    player.on('dispose', () => {
+      console.log('player will dispose');
     });
   };
 
-  return <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />;
+  return (
+    <VideoJS
+      options={videoJsOptions}
+      onReady={handlePlayerReady}
+      subtitles={subtitle}
+    />
+  );
 };
 
 export default Player;

@@ -85,7 +85,7 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 text-black">
       <form onSubmit={onSubmitHandler} className="flex h-10">
         <button
           type="button"
@@ -106,7 +106,7 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
             />
             <button
               type="submit"
-              className="bg-secondary rounded-r px-4 border-t border-r border-b border-secondary hover:opacity-80"
+              className="bg-primaryText rounded-r px-4 border-t border-r border-b border-primaryText hover:opacity-80"
             >
               <SearchIcon className="h-5 w-5" />
             </button>
@@ -122,7 +122,7 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
             />
             <button
               type="submit"
-              className="bg-secondary rounded-r px-4 border-t border-r border-b border-secondary hover:opacity-80"
+              className="bg-primaryText rounded-r px-4 border-t border-r border-b border-primaryText hover:opacity-80"
             >
               <PlusIcon className="h-5 w-5" />
             </button>

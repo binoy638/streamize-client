@@ -1,32 +1,33 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+/* eslint-disable unicorn/no-nested-ternary */
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 
-import { getTorrent } from "../API";
-import TorrentInfo from "../components/TorrentInfo";
+import { getTorrent } from '../API';
+import TorrentInfo from '../components/TorrentInfo';
 
 const Torrent: NextPage = () => {
   const router = useRouter();
 
-  const [slug, setSlug] = useState("random");
+  const [slug, setSlug] = useState('random');
 
   useEffect(() => {
     const { torrentSlug } = router.query;
 
-    if (torrentSlug && typeof torrentSlug === "string") {
+    if (torrentSlug && typeof torrentSlug === 'string') {
       setSlug(torrentSlug);
     }
   }, [router]);
 
   const { isError, isLoading, data } = useQuery(
-    ["video", slug],
+    ['torrent', slug],
     () => getTorrent(slug),
     {
-      refetchInterval: (data) => {
-        return data && data.status === "done" ? 0 : 5000;
-      },
+      refetchInterval: data => {
+        return data && data.status === 'done' ? 0 : 5000;
+      }
     }
   );
 
@@ -38,11 +39,11 @@ const Torrent: NextPage = () => {
       <div>
         {isLoading ? (
           <div>Loading...</div>
-        ) : (isError ? (
+        ) : isError ? (
           <div>Error</div>
         ) : (
           <div>{data && <TorrentInfo data={data} />}</div>
-        ))}
+        )}
       </div>
     </>
   );

@@ -1,22 +1,23 @@
 module.exports = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
     extend: {
       fontFamily: {
-        lato: ["Lato", "sans-serif"],
-        publicSans: ["Public Sans", "sans-serif"],
-        balsamiqSans: ["Balsamiq Sans", "sans-serif"],
+        lato: ['Lato', 'sans-serif'],
+        publicSans: ['Public Sans', 'sans-serif'],
+        balsamiqSans: ['Balsamiq Sans', 'sans-serif']
       },
       colors: {
-        primary: "#000000",
-        secondary: "#ed5a5a",
-        tertiary: "#0E5FFF",
-        secondaryText: "#999999",
-      },
-    },
+        background: '#181818',
+        primary: '#202020',
+        // secondary: '#1B1B30',
+        primaryText: '#EC4D7D',
+        secondaryText: '#ffffff'
+      }
+    }
   },
-  plugins: [],
+  plugins: []
 };

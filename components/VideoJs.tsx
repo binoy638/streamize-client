@@ -1,14 +1,19 @@
-import "video.js/dist/video-js.css";
+import 'video.js/dist/video-js.css';
 
-import React from "react";
-import videojs from "video.js";
+import React from 'react';
+import videojs from 'video.js';
+
+import { ISubtitle } from '../@types';
+import { getSubtitleLink } from '../API';
 
 export const VideoJS = ({
   options,
   onReady,
+  subtitles = []
 }: {
   options: videojs.PlayerOptions;
   onReady: any;
+  subtitles: ISubtitle[];
 }) => {
   const videoRef = React.useRef<any>();
   const playerRef = React.useRef<any>();
@@ -20,7 +25,7 @@ export const VideoJS = ({
       if (!videoElement) return;
 
       const player = (playerRef.current = videojs(videoElement, options, () => {
-        console.log("player is ready");
+        console.log('player is ready');
         onReady && onReady(player);
       }));
     } else {
@@ -47,12 +52,18 @@ export const VideoJS = ({
   return (
     <div data-vjs-player>
       <video ref={videoRef} className="video-js vjs-big-play-centered">
-        {/* <track
-          kind="captions"
-          src="https://hs-activestorage.s3.eu-west-1.amazonaws.com/yvu0znh5lo0qy2i6r27ctvct9t78?response-content-disposition=attachment%3B%20filename%3D%22Venom.Let.There.Be.Carnage.2021.2160p.10bit.HDR.DV.BluRay.8CH.x265.HEVC-PSA.vtt%22%3B%20filename%2A%3DUTF-8%27%27Venom.Let.There.Be.Carnage.2021.2160p.10bit.HDR.DV.BluRay.8CH.x265.HEVC-PSA.vtt&response-content-type=text%2Fvtt&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIUVYIPOTEGJRYD6Q%2F20220203%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20220203T062917Z&X-Amz-Expires=432000&X-Amz-SignedHeaders=host&X-Amz-Signature=6eab42c6ba72d3f81872171d2aea2b7723fca6378ea33e6e17e372f66f1a367a"
-          srcLang="en"
-          label="English"
-        /> */}
+        {subtitles.length > 0 &&
+          subtitles.map(sub => {
+            return (
+              <track
+                key={sub._id || sub.fileName}
+                kind="captions"
+                src={getSubtitleLink(sub.fileName)}
+                srcLang={sub.language}
+                label={sub.title}
+              />
+            );
+          })}
       </video>
     </div>
   );

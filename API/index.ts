@@ -1,6 +1,6 @@
-import { IAddedTorrent } from "../@types";
-import { Provider, TorrentData } from "../@types/store";
-import { API, TorrentScrapper } from "./config";
+import { IAddedTorrent, IVideo } from '../@types';
+import { Provider, TorrentData } from '../@types/store';
+import { API, TorrentScrapper } from './config';
 
 export const searchTorrentAPI = async (
   query: string,
@@ -11,22 +11,22 @@ export const searchTorrentAPI = async (
 
     return data.result.map((item: TorrentData) => ({
       ...item,
-      provider,
+      provider
     }));
   } catch (error) {
     console.log(error);
-    throw new Error("Error while searching torrents");
+    throw new Error('Error while searching torrents');
   }
 };
 
 export const getAddedTorrents = async (): Promise<IAddedTorrent[]> => {
   try {
-    const { data } = await API.get("/torrent");
+    const { data } = await API.get('/torrent');
     if (!data) return [];
     return data.torrents;
   } catch (error) {
     console.log(error);
-    throw new Error("Error while fetching added torrents");
+    throw new Error('Error while fetching added torrents');
   }
 };
 
@@ -39,13 +39,27 @@ export const getTorrent = async (
     return data;
   } catch (error) {
     console.log(error);
-    throw new Error("Error while fetching torrent");
+    throw new Error('Error while fetching torrent');
+  }
+};
+
+export const getVideo = async (slug: string): Promise<IVideo | null> => {
+  try {
+    const { data } = await API.get(`/video/${slug}`);
+    if (!data) return null;
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error while fetching video info');
   }
 };
 
 export const getVideoLink = (torrentSlug: string, videoSlug: string) =>
-  `${process.env.NEXT_PUBLIC_BASE_URL}video/play/${torrentSlug}/${videoSlug}`;
+  `${process.env.NEXT_PUBLIC_BASE_URL}video/play/${videoSlug}`;
 // getVideoLink(slugT, slugV);
 
+export const getSubtitleLink = (filename: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${filename}`;
+
 export const addMagnetLink = (magnet: string) =>
-  API.post("/torrent", { magnet });
+  API.post('/torrent', { magnet });

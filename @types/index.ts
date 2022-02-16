@@ -6,14 +6,14 @@ export interface IDownloadInfo {
   paused: boolean;
   completed: boolean;
 }
-export type ConvertState = "processing" | "done" | "error" | "waiting";
+export type ConvertState = 'processing' | 'done' | 'error' | 'waiting';
 
 export type TorrentStatus =
-  | "added"
-  | "downloading"
-  | "converting"
-  | "done"
-  | "error";
+  | 'added'
+  | 'downloading'
+  | 'converting'
+  | 'done'
+  | 'error';
 // | "waiting"
 // | "pause";
 
@@ -23,12 +23,20 @@ export interface IVideo {
   size: number;
   path: string;
   ext: string;
+  subtitles: ISubtitle[];
   isConvertable: boolean;
   status: TorrentStatus;
   convertStatus?: {
     progress: number;
     state: ConvertState;
   };
+}
+export interface ISubtitle {
+  _id: string;
+  fileName: string;
+  title: string;
+  language: string;
+  path: string;
 }
 
 export interface IAddedTorrentFull {
@@ -40,7 +48,7 @@ export interface IAddedTorrentFull {
   size: number;
   files: IVideo[];
   isMultiVideos: boolean;
-  status: "downloading" | "converting" | "done";
+  status: 'downloading' | 'converting' | 'done';
   isMedia: boolean;
   downloadInfo: IDownloadInfo;
 }
@@ -49,7 +57,7 @@ export interface IAddedTorrentPartial {
   _id: string;
   slug: string;
   magnet: string;
-  status: "added" | "error";
+  status: 'added' | 'error';
   isMedia: boolean;
 }
 
