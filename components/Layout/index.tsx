@@ -12,7 +12,7 @@ function index({ children }: { children: React.ReactNode }) {
         </Link>
       </header>
 
-      <main className="pt-4 md:px-10 lg:px-56 lg:pt-10 font-lato text-secondaryText">
+      <main className="pt-4  md:px-10 lg:px-56 lg:pt-10 font-lato overflow-hidden  text-secondaryText">
         {children}
       </main>
     </section>

@@ -7,7 +7,7 @@ function index({ data }: { data: IAddedTorrent }) {
   return data.status === 'downloading' ||
     data.status === 'converting' ||
     data.status === 'done' ? (
-    <div>
+    <div className="">
       <div>{data.name}</div>
       <div>
         <div>Files</div>
