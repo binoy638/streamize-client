@@ -26,6 +26,7 @@ export interface IVideo {
   subtitles: ISubtitle[];
   isConvertable: boolean;
   status: TorrentStatus;
+  downloadInfo?: IDownloadInfo;
   convertStatus?: {
     progress: number;
     state: ConvertState;
@@ -50,7 +51,7 @@ export interface IAddedTorrentFull {
   isMultiVideos: boolean;
   status: 'downloading' | 'converting' | 'done';
   isMedia: boolean;
-  downloadInfo: IDownloadInfo;
+  downloadInfo?: IDownloadInfo;
 }
 
 export interface IAddedTorrentPartial {

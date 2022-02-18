@@ -3,11 +3,41 @@ import { DotsVerticalIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import prettyBytes from 'pretty-bytes';
 import React from 'react';
+import { useMutation } from 'react-query';
 
 import { IAddedTorrent } from '../../@types';
+import { deleteTorrent } from '../../API';
+import { useTypedDispatch } from '../../hooks/useTypedDispatch';
+import { setSnackbarMessage, toggleSnackbar } from '../../store/slice/UI.slice';
 import { prettyTime } from '../../utils';
 
 function TorrentList({ data }: { data: IAddedTorrent[] }) {
+  const dispatch = useTypedDispatch();
+  const { mutate } = useMutation(deleteTorrent, {
+    onSuccess: () => {
+      dispatch(
+        setSnackbarMessage({
+          message: 'Torrent deleted successfully',
+          type: 'success'
+        })
+      );
+      dispatch(toggleSnackbar('show'));
+    },
+    onError: () => {
+      dispatch(
+        setSnackbarMessage({
+          message: 'Something went wrong',
+          type: 'error'
+        })
+      );
+      dispatch(toggleSnackbar('show'));
+    }
+  });
+
+  const deleteTorrentHandler = (slug: string) => {
+    mutate(slug);
+  };
+
   return (
     <div className="mt-4 lg:mt-6 overflow-hidden flex flex-col gap-4 text-secondaryText">
       {data.map(item => {
@@ -74,7 +104,10 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                 ) : null}
               </div>
               <div className="my-auto px-2">
-                <DotsVerticalIcon className="h-5 w-5 cursor-pointer" />
+                <DotsVerticalIcon
+                  className="h-5 w-5 cursor-pointer"
+                  onClick={() => deleteTorrentHandler(item.slug)}
+                />
               </div>
             </div>
           </div>

@@ -63,3 +63,5 @@ export const getSubtitleLink = (filename: string) =>
 
 export const addMagnetLink = (magnet: string) =>
   API.post('/torrent', { magnet });
+
+export const deleteTorrent = (slug: string) => API.delete(`/torrent/${slug}`);
