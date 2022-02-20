@@ -61,9 +61,9 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                   item.status === 'done' ||
                   item.status === 'converting' ? (
                   <>
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                       <Link href={`/${item.slug}`} passHref>
-                        <p className="truncate w-4/5 hover:underline cursor-pointer">
+                        <p className="truncate w-4/5 px-1 py-2 flex hover:underline cursor-pointer">
                           {item.name}
                         </p>
                       </Link>

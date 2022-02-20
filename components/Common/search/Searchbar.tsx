@@ -109,9 +109,9 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
             />
             <button
               type="submit"
-              className="bg-primaryText rounded-r px-4 border-t border-r border-b border-primaryText hover:opacity-80"
+              className="bg-primary rounded-r px-4 border-t border-r border-b border-primary hover:opacity-80"
             >
-              <SearchIcon className="h-5 w-5" />
+              <SearchIcon className="h-5 w-5 text-white" />
             </button>
           </>
         ) : (
@@ -125,9 +125,9 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
             />
             <button
               type="submit"
-              className="bg-primaryText rounded-r px-4 border-t border-r border-b border-primaryText hover:opacity-80"
+              className="bg-primary rounded-r px-4 border-t border-r border-b border-primary hover:opacity-80"
             >
-              <PlusIcon className="h-5 w-5" />
+              <PlusIcon className="h-5 w-5 text-white" />
             </button>
           </>
         )}
