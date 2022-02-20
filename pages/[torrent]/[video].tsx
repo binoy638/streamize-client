@@ -1,33 +1,19 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
-import { getSubtitleLink, getVideo, getVideoLink } from '../../API';
+import { getVideo, getVideoLink } from '../../API';
 import Player from '../../components/VideoPlayer';
 
 const Video: NextPage = () => {
   const router = useRouter();
 
-  const [slugV, setSlugV] = useState('');
+  const { video, torrent } = router.query;
 
-  const [slugT, setSlugT] = useState('');
-
-  const { isError, isLoading, data } = useQuery(['video', slugV], () =>
-    getVideo(slugV)
+  const { isError, isLoading, data } = useQuery(['video', video], () =>
+    getVideo(video as string)
   );
-
-  useEffect(() => {
-    const { videoSlug, torrentSlug } = router.query;
-
-    if (videoSlug && typeof videoSlug === 'string') {
-      setSlugV(videoSlug);
-    }
-    if (torrentSlug && typeof torrentSlug === 'string') {
-      setSlugT(torrentSlug);
-    }
-  }, [router]);
 
   if (isError) {
     return (
@@ -52,7 +38,10 @@ const Video: NextPage = () => {
     return (
       <>
         <div>
-          <Player src={getVideoLink(slugT, slugV)} subtitle={data.subtitles} />
+          <Player
+            src={getVideoLink(torrent as string, video as string)}
+            subtitle={data.subtitles}
+          />
           <div>{data.name}</div>
         </div>
       </>

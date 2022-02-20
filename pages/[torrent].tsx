@@ -2,28 +2,19 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { getTorrent } from '../API';
-import TorrentInfo from '../components/TorrentInfo';
+import Torrent from '../components/Torrent';
 
-const Torrent: NextPage = () => {
+const TorrentPage: NextPage = () => {
   const router = useRouter();
 
-  const [slug, setSlug] = useState('random');
-
-  useEffect(() => {
-    const { torrentSlug } = router.query;
-
-    if (torrentSlug && typeof torrentSlug === 'string') {
-      setSlug(torrentSlug);
-    }
-  }, [router]);
+  const torrentSlug = router.query.torrent as string;
 
   const { isError, isLoading, data } = useQuery(
-    ['torrent', slug],
-    () => getTorrent(slug),
+    ['torrent', torrentSlug],
+    () => getTorrent(torrentSlug),
     {
       refetchInterval: data => {
         return data && data.status === 'done' ? 0 : 5000;
@@ -42,11 +33,11 @@ const Torrent: NextPage = () => {
         ) : isError ? (
           <div>Error</div>
         ) : (
-          <div>{data && <TorrentInfo data={data} />}</div>
+          <div>{data && <Torrent data={data} />}</div>
         )}
       </div>
     </>
   );
 };
 
-export default Torrent;
+export default TorrentPage;

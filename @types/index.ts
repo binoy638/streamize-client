@@ -26,7 +26,7 @@ export interface IVideo {
   subtitles: ISubtitle[];
   isConvertable: boolean;
   status: TorrentStatus;
-  downloadInfo?: IDownloadInfo;
+  downloadInfo?: { downloaded: number; progress: number };
   convertStatus?: {
     progress: number;
     state: ConvertState;

@@ -11,7 +11,7 @@
     "prepare": "husky install",
     "pre-commit": "npm run lint && npm run typecheck "
   },
-    "lint-staged": {
+  "lint-staged": {
     "**/*.{ts,tsx}": [
       "eslint \"**/*.{ts,tsx}\" --fix",
       "prettier -w \"**/*.{js,ts,tsx,json}\""

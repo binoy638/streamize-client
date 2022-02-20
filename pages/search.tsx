@@ -1,19 +1,19 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-import { Provider } from "../@types/store";
-import Searchbar from "../components/search/Searchbar";
-import SearchResults from "../components/search/SearchResults";
-import useSearch from "../hooks/useSearch";
+import { Provider } from '../@types/store';
+import Searchbar from '../components/Common/search/Searchbar';
+import SearchResults from '../components/Common/search/SearchResults';
+import useSearch from '../hooks/useSearch';
 
 const Home: NextPage = () => {
   const router = useRouter();
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
-  const [provider, setProvider] = useState<Provider>("rarbg");
+  const [provider, setProvider] = useState<Provider>('rarbg');
 
   const { isLoading, error, data } = useSearch(query, provider);
 
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
     const q = router?.query?.q;
     //! handle invalid provider
     const p = router?.query?.p as Provider;
-    if (typeof q === "string" && typeof p === "string") {
+    if (typeof q === 'string' && typeof p === 'string') {
       setQuery(q);
       setProvider(p);
     }

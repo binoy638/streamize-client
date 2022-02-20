@@ -56,7 +56,9 @@ export const getVideo = async (slug: string): Promise<IVideo | null> => {
 
 export const getVideoLink = (torrentSlug: string, videoSlug: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/play/${videoSlug}`;
-// getVideoLink(slugT, slugV);
+
+export const getDownloadLink = (videoSlug: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_URL}video/download/${videoSlug}`;
 
 export const getSubtitleLink = (filename: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${filename}`;

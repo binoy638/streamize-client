@@ -14,8 +14,8 @@ module.exports = {
         background: '#181818',
         primary: '#202020',
         // secondary: '#1B1B30',
-        primaryText: '#EC4D7D',
-        secondaryText: '#ffffff'
+        primaryText: '#FF0A0A',
+        secondaryText: '#cecccc'
       }
     }
   },
