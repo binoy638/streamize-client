@@ -7,9 +7,9 @@ export const searchTorrentAPI = async (
   provider: Provider
 ): Promise<TorrentData[]> => {
   try {
-    const { data } = await TorrentScrapper.get(`${provider}/search?q=${query}`);
+    const { data } = await TorrentScrapper.get(`search/${provider}?q=${query}`);
 
-    return data.result.map((item: TorrentData) => ({
+    return data.results.map((item: TorrentData) => ({
       ...item,
       provider
     }));

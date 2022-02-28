@@ -8,7 +8,7 @@ function index({ children }: { children: React.ReactNode }) {
       <Head>
         <title>Streamize</title>
       </Head>
-      <section className="px-4 py-4 lg:pt-6 bg-background h-screen w-screen">
+      <section className="px-4 py-4 lg:pt-6  h-screen w-screen">
         <header className="font-balsamiqSans text-5xl font-bold flex justify-center">
           <Link href={'/'} passHref>
             <a className="cursor-pointer text-primaryText hover:opacity-75">

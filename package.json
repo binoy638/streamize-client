@@ -20,6 +20,10 @@
   "dependencies": {
     "@headlessui/react": "^1.4.3",
     "@heroicons/react": "^1.0.5",
+    "@mantine/core": "^3.6.11",
+    "@mantine/hooks": "^3.6.11",
+    "@mantine/modals": "^3.6.11",
+    "@mantine/next": "^3.6.11",
     "@reduxjs/toolkit": "^1.7.2",
     "axios": "^0.25.0",
     "next": "12.0.9",

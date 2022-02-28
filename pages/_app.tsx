@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 
+import { MantineProvider } from '@mantine/core';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -15,9 +16,18 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <MantineProvider
+          withGlobalStyles
+          withNormalizeCSS
+          theme={{
+            /** Put your mantine theme override here */
+            colorScheme: 'dark'
+          }}
+        >
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </MantineProvider>
       </QueryClientProvider>
     </Provider>
   );

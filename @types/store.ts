@@ -1,4 +1,4 @@
-export type Provider = "rarbg" | "piratebay" | "1337" | "nyaa";
+export type Provider = 'rarbg' | 'tpb' | '1337x' | 'nyaa';
 
 export interface TorrentData {
   name: string;
@@ -13,7 +13,7 @@ export interface TorrentData {
 }
 
 export interface ISearchBarSlice {
-  type: "add" | "search";
+  type: 'add' | 'search';
   search: {
     query: string;
     torrentProvider: Provider;
@@ -27,6 +27,6 @@ export interface IUIState {
   snackbar: {
     show: boolean;
     message: string;
-    type: "success" | "error" | "info";
+    type: 'success' | 'error' | 'info';
   };
 }
