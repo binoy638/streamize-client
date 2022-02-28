@@ -10,13 +10,13 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 
-import { addMagnetLink } from '../../../API';
-import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
-import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import { addMagnetLink } from '../../API';
+import { useTypedDispatch } from '../../hooks/useTypedDispatch';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 import {
   setMagnetLink,
   setSearchQuery
-} from '../../../store/slice/searchBar.slice';
+} from '../../store/slice/searchBar.slice';
 import ProviderSelector from './ProviderSelector';
 
 interface SearchbarProps {

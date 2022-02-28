@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/no-nested-ternary */
 import React from 'react';
 
-import { TorrentData } from '../../../../@types/store';
+import { TorrentData } from '../../../@types/store';
 import Error from './Error';
 import Loading from './Loading';
 import Results from './Results';

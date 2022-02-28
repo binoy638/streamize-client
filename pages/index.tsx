@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 
-import Searchbar from '../components/Common/search/Searchbar';
 import AddedTorrentList from '../components/Home';
+import Searchbar from '../components/search/Searchbar';
 
 const Home: NextPage = () => {
   return (

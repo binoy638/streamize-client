@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
 import { Provider } from '../@types/store';
-import Searchbar from '../components/Common/search/Searchbar';
-import SearchResults from '../components/Common/search/SearchResults';
+import Searchbar from '../components/search/Searchbar';
+import SearchResults from '../components/search/SearchResults';
 import useSearch from '../hooks/useSearch';
 
 const Home: NextPage = () => {
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 
   const [query, setQuery] = useState('');
 
-  const [provider, setProvider] = useState<Provider>('rarbg');
+  const [provider, setProvider] = useState<Provider>('1337x');
 
   const { isLoading, error, data } = useSearch(query, provider);
 
