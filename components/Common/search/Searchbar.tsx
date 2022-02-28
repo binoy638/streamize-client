@@ -1,4 +1,11 @@
-import { PlusIcon, SearchIcon, SelectorIcon } from '@heroicons/react/solid';
+import {
+  CheckIcon,
+  PlusIcon,
+  SearchIcon,
+  SelectorIcon,
+  XIcon
+} from '@heroicons/react/solid';
+import { useNotifications } from '@mantine/notifications';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
@@ -10,10 +17,6 @@ import {
   setMagnetLink,
   setSearchQuery
 } from '../../../store/slice/searchBar.slice';
-import {
-  setSnackbarMessage,
-  toggleSnackbar
-} from '../../../store/slice/UI.slice';
 import ProviderSelector from './ProviderSelector';
 
 interface SearchbarProps {
@@ -22,27 +25,26 @@ interface SearchbarProps {
 }
 
 function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
+  const notifications = useNotifications();
   const dispatch = useTypedDispatch();
 
   const { mutate } = useMutation(addMagnetLink, {
     onSuccess: () => {
       dispatch(setMagnetLink(''));
-      dispatch(
-        setSnackbarMessage({
-          message: 'Torrent added successfully',
-          type: 'success'
-        })
-      );
-      dispatch(toggleSnackbar('show'));
+      notifications.showNotification({
+        title: 'Torrent',
+        message: 'successfully added to queue',
+        color: 'teal',
+        icon: <CheckIcon className="h-4 w-4" />
+      });
     },
     onError: () => {
-      dispatch(
-        setSnackbarMessage({
-          message: 'Something went wrong',
-          type: 'error'
-        })
-      );
-      dispatch(toggleSnackbar('show'));
+      notifications.showNotification({
+        title: 'Torrent',
+        message: 'something went wrong while adding to queue',
+        color: 'red',
+        icon: <XIcon className="h-4 w-4" />
+      });
     }
   });
 
@@ -70,13 +72,12 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
     if (type === 'add') {
       if (magnet.length === 0) return;
       if (!magnet.startsWith('magnet:?xt=urn:btih:')) {
-        dispatch(
-          setSnackbarMessage({
-            message: 'Invalid magnet link',
-            type: 'error'
-          })
-        );
-        dispatch(toggleSnackbar('show'));
+        notifications.showNotification({
+          title: 'Torrent',
+          message: 'invalid magnet link',
+          color: 'red',
+          icon: <XIcon className="h-4 w-4" />
+        });
 
         return;
       }

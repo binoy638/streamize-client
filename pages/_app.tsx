@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 
 import { MantineProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -24,9 +25,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             colorScheme: 'dark'
           }}
         >
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <NotificationsProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </NotificationsProvider>
         </MantineProvider>
       </QueryClientProvider>
     </Provider>

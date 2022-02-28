@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/no-nested-ternary */
-import { DotsVerticalIcon } from '@heroicons/react/solid';
+import { CheckIcon, DotsVerticalIcon, XIcon } from '@heroicons/react/solid';
+import { useNotifications } from '@mantine/notifications';
 import Link from 'next/link';
 import prettyBytes from 'pretty-bytes';
 import React from 'react';
@@ -7,30 +8,27 @@ import { useMutation } from 'react-query';
 
 import { IAddedTorrent } from '../../@types';
 import { deleteTorrent } from '../../API';
-import { useTypedDispatch } from '../../hooks/useTypedDispatch';
-import { setSnackbarMessage, toggleSnackbar } from '../../store/slice/UI.slice';
 import { prettyTime } from '../../utils';
 
 function TorrentList({ data }: { data: IAddedTorrent[] }) {
-  const dispatch = useTypedDispatch();
+  const notifications = useNotifications();
+
   const { mutate } = useMutation(deleteTorrent, {
     onSuccess: () => {
-      dispatch(
-        setSnackbarMessage({
-          message: 'Torrent deleted successfully',
-          type: 'success'
-        })
-      );
-      dispatch(toggleSnackbar('show'));
+      notifications.showNotification({
+        title: 'Torrent',
+        message: 'successfully deleted torrent',
+        color: 'teal',
+        icon: <CheckIcon className="h-4 w-4" />
+      });
     },
     onError: () => {
-      dispatch(
-        setSnackbarMessage({
-          message: 'Something went wrong',
-          type: 'error'
-        })
-      );
-      dispatch(toggleSnackbar('show'));
+      notifications.showNotification({
+        title: 'Torrent',
+        message: 'something went wrong while deleting torrent',
+        color: 'red',
+        icon: <XIcon className="h-4 w-4" />
+      });
     }
   });
 
@@ -39,7 +37,7 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
   };
 
   return (
-    <div className="mt-4 lg:mt-6 overflow-hidden flex flex-col gap-4 text-secondaryText">
+    <div className="mt-4 lg:mt-6 h-96 flex flex-col gap-4 overflow-y-auto overflow-x-hidden text-secondaryText">
       {data.map(item => {
         return (
           <div className=" bg-primary rounded pb-1 lg:pb-0 " key={item.slug}>
