@@ -11,12 +11,6 @@ import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 
 import { addMagnetLink } from '../../API';
-import { useTypedDispatch } from '../../hooks/useTypedDispatch';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
-import {
-  setMagnetLink,
-  setSearchQuery
-} from '../../store/slice/searchBar.slice';
 import ProviderSelector from './ProviderSelector';
 
 interface SearchbarProps {
@@ -26,11 +20,10 @@ interface SearchbarProps {
 
 function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
   const notifications = useNotifications();
-  const dispatch = useTypedDispatch();
 
   const { mutate } = useMutation(addMagnetLink, {
     onSuccess: () => {
-      dispatch(setMagnetLink(''));
+      setMagnet('');
       notifications.showNotification({
         title: 'Torrent',
         message: 'successfully added to queue',
@@ -50,12 +43,10 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
 
   const router = useRouter();
 
-  const { query, torrentProvider } = useTypedSelector(
-    state => state.searchBar.search
-  );
-  const { magnet } = useTypedSelector(state => state.searchBar.add);
+  const [query, setQuery] = useState('');
+  const [torrentProvider, setTorrentProvider] = useState('1337x');
   const [type, setType] = useState<'search' | 'add'>(def);
-
+  const [magnet, setMagnet] = useState<string>('');
   const toggleHandler = () => {
     setType(prev => (prev === 'search' ? 'add' : 'search'));
   };
@@ -103,7 +94,7 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
           <>
             <input
               type="text"
-              onChange={e => dispatch(setSearchQuery(e.target.value))}
+              onChange={e => setQuery(e.target.value)}
               value={query}
               placeholder="Enter movie name"
               className="w-full border-gray-400 border-t border-b focus:outline-none pl-4"
@@ -119,7 +110,7 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
           <>
             <input
               type="text"
-              onChange={e => dispatch(setMagnetLink(e.target.value))}
+              onChange={e => setMagnet(e.target.value)}
               value={magnet}
               placeholder="Add magnet link"
               className="w-full border-gray-400 border-t border-b focus:outline-none pl-4"
@@ -133,6 +124,7 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
           </>
         )}
       </form>
+
       {type === 'search' && showProviderSelector && <ProviderSelector />}
     </div>
   );

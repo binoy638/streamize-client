@@ -11,11 +11,7 @@ module.exports = {
         balsamiqSans: ['Balsamiq Sans', 'sans-serif']
       },
       colors: {
-        background: '#181818',
-        primary: '#202020',
-        // secondary: '#1B1B30',
-        primaryText: '#FF0A0A',
-        secondaryText: '#cecccc'
+        primary: '#FF0A0A'
       }
     }
   },

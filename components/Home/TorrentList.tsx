@@ -45,7 +45,15 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
               <div className="flex flex-col grow">
                 {item.status === 'added' ? (
                   <div className="flex flex-col gap-2">
-                    <div className="bg-blue-700 text-white">Torrent Added</div>
+                    <div className="flex">
+                      <div className="bg-blue-700 ">Torrent Added</div>
+                      <div className="my-auto px-2">
+                        <DotsVerticalIcon
+                          className="h-5 w-5 cursor-pointer"
+                          onClick={() => deleteTorrentHandler(item.slug)}
+                        />
+                      </div>
+                    </div>
                     <div className="truncate">{item.magnet}</div>
                   </div>
                 ) : item.status === 'error' ? (

@@ -1,6 +1,10 @@
 import '../styles/globals.css';
 
-import { MantineProvider } from '@mantine/core';
+import {
+  ColorScheme,
+  ColorSchemeProvider,
+  MantineProvider
+} from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
@@ -13,24 +17,34 @@ import store from '../store';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
+
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        <MantineProvider
-          withGlobalStyles
-          withNormalizeCSS
-          theme={{
-            /** Put your mantine theme override here */
-            colorScheme: 'dark'
-          }}
+        <ColorSchemeProvider
+          colorScheme={colorScheme}
+          toggleColorScheme={toggleColorScheme}
         >
-          <NotificationsProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </NotificationsProvider>
-        </MantineProvider>
+          <MantineProvider
+            withGlobalStyles
+            withNormalizeCSS
+            theme={{
+              colorScheme: 'dark'
+            }}
+          >
+            <NotificationsProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </NotificationsProvider>
+          </MantineProvider>
+        </ColorSchemeProvider>
       </QueryClientProvider>
     </Provider>
   );
