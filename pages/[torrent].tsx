@@ -17,7 +17,7 @@ const TorrentPage: NextPage = () => {
     () => getTorrent(torrentSlug),
     {
       refetchInterval: data => {
-        return data && data.status === 'done' ? 0 : 5000;
+        return data && data.status === 'done' ? 0 : 1000;
       }
     }
   );

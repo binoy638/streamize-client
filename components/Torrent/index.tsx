@@ -1,12 +1,22 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import { DownloadIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import prettyBytes from 'pretty-bytes';
 import React from 'react';
 
 import { IAddedTorrent } from '../../@types';
 import { getDownloadLink } from '../../API';
+import StatusIndicator from '../Common/StatusIndicator';
 
 function Torrent({ data }: { data: IAddedTorrent }) {
+  const router = useRouter();
+
+  const handleClick = (torrentSlug: string, videoSlug: string) => {
+    if (data.status !== 'done') return;
+    router.push(`/${torrentSlug}/${videoSlug}`);
+  };
+
   return data.status === 'downloading' ||
     data.status === 'converting' ||
     data.status === 'done' ? (
@@ -22,26 +32,50 @@ function Torrent({ data }: { data: IAddedTorrent }) {
             return (
               <div
                 key={item.slug}
-                className="bg-primary py-1 rounded px-1 flex justify-between items-center"
+                className="bg-gray-700  rounded  flex flex-col overflow-hidden justify-between "
               >
-                <Link
-                  href={{
-                    pathname: '/[torrent]/[video]',
-                    query: { torrent: data.slug, video: item.slug }
-                  }}
-                  passHref
-                >
-                  <span className="hover:underline cursor-pointer">
+                <div className="px-2 py-1 flex justify-between items-center">
+                  <span
+                    className="hover:underline cursor-pointer"
+                    onClick={() => handleClick(data.slug, item.slug)}
+                  >
                     {item.name}
                   </span>
-                </Link>
-                {data.status === 'done' && (
-                  <Link href={getDownloadLink(item.slug)} passHref>
-                    <a>
-                      <DownloadIcon className="h-5 w-5" />
-                    </a>
-                  </Link>
-                )}
+                  {item.status === 'downloading' ? (
+                    <StatusIndicator type="downloading" />
+                  ) : item.status === 'converting' ? (
+                    <StatusIndicator type="converting" />
+                  ) : item.status === 'done' ? (
+                    <Link href={getDownloadLink(item.slug)} passHref>
+                      <a>
+                        <DownloadIcon className="h-5 w-5" />
+                      </a>
+                    </Link>
+                  ) : null}
+                </div>
+                {item.status === 'downloading' && item?.downloadInfo ? (
+                  <div className="w-full bg-gray-200 rounded-full">
+                    <div
+                      className="bg-green-500 text-xs font-medium text-blue-100 text-center h-1 leading-none "
+                      style={{
+                        width: `${Math.round(
+                          item.downloadInfo?.progress * 100
+                        )}%`
+                      }}
+                    ></div>
+                  </div>
+                ) : item.status === 'converting' && item?.convertStatus ? (
+                  <div className="w-full bg-gray-200 rounded-full">
+                    <div
+                      className="bg-green-500 text-xs font-medium text-blue-100 text-center h-1 leading-none "
+                      style={{
+                        width: `${Math.round(
+                          item.convertStatus.progress * 100
+                        )}%`
+                      }}
+                    ></div>
+                  </div>
+                ) : null}
               </div>
             );
           })}

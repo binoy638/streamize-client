@@ -37,6 +37,7 @@ module.exports = {
     'unicorn/no-null': 'off',
     'unicorn/prevent-abbreviations': 'off',
     'unicorn/numeric-separators-style': 'off',
-    'unicorn/no-array-reduce': 'off'
+    'unicorn/no-array-reduce': 'off',
+    'unicorn/no-nested-ternary': 'off'
   }
 };

@@ -40,7 +40,7 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
     <div className="mt-4 lg:mt-6 h-96 flex flex-col gap-4 overflow-y-auto overflow-x-hidden text-secondaryText">
       {data.map(item => {
         return (
-          <div className=" bg-primary rounded pb-1 lg:pb-0 " key={item.slug}>
+          <div className=" bg-gray-800 rounded pb-1 lg:pb-0 " key={item.slug}>
             <div className="flex ">
               <div className="flex flex-col grow">
                 {item.status === 'added' ? (
@@ -58,8 +58,14 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                   </div>
                 ) : item.status === 'error' ? (
                   <div>
-                    <div className="bg-red-500 text-white">
+                    <div className=" bg-gray-800 text-white flex">
                       Could not download
+                      <div className="my-auto px-2">
+                        <DotsVerticalIcon
+                          className="h-5 w-5 cursor-pointer"
+                          onClick={() => deleteTorrentHandler(item.slug)}
+                        />
+                      </div>
                     </div>
                     <div className="truncate">{item.magnet}</div>
                   </div>
