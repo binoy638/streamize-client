@@ -3,16 +3,21 @@ import 'video.js/dist/video-js.css';
 import React from 'react';
 import videojs from 'video.js';
 
+// import 'videojs-vtt-thumbnails';
 import { ISubtitle } from '../@types';
 import { getSubtitleLink } from '../API';
+
+// videojs.registerPlugin('vttThumbnails', vttThumbnails);
 
 export const VideoJS = ({
   options,
   onReady,
+  videoSlug,
   subtitles = []
 }: {
   options: videojs.PlayerOptions;
   onReady: any;
+  videoSlug: string;
   subtitles: ISubtitle[];
 }) => {
   const videoRef = React.useRef<any>();
@@ -28,6 +33,11 @@ export const VideoJS = ({
         console.log('player is ready');
         onReady && onReady(player);
       }));
+
+      // player.vttThumbnails({
+      //   src: 'http://localhost:3000/thumbnails.vtt',
+      //   showTimestamp: true
+      // });
     } else {
       // you can update player here [update player through props]
       // const player = playerRef.current;
@@ -58,7 +68,7 @@ export const VideoJS = ({
               <track
                 key={sub._id || sub.fileName}
                 kind="captions"
-                src={getSubtitleLink(sub.fileName)}
+                src={getSubtitleLink(videoSlug, sub.fileName)}
                 srcLang={sub.language}
                 label={sub.language}
               />

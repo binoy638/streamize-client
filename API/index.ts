@@ -54,14 +54,14 @@ export const getVideo = async (slug: string): Promise<IVideo | null> => {
   }
 };
 
-export const getVideoLink = (torrentSlug: string, videoSlug: string) =>
-  `${process.env.NEXT_PUBLIC_BASE_URL}video/play/${videoSlug}`;
+export const getVideoLink = (videoSlug: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_URL}video/stream/${videoSlug}/${videoSlug}.m3u8`;
 
 export const getDownloadLink = (videoSlug: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/download/${videoSlug}`;
 
-export const getSubtitleLink = (filename: string) =>
-  `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${filename}`;
+export const getSubtitleLink = (videoSlug: string, filename: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${videoSlug}/${filename}`;
 
 export const addMagnetLink = (magnet: string) =>
   API.post('/torrent', { magnet });

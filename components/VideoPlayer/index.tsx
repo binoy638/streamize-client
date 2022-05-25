@@ -3,19 +3,36 @@ import React from 'react';
 import { ISubtitle } from '../../@types';
 import VideoJS from '../VideoJs';
 
-const Player = ({ src, subtitle }: { src: string; subtitle: ISubtitle[] }) => {
+const Player = ({
+  src,
+  subtitle,
+  videoSlug
+}: {
+  src: string;
+  subtitle: ISubtitle[];
+  videoSlug: string;
+}) => {
   const playerRef = React.useRef<any>(null);
 
   const videoJsOptions = {
     // lookup the options in the docs for more options
     // autoplay: true,
+    // plugins: {
+    //   spriteThumbnails: {
+    //     width: 160,
+    //     height: 90
+    //   }
+    // },
     controls: true,
     responsive: true,
     fluid: true,
     sources: [
       {
-        src: src,
-        type: 'video/mp4'
+        src
+        // type: 'video/mp4'
+        // spriteThumbnails: {
+        //   url: 'http://localhost:3000/thumbnails.jpg'
+        // }
       }
     ]
   };
@@ -35,6 +52,7 @@ const Player = ({ src, subtitle }: { src: string; subtitle: ISubtitle[] }) => {
 
   return (
     <VideoJS
+      videoSlug={videoSlug}
       options={videoJsOptions}
       onReady={handlePlayerReady}
       subtitles={subtitle}

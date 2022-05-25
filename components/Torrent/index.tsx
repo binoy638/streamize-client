@@ -13,7 +13,7 @@ function Torrent({ data }: { data: IAddedTorrent }) {
   const router = useRouter();
 
   const handleClick = (torrentSlug: string, videoSlug: string) => {
-    if (data.status !== 'done') return;
+    // if (data.status !== 'done') return;
     router.push(`/${torrentSlug}/${videoSlug}`);
   };
 

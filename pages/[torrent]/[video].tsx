@@ -39,7 +39,8 @@ const Video: NextPage = () => {
       <>
         <div>
           <Player
-            src={getVideoLink(torrent as string, video as string)}
+            src={getVideoLink(video as string)}
+            videoSlug={video as string}
             subtitle={data.subtitles}
           />
           <div>{data.name}</div>
