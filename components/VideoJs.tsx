@@ -33,7 +33,17 @@ export const VideoJS = ({
         console.log('player is ready');
         onReady && onReady(player);
       }));
-
+      const savedVolume = localStorage.getItem('volume');
+      // eslint-disable-next-line sonarjs/no-collapsible-if
+      if (savedVolume) {
+        // eslint-disable-next-line unicorn/no-lonely-if
+        if (savedVolume === '0' || Number(savedVolume)) {
+          player.volume(Number(savedVolume));
+        }
+      }
+      player.on('volumechange', () => {
+        localStorage.setItem('volume', player.volume().toString());
+      });
       // player.vttThumbnails({
       //   src: 'http://localhost:3000/thumbnails.vtt',
       //   showTimestamp: true

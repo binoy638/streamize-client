@@ -10,7 +10,13 @@ import { ITorrent, TorrentState } from '../../@types';
 import { deleteTorrent } from '../../API';
 import { prettyTime } from '../../utils';
 
-function TorrentList({ data }: { data: ITorrent[] }) {
+function TorrentList({
+  data,
+  diskSpace
+}: {
+  data: ITorrent[];
+  diskSpace: { size: number; free: number };
+}) {
   const notifications = useNotifications();
 
   const { mutate } = useMutation(deleteTorrent, {
@@ -38,6 +44,9 @@ function TorrentList({ data }: { data: ITorrent[] }) {
 
   return (
     <div className="mt-4 lg:mt-6 h-96 flex flex-col gap-4 overflow-y-auto overflow-x-hidden text-secondaryText">
+      <p>Total: {prettyBytes(diskSpace.size)}</p>
+      <p>Free: {prettyBytes(diskSpace.free)}</p>
+
       {data.map(item => {
         return (
           <div className=" bg-gray-800 rounded pb-1 lg:pb-0 " key={item.slug}>

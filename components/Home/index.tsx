@@ -19,7 +19,13 @@ function AddedTorrentList() {
   ) : error ? (
     <Error />
   ) : (
-    <>{data && data.length > 0 ? <TorrentList data={data} /> : <Empty />}</>
+    <>
+      {data?.torrents && data.torrents.length > 0 ? (
+        <TorrentList data={data.torrents} diskSpace={data.diskSpace} />
+      ) : (
+        <Empty />
+      )}
+    </>
   );
 }
 

@@ -19,11 +19,14 @@ export const searchTorrentAPI = async (
   }
 };
 
-export const getAddedTorrents = async (): Promise<ITorrent[]> => {
+export const getAddedTorrents = async (): Promise<{
+  torrents: ITorrent[];
+  diskSpace: { size: number; free: number };
+}> => {
   try {
     const { data } = await API.get('/torrent');
-    if (!data) return [];
-    return data.torrents;
+
+    return data;
   } catch (error) {
     console.log(error);
     throw new Error('Error while fetching added torrents');
