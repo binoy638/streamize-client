@@ -1,4 +1,4 @@
-import { IAddedTorrent, IVideo } from '../@types';
+import { ITorrent, IVideo } from '../@types';
 import { Provider, TorrentData } from '../@types/store';
 import { API, TorrentScrapper } from './config';
 
@@ -19,7 +19,7 @@ export const searchTorrentAPI = async (
   }
 };
 
-export const getAddedTorrents = async (): Promise<IAddedTorrent[]> => {
+export const getAddedTorrents = async (): Promise<ITorrent[]> => {
   try {
     const { data } = await API.get('/torrent');
     if (!data) return [];
@@ -30,9 +30,7 @@ export const getAddedTorrents = async (): Promise<IAddedTorrent[]> => {
   }
 };
 
-export const getTorrent = async (
-  slug: string
-): Promise<IAddedTorrent | null> => {
+export const getTorrent = async (slug: string): Promise<ITorrent | null> => {
   try {
     const { data } = await API.get(`/torrent/${slug}`);
     if (!data) return null;

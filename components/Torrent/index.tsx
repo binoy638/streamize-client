@@ -5,11 +5,11 @@ import { useRouter } from 'next/router';
 import prettyBytes from 'pretty-bytes';
 import React from 'react';
 
-import { IAddedTorrent } from '../../@types';
+import { ITorrent, TorrentState, VideoState } from '../../@types';
 import { getDownloadLink } from '../../API';
 import StatusIndicator from '../Common/StatusIndicator';
 
-function Torrent({ data }: { data: IAddedTorrent }) {
+function Torrent({ data }: { data: ITorrent }) {
   const router = useRouter();
 
   const handleClick = (torrentSlug: string, videoSlug: string) => {
@@ -17,9 +17,9 @@ function Torrent({ data }: { data: IAddedTorrent }) {
     router.push(`/${torrentSlug}/${videoSlug}`);
   };
 
-  return data.status === 'downloading' ||
-    data.status === 'converting' ||
-    data.status === 'done' ? (
+  return data.status === TorrentState.DOWNLOADING ||
+    data.status === TorrentState.PROCESSING ||
+    data.status === TorrentState.DONE ? (
     <div className="flex flex-col gap-4">
       <div className="justify-center text-xl border-b pb-4">
         <Tag header="Title" value={data.name} />
@@ -41,11 +41,11 @@ function Torrent({ data }: { data: IAddedTorrent }) {
                   >
                     {item.name}
                   </span>
-                  {item.status === 'downloading' ? (
+                  {item.status === VideoState.DOWNLOADING ? (
                     <StatusIndicator type="downloading" />
-                  ) : item.status === 'converting' ? (
+                  ) : item.status === VideoState.PROCESSING ? (
                     <StatusIndicator type="converting" />
-                  ) : item.status === 'done' ? (
+                  ) : item.status === VideoState.DONE ? (
                     <Link href={getDownloadLink(item.slug)} passHref>
                       <a>
                         <DownloadIcon className="h-5 w-5" />
@@ -53,7 +53,8 @@ function Torrent({ data }: { data: IAddedTorrent }) {
                     </Link>
                   ) : null}
                 </div>
-                {item.status === 'downloading' && item?.downloadInfo ? (
+                {item.status === VideoState.DOWNLOADING &&
+                item?.downloadInfo ? (
                   <div className="w-full bg-gray-200 rounded-full">
                     <div
                       className="bg-green-500 text-xs font-medium text-blue-100 text-center h-1 leading-none "
@@ -64,14 +65,13 @@ function Torrent({ data }: { data: IAddedTorrent }) {
                       }}
                     ></div>
                   </div>
-                ) : item.status === 'converting' && item?.convertStatus ? (
+                ) : item.status === VideoState.PROCESSING &&
+                  item.transcodingPercent ? (
                   <div className="w-full bg-gray-200 rounded-full">
                     <div
                       className="bg-green-500 text-xs font-medium text-blue-100 text-center h-1 leading-none "
                       style={{
-                        width: `${Math.round(
-                          item.convertStatus.progress * 100
-                        )}%`
+                        width: `${Math.round(item.transcodingPercent * 100)}%`
                       }}
                     ></div>
                   </div>

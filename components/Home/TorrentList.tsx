@@ -6,11 +6,11 @@ import prettyBytes from 'pretty-bytes';
 import React from 'react';
 import { useMutation } from 'react-query';
 
-import { IAddedTorrent } from '../../@types';
+import { ITorrent, TorrentState } from '../../@types';
 import { deleteTorrent } from '../../API';
 import { prettyTime } from '../../utils';
 
-function TorrentList({ data }: { data: IAddedTorrent[] }) {
+function TorrentList({ data }: { data: ITorrent[] }) {
   const notifications = useNotifications();
 
   const { mutate } = useMutation(deleteTorrent, {
@@ -43,7 +43,7 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
           <div className=" bg-gray-800 rounded pb-1 lg:pb-0 " key={item.slug}>
             <div className="flex ">
               <div className="flex flex-col grow">
-                {item.status === 'added' ? (
+                {item.status === TorrentState.ADDED ? (
                   <div className="flex flex-col gap-2">
                     <div className="flex">
                       <div className="bg-blue-700 ">Torrent Added</div>
@@ -69,9 +69,9 @@ function TorrentList({ data }: { data: IAddedTorrent[] }) {
                     </div>
                     <div className="truncate">{item.magnet}</div>
                   </div>
-                ) : item.status === 'downloading' ||
-                  item.status === 'done' ||
-                  item.status === 'converting' ? (
+                ) : item.status === TorrentState.DOWNLOADING ||
+                  item.status === TorrentState.PROCESSING ||
+                  item.status === TorrentState.DONE ? (
                   <>
                     <div className="flex justify-between items-center">
                       <Link href={`/${item.slug}`} passHref>
