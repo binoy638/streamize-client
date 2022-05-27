@@ -6,11 +6,13 @@ import VideoJS from '../VideoJs';
 const Player = ({
   src,
   subtitle,
-  videoSlug
+  videoSlug,
+  previewSrc
 }: {
   src: string;
   subtitle: ISubtitle[];
   videoSlug: string;
+  previewSrc?: string;
 }) => {
   const playerRef = React.useRef<any>(null);
 
@@ -56,6 +58,7 @@ const Player = ({
       options={videoJsOptions}
       onReady={handlePlayerReady}
       subtitles={subtitle}
+      preview={previewSrc}
     />
   );
 };

@@ -44,6 +44,7 @@ export interface IVideo {
   size: number;
   path: string;
   ext: string;
+  progressPreview: boolean;
   subtitles: ISubtitle[];
   status: VideoState;
   downloadInfo?: IFileDownloadInfo;

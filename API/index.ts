@@ -64,6 +64,9 @@ export const getDownloadLink = (videoSlug: string) =>
 export const getSubtitleLink = (videoSlug: string, filename: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${videoSlug}/${filename}`;
 
+export const getPreviewLink = (videoSlug: string, filename: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_URL}video/preview/${videoSlug}/${filename}`;
+
 export const addMagnetLink = (magnet: string) =>
   API.post('/torrent', { magnet });
 

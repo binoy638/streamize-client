@@ -1,4 +1,5 @@
 import 'video.js/dist/video-js.css';
+import 'videojs-vtt-thumbnails';
 
 import React from 'react';
 import videojs from 'video.js';
@@ -6,19 +7,29 @@ import videojs from 'video.js';
 // import 'videojs-vtt-thumbnails';
 import { ISubtitle } from '../@types';
 import { getSubtitleLink } from '../API';
-
 // videojs.registerPlugin('vttThumbnails', vttThumbnails);
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace videojs {
+    interface VideoJsPlayer {
+      vttThumbnails({ src }: { src: string }): unknown;
+    }
+  }
+}
 
 export const VideoJS = ({
   options,
   onReady,
   videoSlug,
-  subtitles = []
+  subtitles = [],
+  preview
 }: {
   options: videojs.PlayerOptions;
   onReady: any;
   videoSlug: string;
   subtitles: ISubtitle[];
+  preview?: string;
 }) => {
   const videoRef = React.useRef<any>();
   const playerRef = React.useRef<any>();
@@ -41,6 +52,13 @@ export const VideoJS = ({
           player.volume(Number(savedVolume));
         }
       }
+
+      if (preview) {
+        player.vttThumbnails({
+          src: preview
+        });
+      }
+
       player.on('volumechange', () => {
         localStorage.setItem('volume', player.volume().toString());
       });

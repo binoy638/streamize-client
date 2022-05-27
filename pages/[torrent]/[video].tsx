@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
-import { getVideo, getVideoLink } from '../../API';
+import { getPreviewLink, getVideo, getVideoLink } from '../../API';
 import Player from '../../components/VideoPlayer';
 
 const Video: NextPage = () => {
@@ -42,6 +42,12 @@ const Video: NextPage = () => {
             src={getVideoLink(video as string)}
             videoSlug={video as string}
             subtitle={data.subtitles}
+            previewSrc={
+              // data.progressPreview === true
+              //   ? getPreviewLink(data.slug, `${data.slug}.vtt`)
+              //   : undefined
+              getPreviewLink(data.slug, `${data.slug}.vtt`)
+            }
           />
           <div>{data.name}</div>
         </div>
