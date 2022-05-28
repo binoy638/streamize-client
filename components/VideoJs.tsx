@@ -1,5 +1,7 @@
 import 'video.js/dist/video-js.css';
 import 'videojs-vtt-thumbnails';
+import 'videojs-seek-buttons';
+import 'videojs-seek-buttons/dist/videojs-seek-buttons.css';
 
 import React from 'react';
 import videojs from 'video.js';
@@ -9,14 +11,14 @@ import { ISubtitle } from '../@types';
 import { getSubtitleLink } from '../API';
 // videojs.registerPlugin('vttThumbnails', vttThumbnails);
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace videojs {
-    interface VideoJsPlayer {
-      vttThumbnails({ src }: { src: string }): unknown;
-    }
-  }
-}
+// declare global {
+//   // eslint-disable-next-line @typescript-eslint/no-namespace
+//   namespace videojs {
+//     interface VideoJsPlayer {
+//       vttThumbnails({ src }: { src: string }): unknown;
+//     }
+//   }
+// }
 
 export const VideoJS = ({
   options,
@@ -55,9 +57,15 @@ export const VideoJS = ({
 
       if (preview) {
         player.vttThumbnails({
-          src: preview
+          src: preview,
+          showTimestamp: true
         });
       }
+
+      player.seekButtons({
+        forward: 10,
+        back: 10
+      });
 
       player.on('volumechange', () => {
         localStorage.setItem('volume', player.volume().toString());
