@@ -2,8 +2,11 @@ import 'video.js/dist/video-js.css';
 import 'videojs-vtt-thumbnails';
 import 'videojs-seek-buttons';
 import 'videojs-seek-buttons/dist/videojs-seek-buttons.css';
+import 'videojs-mobile-ui/dist/videojs-mobile-ui.css';
+import 'videojs-mobile-ui';
 
 import React from 'react';
+import { isDesktop } from 'react-device-detect';
 import videojs from 'video.js';
 
 // import 'videojs-vtt-thumbnails';
@@ -48,7 +51,7 @@ export const VideoJS = ({
       }));
       const savedVolume = localStorage.getItem('volume');
       // eslint-disable-next-line sonarjs/no-collapsible-if
-      if (savedVolume) {
+      if (savedVolume && isDesktop) {
         // eslint-disable-next-line unicorn/no-lonely-if
         if (savedVolume === '0' || Number(savedVolume)) {
           player.volume(Number(savedVolume));
@@ -61,19 +64,38 @@ export const VideoJS = ({
           showTimestamp: true
         });
       }
-
+      player.mobileUi();
       player.seekButtons({
         forward: 10,
         back: 10
       });
-
       player.on('volumechange', () => {
         localStorage.setItem('volume', player.volume().toString());
       });
-      // player.vttThumbnails({
-      //   src: 'http://localhost:3000/thumbnails.vtt',
-      //   showTimestamp: true
-      // });
+      //  let player = videojs('ID_OF_YOUR_VIDEO');
+      //  const SeekBar = videojs.getComponent('SeekBar');
+
+      //  SeekBar.prototype.getPercent = function getPercent() {
+      //    const time = this.player_.currentTime();
+      //    const percent = time / this.player_.duration();
+      //    return percent >= 1 ? 1 : percent;
+      //  };
+
+      //  SeekBar.prototype.handleMouseMove = function handleMouseMove(event) {
+      //    let newTime = this.calculateDistance(event) * this.player_.duration();
+      //    if (newTime === this.player_.duration()) {
+      //      newTime = newTime - 0.1;
+      //    }
+      //    this.player_.currentTime(newTime);
+      //    this.update();
+      //    let currentTime = player.currentTime();
+      //    let minutes = Math.floor(currentTime / 60);
+      //    let seconds = Math.floor(currentTime - minutes * 60);
+      //    let x = minutes < 10 ? '0' + minutes : minutes;
+      //    let y = seconds < 10 ? '0' + seconds : seconds;
+      //    let format = x + ':' + y;
+      //    player.controlBar.currentTimeDisplay.el_.innerHTML = format;
+      //  };
     } else {
       // you can update player here [update player through props]
       // const player = playerRef.current;
