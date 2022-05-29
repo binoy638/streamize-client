@@ -52,14 +52,14 @@ export const VideoJS = ({
       }));
       const savedVolume = localStorage.getItem('volume');
       // eslint-disable-next-line sonarjs/no-collapsible-if
-      if (savedVolume && isDesktop) {
+      if (savedVolume) {
         // eslint-disable-next-line unicorn/no-lonely-if
         if (savedVolume === '0' || Number(savedVolume)) {
           player.volume(Number(savedVolume));
         }
       }
 
-      if (preview) {
+      if (preview && isDesktop) {
         player.vttThumbnails({
           src: preview,
           showTimestamp: true
