@@ -1,15 +1,17 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { ReactElement } from 'react';
 import { useQuery } from 'react-query';
 
 import { getPreviewLink, getVideo, getVideoLink } from '../../API';
+import Layout from '../../components/Layout';
 import Player from '../../components/VideoPlayer';
 
-const Video: NextPage = () => {
+const Video = () => {
   const router = useRouter();
 
-  const { video, torrent } = router.query;
+  const { video } = router.query;
 
   const { isError, isLoading, data } = useQuery(['video', video], () =>
     getVideo(video as string)
@@ -43,10 +45,9 @@ const Video: NextPage = () => {
             videoSlug={video as string}
             subtitle={data.subtitles}
             previewSrc={
-              // data.progressPreview === true
-              //   ? getPreviewLink(data.slug, `${data.slug}.vtt`)
-              //   : undefined
-              getPreviewLink(data.slug, `${data.slug}.vtt`)
+              data.progressPreview === true
+                ? getPreviewLink(data.slug, `${data.slug}.vtt`)
+                : undefined
             }
           />
           <div>{data.name}</div>
@@ -55,5 +56,7 @@ const Video: NextPage = () => {
     );
   }
 };
+
+Video.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 
 export default Video;

@@ -28,9 +28,11 @@ const Player = ({
     controls: true,
     responsive: true,
     fluid: true,
+
     sources: [
       {
-        src
+        src,
+        withCredentials: true
         // type: 'video/mp4'
         // spriteThumbnails: {
         //   url: 'http://localhost:3000/thumbnails.jpg'

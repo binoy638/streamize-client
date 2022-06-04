@@ -1,8 +1,8 @@
 import React from 'react';
 
-function test() {
+export default function ScreenLoader() {
   return (
-    <div className="h-screen w-screen flex justify-center items-center ">
+    <div className="fixed h-screen w-screen flex justify-center items-center ">
       <div>
         <span className="cursor-pointer text-4xl font-teko   text-primary  hover:opacity-75">
           Streamize
@@ -12,5 +12,3 @@ function test() {
     </div>
   );
 }
-
-export default test;

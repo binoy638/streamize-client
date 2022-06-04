@@ -8,7 +8,8 @@ module.exports = {
       fontFamily: {
         lato: ['Lato', 'sans-serif'],
         publicSans: ['Public Sans', 'sans-serif'],
-        balsamiqSans: ['Balsamiq Sans', 'sans-serif']
+        balsamiqSans: ['Balsamiq Sans', 'sans-serif'],
+        teko: ['Teko', 'sans-serif']
       },
       colors: {
         primary: '#FF0A0A'

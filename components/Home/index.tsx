@@ -12,7 +12,10 @@ function AddedTorrentList() {
   const { data, isLoading, error } = useQuery(
     'addedTorrents',
     () => getAddedTorrents(),
-    { refetchInterval: 1000 }
+    {
+      refetchInterval: data =>
+        data && data?.torrents?.length > 0 ? 1000 : false
+    }
   );
   return isLoading ? (
     <Loading />

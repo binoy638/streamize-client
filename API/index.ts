@@ -71,3 +71,15 @@ export const addMagnetLink = (magnet: string) =>
   API.post('/torrent', { magnet });
 
 export const deleteTorrent = (slug: string) => API.delete(`/torrent/${slug}`);
+
+export const signIn = ({
+  username,
+  password
+}: {
+  username: string;
+  password: string;
+}) => API.post('/auth/signin', { username, password });
+
+export const signOut = () => API.post('/auth/signout');
+
+export const verifyUser = () => API.post('/auth/verify');

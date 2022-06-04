@@ -2,12 +2,14 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { ReactElement } from 'react';
 import { useQuery } from 'react-query';
 
 import { getTorrent } from '../API';
+import Layout from '../components/Layout';
 import Torrent from '../components/Torrent';
 
-const TorrentPage: NextPage = () => {
+const TorrentPage = () => {
   const router = useRouter();
 
   const torrentSlug = router.query.torrent as string;
@@ -39,5 +41,7 @@ const TorrentPage: NextPage = () => {
     </>
   );
 };
+
+TorrentPage.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 
 export default TorrentPage;

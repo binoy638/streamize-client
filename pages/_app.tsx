@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import '../styles/globals.scss';
 
 import {
@@ -6,22 +7,33 @@ import {
   MantineProvider
 } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
+import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
+import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 
-import Layout from '../components/Common/Layout';
 import store from '../store';
 
-function MyApp({ Component, pageProps }: AppProps) {
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(() => new QueryClient());
 
   const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
 
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  const getLayout = Component.getLayout ?? (page => page);
 
   return (
     <Provider store={store}>
@@ -34,14 +46,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           <MantineProvider
             withGlobalStyles
             withNormalizeCSS
+            emotionOptions={{ key: 'mantine', prepend: false }}
             theme={{
               colorScheme: 'dark'
             }}
           >
             <NotificationsProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
+              {getLayout(<Component {...pageProps} />)}
             </NotificationsProvider>
           </MantineProvider>
         </ColorSchemeProvider>
