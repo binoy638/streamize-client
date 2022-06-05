@@ -31,7 +31,11 @@ const SharedPlaylist = () => {
             <Accordion.Item label={data.torrent.name}>
               {data.torrent.files.map(file => {
                 return (
-                  <div onClick={() => handleClick(file.slug)} key={file.slug}>
+                  <div
+                    className="my-2 cursor-pointer"
+                    onClick={() => handleClick(file.slug)}
+                    key={file.slug}
+                  >
                     {file.name}
                   </div>
                 );
