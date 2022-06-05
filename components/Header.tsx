@@ -6,7 +6,10 @@ import {
 } from '@mantine/core';
 import { Avatar } from '@mantine/core';
 import Link from 'next/link';
+import { Router, useRouter } from 'next/router';
 import React, { FC } from 'react';
+import { useMutation } from 'react-query';
+import { signOut } from '../API';
 
 interface HeaderProps {
   opened: boolean;
@@ -14,7 +17,18 @@ interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = ({ opened, setOpened }) => {
+  const router = useRouter();
+  const { mutate } = useMutation(signOut, {
+    onSuccess: () => {
+      router.push('/signin');
+    }
+  });
+
   const theme = useMantineTheme();
+
+  const handleLogout = () => {
+    mutate();
+  };
 
   return (
     <HeaderComp height={60} p="md">
@@ -40,7 +54,10 @@ const Header: FC<HeaderProps> = ({ opened, setOpened }) => {
               Streamize
             </span>
           </Link>
-          <span className="flex justify-center items-center">
+          <span
+            className="flex justify-center items-center cursor-pointer"
+            onClick={handleLogout}
+          >
             <Avatar color="cyan" radius="xl">
               B
             </Avatar>

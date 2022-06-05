@@ -6,6 +6,7 @@ import {
   XIcon
 } from '@heroicons/react/solid';
 import { useNotifications } from '@mantine/notifications';
+import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
@@ -31,10 +32,13 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
         icon: <CheckIcon className="h-4 w-4" />
       });
     },
-    onError: () => {
+    onError: (error: AxiosError) => {
+      const errMsg =
+        error.response?.data?.error?.message ||
+        'something went wrong while adding to queue';
       notifications.showNotification({
         title: 'Torrent',
-        message: 'something went wrong while adding to queue',
+        message: errMsg,
         color: 'red',
         icon: <XIcon className="h-4 w-4" />
       });
