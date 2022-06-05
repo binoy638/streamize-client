@@ -72,6 +72,24 @@ export const addMagnetLink = (magnet: string) =>
 
 export const deleteTorrent = (slug: string) => API.delete(`/torrent/${slug}`);
 
+export const shareTorrent = async ({
+  torrent,
+  mediaId,
+  isTorrent
+}: {
+  torrent: string;
+  mediaId: string;
+  isTorrent: boolean;
+}): Promise<string> => {
+  const { data } = await API.post('/share/create', {
+    torrent,
+    mediaId,
+    isTorrent
+  });
+  if (data) return data.slug;
+  return '';
+};
+
 export const signIn = ({
   username,
   password
@@ -83,3 +101,14 @@ export const signIn = ({
 export const signOut = () => API.post('/auth/signout');
 
 export const verifyUser = () => API.post('/auth/verify');
+
+export const getSharedPlaylist = async (
+  slug: string
+): Promise<{ torrent: ITorrent; user: string }> => {
+  if (!slug) throw new Error('No slug provided');
+  const { data } = await API.get(`/share/${slug}`);
+  return data;
+};
+
+export const getSharedVideoLink = (slug: string, videoSlug: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_URL}share/stream/${slug}/${videoSlug}/${videoSlug}.m3u8`;

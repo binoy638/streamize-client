@@ -1,3 +1,4 @@
+import { UserIcon } from '@heroicons/react/solid';
 import {
   Burger,
   Header as HeaderComp,
@@ -9,6 +10,7 @@ import Link from 'next/link';
 import { Router, useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { useMutation } from 'react-query';
+
 import { signOut } from '../API';
 
 interface HeaderProps {
@@ -59,7 +61,7 @@ const Header: FC<HeaderProps> = ({ opened, setOpened }) => {
             onClick={handleLogout}
           >
             <Avatar color="cyan" radius="xl">
-              B
+              <UserIcon className="w-5 h-5" />
             </Avatar>
           </span>
         </div>

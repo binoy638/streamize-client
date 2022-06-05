@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import prettyBytes from 'pretty-bytes';
 import React from 'react';
+import { useMutation } from 'react-query';
 
 import { ITorrent, TorrentState, VideoState } from '../../@types';
-import { getDownloadLink } from '../../API';
+import { getDownloadLink, shareTorrent } from '../../API';
 import StatusIndicator from '../Common/StatusIndicator';
 
 function Torrent({ data }: { data: ITorrent }) {
@@ -15,6 +16,19 @@ function Torrent({ data }: { data: ITorrent }) {
   const handleClick = (torrentSlug: string, videoSlug: string) => {
     // if (data.status !== 'done') return;
     router.push(`/${torrentSlug}/${videoSlug}`);
+  };
+
+  const { mutate } = useMutation(shareTorrent, {
+    onSuccess: data => {
+      const link = `${window.location.host}/shared/${data}`;
+      setShareLink(link);
+    }
+  });
+
+  const [shareLink, setShareLink] = React.useState('');
+
+  const handleShare = () => {
+    mutate({ isTorrent: true, torrent: data._id, mediaId: data._id });
   };
 
   return data.status === TorrentState.DOWNLOADING ||
@@ -80,6 +94,12 @@ function Torrent({ data }: { data: ITorrent }) {
             );
           })}
         </div>
+      </div>
+      <div>
+        <button onClick={handleShare} className="bg-green-400">
+          Share
+        </button>
+        {shareLink && shareLink.length > 0 && <div>{shareLink}</div>}
       </div>
     </div>
   ) : (
