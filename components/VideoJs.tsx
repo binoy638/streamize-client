@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 import 'video.js/dist/video-js.css';
 import 'videojs-seek-buttons';
 import 'videojs-seek-buttons/dist/videojs-seek-buttons.css';
@@ -11,6 +12,14 @@ import videojs from 'video.js';
 
 import { ISubtitle } from '../@types';
 import { getSubtitleLink } from '../API';
+
+const englishLanguageCodes = new Set([
+  'en',
+  'en-US',
+  'en-GB',
+  'eng',
+  'english'
+]);
 
 export const VideoJS = ({
   options,
@@ -27,10 +36,20 @@ export const VideoJS = ({
 }) => {
   const videoRef = React.useRef<any>();
   const playerRef = React.useRef<any>();
+  const [subs, setSubs] = React.useState<ISubtitle[]>(subtitles);
 
   React.useEffect(() => {
     // make sure Video.js player is only initialized once
     if (!playerRef.current) {
+      if (subs.length > 0) {
+        const engSub = subs.filter(sub =>
+          englishLanguageCodes.has(sub.language)
+        );
+        if (engSub) {
+          setSubs(engSub);
+        }
+      }
+
       const videoElement = videoRef.current;
       if (!videoElement) return;
 
@@ -86,8 +105,8 @@ export const VideoJS = ({
   return (
     <div data-vjs-player>
       <video ref={videoRef} className="video-js vjs-big-play-centered">
-        {subtitles.length > 0 &&
-          subtitles.map(sub => {
+        {subs.splice(5).length > 0 &&
+          subs.map(sub => {
             return (
               <track
                 key={sub._id || sub.fileName}
