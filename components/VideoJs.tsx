@@ -15,8 +15,8 @@ import { getSubtitleLink } from '../API';
 
 const englishLanguageCodes = new Set([
   'en',
-  'en-US',
-  'en-GB',
+  'en-us',
+  'en-gb',
   'eng',
   'english'
 ]);
@@ -36,20 +36,10 @@ export const VideoJS = ({
 }) => {
   const videoRef = React.useRef<any>();
   const playerRef = React.useRef<any>();
-  const [subs, setSubs] = React.useState<ISubtitle[]>(subtitles);
 
   React.useEffect(() => {
     // make sure Video.js player is only initialized once
     if (!playerRef.current) {
-      if (subs.length > 0) {
-        const engSub = subs.filter(sub =>
-          englishLanguageCodes.has(sub.language)
-        );
-        if (engSub) {
-          setSubs(engSub);
-        }
-      }
-
       const videoElement = videoRef.current;
       if (!videoElement) return;
 
@@ -105,17 +95,18 @@ export const VideoJS = ({
   return (
     <div data-vjs-player>
       <video ref={videoRef} className="video-js vjs-big-play-centered">
-        {subs.splice(5).length > 0 &&
-          subs.map(sub => {
-            return (
-              <track
-                key={sub._id || sub.fileName}
-                kind="captions"
-                src={getSubtitleLink(videoSlug, sub.fileName)}
-                srcLang={sub.language}
-                label={sub.language}
-              />
-            );
+        {subtitles.length > 0 &&
+          subtitles.map(sub => {
+            if (englishLanguageCodes.has(sub.language.toLowerCase()))
+              return (
+                <track
+                  key={sub._id || sub.fileName}
+                  kind="captions"
+                  src={getSubtitleLink(videoSlug, sub.fileName)}
+                  srcLang={sub.language}
+                  label={sub.language}
+                />
+              );
           })}
       </video>
     </div>
