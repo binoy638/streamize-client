@@ -13,9 +13,10 @@ import Sidebar from './Sidebar';
 
 interface LayoutProps {
   children: React.ReactNode;
+  needAuth: boolean;
 }
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+const Layout: FC<LayoutProps> = ({ children, needAuth = true }) => {
   const theme = useMantineTheme();
 
   const [opened, setOpened] = useState(false);
@@ -26,25 +27,32 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   const { user } = useTypedSelector(state => state.user);
 
-  const { mutate, isLoading } = useMutation(verifyUser, {
+  const [loading, setLoading] = useState(true);
+
+  const { mutate } = useMutation(verifyUser, {
     onSuccess: response => {
       const { user } = response.data;
       dispatch(setUser(user));
+      setLoading(false);
     },
-    onError: err => {
-      console.log(err);
-      console.log('error');
-      // router.push('/signin');
+    onError: () => {
+      router.push('/signin');
     }
   });
 
   useEffect(() => {
+    if (!needAuth) {
+      setLoading(false);
+      return;
+    }
     if (user.id.length === 0) {
       mutate();
+    } else {
+      setLoading(false);
     }
-  }, [user.id, mutate]);
+  }, [user.id, mutate, needAuth]);
 
-  if (isLoading) {
+  if (loading) {
     return <ScreenLoader />;
   }
 
@@ -56,17 +64,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
             theme.colorScheme === 'dark'
               ? theme.colors.dark[8]
               : theme.colors.gray[0]
-          //   display: 'flex',
-          //   width: '100%',
-          //   justifyContent: 'center',
-          //   alignItems: 'center'
         }
       }}
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       fixed
       navbar={<Sidebar show={opened} />}
-      header={<Header opened={opened} setOpened={setOpened} />}
+      header={
+        <Header needAuth={needAuth} opened={opened} setOpened={setOpened} />
+      }
     >
       {children}
     </AppShell>

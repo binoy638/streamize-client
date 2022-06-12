@@ -1,5 +1,6 @@
 import { Button, PasswordInput, TextInput } from '@mantine/core';
 import { AxiosError } from 'axios';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
@@ -34,6 +35,9 @@ export default function SignIn() {
 
   return (
     <div className=" h-screen w-screen flex justify-center items-center">
+      <Head>
+        <title>Streamize - Sign in</title>
+      </Head>
       <form onSubmit={handleSubmit} className="w-96">
         <TextInput
           placeholder="Username"

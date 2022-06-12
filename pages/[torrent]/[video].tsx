@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import { Text } from '@mantine/core';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
@@ -38,8 +38,8 @@ const Video = () => {
   } else {
     if (!data) return <div>No video data</div>;
     return (
-      <>
-        <div>
+      <div className="flex h-full justify-center lg:items-center">
+        <div className="lg:h-3/4 lg:w-3/4 flex-col justify-center">
           <Player
             src={getVideoLink(video as string)}
             videoSlug={video as string}
@@ -50,13 +50,17 @@ const Video = () => {
                 : undefined
             }
           />
-          <div>{data.name}</div>
+          <Text lineClamp={4} mt={20}>
+            {data.name}
+          </Text>
         </div>
-      </>
+      </div>
     );
   }
 };
 
-Video.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+Video.getLayout = (page: ReactElement) => (
+  <Layout needAuth={true}>{page}</Layout>
+);
 
 export default Video;

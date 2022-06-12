@@ -205,7 +205,9 @@ function TorrentPage() {
   );
 }
 
-TorrentPage.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+TorrentPage.getLayout = (page: ReactElement) => (
+  <Layout needAuth={true}>{page}</Layout>
+);
 
 export default TorrentPage;
 

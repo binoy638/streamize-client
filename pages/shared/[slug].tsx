@@ -1,4 +1,4 @@
-import { Accordion } from '@mantine/core';
+import { Accordion, Text } from '@mantine/core';
 import { useRouter } from 'next/router';
 import React, { ReactElement, useEffect } from 'react';
 import { useQuery } from 'react-query';
@@ -36,7 +36,7 @@ const SharedPlaylist = () => {
                     onClick={() => handleClick(file.slug)}
                     key={file.slug}
                   >
-                    {file.name}
+                    <Text lineClamp={2}>{file.name}</Text>
                   </div>
                 );
               })}
@@ -48,6 +48,8 @@ const SharedPlaylist = () => {
   );
 };
 
-SharedPlaylist.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+SharedPlaylist.getLayout = (page: ReactElement) => (
+  <Layout needAuth={false}>{page}</Layout>
+);
 
 export default SharedPlaylist;

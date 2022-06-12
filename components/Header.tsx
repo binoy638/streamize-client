@@ -17,9 +17,10 @@ import { signOut } from '../API';
 interface HeaderProps {
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  needAuth: boolean;
 }
 
-const Header: FC<HeaderProps> = ({ opened, setOpened }) => {
+const Header: FC<HeaderProps> = ({ opened, setOpened, needAuth }) => {
   const router = useRouter();
   const { mutate } = useMutation(signOut, {
     onSuccess: () => {
@@ -62,14 +63,16 @@ const Header: FC<HeaderProps> = ({ opened, setOpened }) => {
                 Streamize
               </span>
             </Link>
-            <span
-              className="flex justify-center items-center cursor-pointer"
-              onClick={handleLogout}
-            >
-              <Avatar color="cyan" radius="xl">
-                <UserIcon className="w-5 h-5" />
-              </Avatar>
-            </span>
+            {needAuth && (
+              <span
+                className="flex justify-center items-center cursor-pointer"
+                onClick={handleLogout}
+              >
+                <Avatar color="cyan" radius="xl">
+                  <UserIcon className="w-5 h-5" />
+                </Avatar>
+              </span>
+            )}
           </div>
           {/* <Text className="font-balsamiqSans">Application header</Text> */}
         </div>
