@@ -91,7 +91,11 @@ function TorrentList({
                     <div className="flex-col justify-between items-center">
                       <Link href={`/${item.slug}`} passHref>
                         {/* <p className="truncate w-4/5 px-1 py-2 flex hover:underline cursor-pointer"> */}
-                        <Text lineClamp={2} p={10}>
+                        <Text
+                          lineClamp={2}
+                          p={10}
+                          style={{ cursor: 'pointer' }}
+                        >
                           {item.name}
                         </Text>
                         {/* </p> */}
