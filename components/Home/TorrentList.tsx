@@ -1,5 +1,11 @@
 /* eslint-disable unicorn/no-nested-ternary */
-import { CheckIcon, DotsVerticalIcon, XIcon } from '@heroicons/react/solid';
+import {
+  CheckIcon,
+  DotsVerticalIcon,
+  TrashIcon,
+  XIcon
+} from '@heroicons/react/solid';
+import { Text } from '@mantine/core';
 import { useNotifications } from '@mantine/notifications';
 import Link from 'next/link';
 import prettyBytes from 'pretty-bytes';
@@ -43,7 +49,7 @@ function TorrentList({
   };
 
   return (
-    <div className="mt-4 lg:mt-6 h-96 flex flex-col gap-4 overflow-y-auto overflow-x-hidden text-secondaryText">
+    <div className="mt-4 lg:mt-6 flex flex-col gap-4 overflow-hidden text-secondaryText">
       <p>Total: {prettyBytes(diskSpace.size)}</p>
       <p>Free: {prettyBytes(diskSpace.free)}</p>
 
@@ -82,13 +88,15 @@ function TorrentList({
                   item.status === TorrentState.PROCESSING ||
                   item.status === TorrentState.DONE ? (
                   <>
-                    <div className="flex justify-between items-center">
+                    <div className="flex-col justify-between items-center">
                       <Link href={`/${item.slug}`} passHref>
-                        <p className="truncate w-4/5 px-1 py-2 flex hover:underline cursor-pointer">
+                        {/* <p className="truncate w-4/5 px-1 py-2 flex hover:underline cursor-pointer"> */}
+                        <Text lineClamp={2} p={10}>
                           {item.name}
-                        </p>
+                        </Text>
+                        {/* </p> */}
                       </Link>
-                      <p>{prettyBytes(item.size)}</p>
+                      <Text p={10}>{prettyBytes(item.size)}</Text>
                     </div>
                     {item.downloadInfo && (
                       <>
@@ -124,12 +132,12 @@ function TorrentList({
                   </>
                 ) : null}
               </div>
-              <div className="my-auto px-2">
-                <DotsVerticalIcon
-                  className="h-5 w-5 cursor-pointer"
-                  onClick={() => deleteTorrentHandler(item.slug)}
-                />
-              </div>
+            </div>
+            <div className="flex">
+              <TrashIcon
+                className="ml-2 h-5 w-5 cursor-pointer mb-2"
+                onClick={() => deleteTorrentHandler(item.slug)}
+              />
             </div>
           </div>
         );
