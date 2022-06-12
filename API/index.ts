@@ -1,5 +1,8 @@
+import { AxiosResponse } from 'axios';
+
 import { ITorrent, IVideo } from '../@types';
 import { Provider, TorrentData } from '../@types/store';
+import { User } from '../store/slice/user.slice';
 import { API, TorrentScrapper } from './config';
 
 export const searchTorrentAPI = async (
@@ -100,7 +103,8 @@ export const signIn = ({
 
 export const signOut = () => API.post('/auth/signout');
 
-export const verifyUser = () => API.post('/auth/verify');
+export const verifyUser = (): Promise<AxiosResponse<{ user: User }>> =>
+  API.post('/auth/verify');
 
 export const getSharedPlaylist = async (
   slug: string

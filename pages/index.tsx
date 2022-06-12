@@ -9,34 +9,34 @@ import ScreenLoader from '../components/ScreenLoader';
 import Searchbar from '../components/search/Searchbar';
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const { mutate } = useMutation(verifyUser, {
-    onSuccess: () => {
-      setLoading(false);
-    },
-    onError: () => {
-      router.push('/signin');
-    }
-  });
+  // const { mutate } = useMutation(verifyUser, {
+  //   onSuccess: () => {
+  //     setLoading(false);
+  //   },
+  //   onError: () => {
+  //     router.push('/signin');
+  //   }
+  // });
 
-  useEffect(() => {
-    mutate();
-  }, []);
+  // useEffect(() => {
+  //   mutate();
+  // }, []);
 
   return (
-    <>
-      {loading ? (
-        <ScreenLoader />
-      ) : (
-        <Layout>
-          <Searchbar def="search" />
-          <AddedTorrentList />
-        </Layout>
-      )}
-    </>
+    // <>
+    //   {loading ? (
+    //     <ScreenLoader />
+    //   ) : (
+    <Layout>
+      <Searchbar def="search" />
+      <AddedTorrentList />
+    </Layout>
+    //   )}
+    // </>
   );
 };
 

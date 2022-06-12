@@ -29,7 +29,6 @@ export default function SignIn() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // console.log(username, password);
     mutate({ username, password });
   };
 

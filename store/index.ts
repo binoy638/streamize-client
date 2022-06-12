@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import searchBarSlice from './slice/searchBar.slice';
+import userSlice from './slice/user.slice';
 
 const store = configureStore({
   reducer: {
-    searchBar: searchBarSlice
+    user: userSlice
   }
 });
 
