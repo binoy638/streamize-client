@@ -16,13 +16,6 @@ const SharedPlaylist = () => {
     getSharedPlaylist(slug as string)
   );
 
-  const handleClick = (videoSlug: string) => {
-    router.push({
-      pathname: '/shared/stream',
-      query: { slug, videoSlug }
-    });
-  };
-
   if (isLoading) {
     return (
       <div>
@@ -63,6 +56,7 @@ const SharedPlaylist = () => {
         <VideoList
           videos={data.torrent.files}
           torrentSlug={data.torrent.slug}
+          sharedSlug={slug as string}
         />
       )}
     </div>
