@@ -9,19 +9,17 @@ import {
   ExclamationCircleIcon,
   FolderIcon,
   SaveIcon,
-  ShareIcon,
-  TrashIcon
+  ShareIcon
 } from '@heroicons/react/outline';
-import { Drawer, Menu, Paper, Progress, Skeleton, Text } from '@mantine/core';
-import { useRouter } from 'next/router';
+import { Divider, Menu, Paper, Progress, Skeleton, Text } from '@mantine/core';
 import prettyBytes from 'pretty-bytes';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { MdOutlineQueue } from 'react-icons/md';
 import { VscServerProcess } from 'react-icons/vsc';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 
 import { ITorrent, IVideo, TorrentState } from '../@types';
-import { getTorrent, shareTorrent } from '../API';
+import { getTorrent } from '../API';
 import ItemWithIcon from '../components/Common/ItemWithIcon';
 import Layout from '../components/Layout';
 import { prettyTime } from '../utils';
@@ -73,24 +71,18 @@ const TorrentStatus = ({ status }: { status: TorrentState }) => {
   }
 };
 
-export const Header = ({
-  data,
-  setOpenShareDrawer
-}: {
-  data: ITorrent;
-  setOpenShareDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+export const Header = ({ data }: { data: ITorrent }) => {
   return (
     <Paper shadow={'sm'} p={20}>
       <div className="flex justify-end pl-2">
-        <MenuItem setOpenShareDrawer={setOpenShareDrawer} />
+        <MenuItem />
       </div>
       <Text size="xl" weight={'bold'} lineClamp={4}>
         {data.name}
       </Text>
       <div className="py-2  flex gap-6">
         <ItemWithIcon
-          title={data?.size ? prettyBytes(data.size) : '??'}
+          title={prettyBytes(data.size)}
           icon={<ChipIcon className="h-4 w-4" />}
         />
         <ItemWithIcon
@@ -124,17 +116,8 @@ export const Header = ({
   );
 };
 
-function TorrentPage() {
-  const router = useRouter();
-  const [openShareDrawer, setOpenShareDrawer] = useState(false);
-
-  const torrentSlug = router.query.torrent as string;
-  //   const { mutate } = useMutation(shareTorrent, {
-  //     onSuccess: data => {
-  //       const link = `${window.location.host}/shared/${data}`;
-  //       setShareLink(link);
-  //     }
-  //   });
+const torrentSlug = 'iirul';
+function Test() {
   const { isError, isLoading, data } = useQuery(
     ['torrent', torrentSlug],
     () => getTorrent(torrentSlug),
@@ -187,50 +170,24 @@ function TorrentPage() {
 
   return (
     <div>
-      <Header data={data} setOpenShareDrawer={setOpenShareDrawer} />
+      <Header data={data} />
 
-      {data.files.length > 0 && (
-        <VideoList videos={data.files} torrentSlug={data.slug} />
-      )}
-      <Drawer
-        opened={openShareDrawer}
-        onClose={() => setOpenShareDrawer(false)}
-        title="Register"
-        padding="xl"
-        size="xl"
-      >
-        {/* Drawer content */}
-      </Drawer>
+      {data.files.length > 0 && <VideoList videos={data.files} />}
     </div>
   );
 }
 
-TorrentPage.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+Test.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 
-export default TorrentPage;
+export default Test;
 
-const VideoList = ({
-  videos,
-  torrentSlug
-}: {
-  videos: IVideo[];
-  torrentSlug: string;
-}) => {
-  const router = useRouter();
-
-  const handleClick = (tSlug: string, vSlug: string) => {
-    // if (data.status !== 'done') return;
-    router.push(`/${tSlug}/${vSlug}`);
-  };
+const VideoList = ({ videos }: { videos: IVideo[] }) => {
   return (
     <Paper mt={10} shadow={'sm'} p={20} withBorder>
-      {videos.map(video => {
+      {videos.map((video, index) => {
         return (
           <Paper key={video.slug} withBorder py={10} px={10}>
-            <div
-              className="flex gap-2 cursor-pointer items-center "
-              onClick={() => handleClick(torrentSlug, video.slug)}
-            >
+            <div className="flex gap-2 cursor-pointer items-center ">
               <ArrowNarrowRightIcon className="w-5 h-5" />
               <Text size="md" lineClamp={2}>
                 {video.name}
@@ -259,22 +216,10 @@ const VideoList = ({
   );
 };
 
-const MenuItem = ({
-  setOpenShareDrawer
-}: {
-  setOpenShareDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const MenuItem = () => {
   return (
     <Menu>
-      <Menu.Item
-        icon={<ShareIcon className="w-4 h-4" />}
-        onClick={() => setOpenShareDrawer(true)}
-      >
-        Share
-      </Menu.Item>
-      <Menu.Item color="red" icon={<TrashIcon className="w-4 h-4" />}>
-        Delete
-      </Menu.Item>
+      <Menu.Item icon={<ShareIcon className="w-4 h-4" />}>Share</Menu.Item>
     </Menu>
   );
 };

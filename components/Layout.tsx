@@ -33,7 +33,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     },
     onError: err => {
       console.log(err);
-      router.push('/signin');
+      console.log('error');
+      // router.push('/signin');
     }
   });
 

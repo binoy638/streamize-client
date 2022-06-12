@@ -1,8 +1,17 @@
 /* eslint-disable sonarjs/cognitive-complexity */
-import { DownloadIcon } from '@heroicons/react/solid';
+import {
+  ArrowNarrowDownIcon,
+  ArrowNarrowUpIcon,
+  ChipIcon,
+  ClockIcon,
+  CloudDownloadIcon,
+  DownloadIcon,
+  FolderIcon,
+  SaveIcon
+} from '@heroicons/react/outline';
+import { Text } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import prettyBytes from 'pretty-bytes';
 import React from 'react';
 import { useMutation } from 'react-query';
 
@@ -35,11 +44,12 @@ function Torrent({ data }: { data: ITorrent }) {
     data.status === TorrentState.PROCESSING ||
     data.status === TorrentState.DONE ? (
     <div className="flex flex-col gap-4">
-      <div className="justify-center text-xl border-b pb-4">
+      {/* <div className="justify-center text-xl border-b pb-4">
         <Tag header="Title" value={data.name} />
         <Tag header="Size" value={prettyBytes(data.size)} />
         <Tag header="Status" value={data.status} />
-      </div>
+      </div> */}
+      <Header />
       <div className="">
         <div className="flex flex-col gap-2">
           {data.files.map(item => {
@@ -112,7 +122,52 @@ export default Torrent;
 const Tag = ({ header, value }: { header: string; value: string }) => {
   return (
     <div className="flex gap-4">
-      <span className="font-bold text-gray-300">{header}:</span> {value}
+      <span className="font-bold text-gray-300">{header}:</span>
+      <Text lineClamp={4}>
+        {value} asdasdaddddddddddddddddddddddddddddddddddddddddddddddddddd
+      </Text>
     </div>
+  );
+};
+
+export const Header = () => {
+  return (
+    <header>
+      <Text size="xl" weight={'bold'} lineClamp={4}>
+        The.Unbearable.Weight.of.Massive.Talent.2022.1080p.WEBRip.1400MB.DD5.1.x264-GalaxyRG.mkv
+      </Text>
+      <div className="py-2  flex gap-6">
+        <div className="flex gap-1  items-center">
+          <ChipIcon className="h-4 w-4" />
+          <Text size="sm">1400MB</Text>
+        </div>
+        <div className="flex gap-2  items-center">
+          <FolderIcon className="h-4 w-4" />
+          <Text size="sm">3</Text>
+        </div>
+        <div className="flex gap-2  items-center">
+          <CloudDownloadIcon className="h-4 w-4" />
+          <Text size="sm">Downloading</Text>
+        </div>
+      </div>
+      <div className="py-2 border-y-2 flex gap-6">
+        <div className="flex gap-2  items-center">
+          <ArrowNarrowUpIcon className="h-4 w-4" />
+          <Text size="sm"> 12 MB/s</Text>
+        </div>
+        <div className="flex gap-2  items-center">
+          <ArrowNarrowDownIcon className="h-4 w-4" />
+          <Text size="sm"> 2 MB/s</Text>
+        </div>
+        <div className="flex gap-2  items-center">
+          <SaveIcon className="h-4 w-4" />
+          <Text size="sm"> 70% </Text>
+        </div>
+        <div className="flex gap-2  items-center">
+          <ClockIcon className="h-4 w-4" />
+          <Text size="sm"> 50min </Text>
+        </div>
+      </div>
+    </header>
   );
 };
