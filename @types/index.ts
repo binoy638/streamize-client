@@ -36,6 +36,7 @@ export interface ISubtitle {
   title: string;
   language: string;
   path: string;
+  src: string;
 }
 
 export interface IVideo {

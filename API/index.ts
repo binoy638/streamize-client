@@ -49,8 +49,13 @@ export const getTorrent = async (slug: string): Promise<ITorrent | null> => {
 
 export const getVideo = async (slug: string): Promise<IVideo | null> => {
   try {
-    const { data } = await API.get(`/video/${slug}`);
+    const { data } = await API.get<IVideo>(`/video/${slug}`);
     if (!data) return null;
+    // eslint-disable-next-line unicorn/no-array-for-each
+    data.subtitles.forEach(sub => {
+      sub.src = `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${data.slug}/${sub.fileName}`;
+      return sub;
+    });
     return data;
   } catch (error) {
     console.log(error);
@@ -63,9 +68,6 @@ export const getVideoLink = (videoSlug: string) =>
 
 export const getDownloadLink = (videoSlug: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/download/${videoSlug}`;
-
-export const getSubtitleLink = (videoSlug: string, filename: string) =>
-  `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${videoSlug}/${filename}`;
 
 export const getPreviewLink = (videoSlug: string, filename: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/preview/${videoSlug}/${filename}`;

@@ -4,13 +4,9 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { IVideo } from '../../@types';
-import {
-  getPreviewLink,
-  getSharedPlaylist,
-  getSharedVideoLink
-} from '../../API';
+import { getSharedPlaylist } from '../../API';
 import Layout from '../../components/Layout';
-import Player from '../../components/VideoPlayer';
+import Player from '../../components/Player';
 
 const Stream = () => {
   const router = useRouter();
@@ -30,16 +26,7 @@ const Stream = () => {
   return (
     <div className="flex h-full justify-center lg:items-center">
       <div className="lg:h-3/4 lg:w-3/4 flex-col justify-center">
-        <Player
-          src={getSharedVideoLink(slug as string, videoSlug as string)}
-          videoSlug={videoSlug as string}
-          subtitle={video.subtitles}
-          previewSrc={
-            video.progressPreview === true
-              ? getPreviewLink(video.slug, `${video.slug}.vtt`)
-              : undefined
-          }
-        />
+        <Player video={video} />
         <Text lineClamp={4} mt={20}>
           {video.name}
         </Text>

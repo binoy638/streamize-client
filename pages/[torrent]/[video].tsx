@@ -4,9 +4,9 @@ import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import { useQuery } from 'react-query';
 
-import { getPreviewLink, getVideo, getVideoLink } from '../../API';
+import { getVideo } from '../../API';
 import Layout from '../../components/Layout';
-import Player from '../../components/VideoPlayer';
+import Player from '../../components/Player';
 
 const Video = () => {
   const router = useRouter();
@@ -40,16 +40,7 @@ const Video = () => {
     return (
       <div className="flex h-full justify-center lg:items-center">
         <div className="lg:h-3/4 lg:w-3/4 flex-col justify-center">
-          <Player
-            src={getVideoLink(video as string)}
-            videoSlug={video as string}
-            subtitle={data.subtitles}
-            previewSrc={
-              data.progressPreview === true
-                ? getPreviewLink(data.slug, `${data.slug}.vtt`)
-                : undefined
-            }
-          />
+          <Player video={data} />
           <Text lineClamp={4} mt={20}>
             {data.name}
           </Text>
