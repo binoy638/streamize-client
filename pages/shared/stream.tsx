@@ -26,7 +26,7 @@ const Stream = () => {
   return (
     <div className="flex h-full justify-center lg:items-center">
       <div className="lg:h-3/4 lg:w-3/4 flex-col justify-center">
-        <Player video={video} />
+        <Player video={video} shareSlug={slug as string} />
         <Text lineClamp={4} mt={20}>
           {video.name}
         </Text>

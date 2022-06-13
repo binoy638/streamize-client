@@ -2,23 +2,22 @@ import React, { FC, useCallback } from 'react';
 import { VideoJsPlayer } from 'video.js';
 
 import { IVideo } from '../@types';
-import { getPreviewLink, getVideoLink } from '../API';
-import { useTypedDispatch } from '../hooks/useTypedDispatch';
-import { setProgress } from '../store/slice/player.slice';
+import { getPreviewLink, getSharedVideoLink, getVideoLink } from '../API';
 import { VideoPlayerEvents } from '../utils/videoPlayerEvents';
 import VideoJS from '../VideoJs/VideoJs';
 
 interface PlayerProps {
   video: IVideo;
+  shareSlug?: string;
 }
 
-const Player: FC<PlayerProps> = ({ video }) => {
-  const dispatch = useTypedDispatch();
-
+const Player: FC<PlayerProps> = ({ video, shareSlug }) => {
   const options = {
     sources: [
       {
-        src: getVideoLink(video.slug as string)
+        src: shareSlug
+          ? getSharedVideoLink(shareSlug, video.slug)
+          : getVideoLink(video.slug)
       }
     ]
   };
