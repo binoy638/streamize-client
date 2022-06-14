@@ -11,7 +11,7 @@ const useFetchSharedPlaylist = (videoSlug: string) => {
       const data = await getSharedPlaylist(videoSlug);
       return data;
     },
-    { enabled: !!videoSlug }
+    { enabled: !!videoSlug, refetchOnWindowFocus: false }
   );
 };
 

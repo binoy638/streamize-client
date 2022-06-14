@@ -13,7 +13,7 @@ const useFetchVideo = (videoSlug: string) => {
       ]);
       return { ...video, ...progress };
     },
-    { enabled: !!videoSlug }
+    { enabled: !!videoSlug, refetchOnWindowFocus: false }
   );
 };
 
