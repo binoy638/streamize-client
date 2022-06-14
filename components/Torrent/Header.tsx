@@ -18,15 +18,15 @@ import { TorrentStatus } from './TorrentStatus';
 
 interface HeaderProps {
   data: ITorrent;
-  setOpenShareDrawer?: React.Dispatch<React.SetStateAction<boolean>>;
+  showExtraOptions?: boolean;
 }
 
-export const Header: FC<HeaderProps> = ({ data, setOpenShareDrawer }) => {
+export const Header: FC<HeaderProps> = ({ data, showExtraOptions }) => {
   return (
     <Paper shadow={'sm'} p={20}>
-      {setOpenShareDrawer && (
+      {showExtraOptions && (
         <div className="flex justify-end pl-2">
-          <ExtraOptions setOpenShareDrawer={setOpenShareDrawer} />
+          <ExtraOptions torrentId={data._id} />
         </div>
       )}
 

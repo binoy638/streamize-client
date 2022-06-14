@@ -53,20 +53,13 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo }) => {
     [shareSlug, video.slug]
   );
 
-  const onReady = useCallback(
-    (player: videojs.VideoJsPlayer) => {
-      const savedVolume = localStorage.getItem('volume');
-      if (savedVolume && (savedVolume === '0' || Number(savedVolume))) {
-        player.volume(Number(savedVolume));
-      }
-
-      const savedProgress = localStorage.getItem(`${video.slug}-progress`);
-      if (savedProgress) {
-        player.currentTime(Number(savedProgress));
-      }
-    },
-    [video.slug]
-  );
+  const onReady = useCallback((player: videojs.VideoJsPlayer) => {
+    //* Restore volume from local storage
+    const savedVolume = localStorage.getItem('volume');
+    if (savedVolume && (savedVolume === '0' || Number(savedVolume))) {
+      player.volume(Number(savedVolume));
+    }
+  }, []);
 
   const onTimeUpdate = useCallback(
     (player: VideoJsPlayer) => {

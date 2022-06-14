@@ -79,19 +79,26 @@ export const deleteTorrent = (slug: string) => API.delete(`/torrent/${slug}`);
 export const shareTorrent = async ({
   torrent,
   mediaId,
-  isTorrent
+  isTorrent,
+  expiresIn
 }: {
   torrent: string;
   mediaId: string;
   isTorrent: boolean;
+  expiresIn: Date;
 }): Promise<string> => {
-  const { data } = await API.post('/share/create', {
-    torrent,
-    mediaId,
-    isTorrent
-  });
-  if (data) return data.slug;
-  return '';
+  try {
+    const { data } = await API.post<{ slug: string }>('/share/create', {
+      torrent,
+      mediaId,
+      isTorrent,
+      expiresIn
+    });
+    return data.slug;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error while sharing torrent');
+  }
 };
 
 export const signIn = ({
@@ -110,7 +117,6 @@ export const verifyUser = (): Promise<AxiosResponse<{ user: User }>> =>
 export const getSharedPlaylist = async (
   slug: string
 ): Promise<{ torrent: ITorrent; user: string }> => {
-  if (!slug) throw new Error('No slug provided');
   const { data } = await API.get(`/share/${slug}`);
   return data;
 };

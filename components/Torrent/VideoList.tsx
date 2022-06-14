@@ -21,7 +21,7 @@ export const VideoList: FC<VideoListProps> = ({
   const handleClick = (vSlug: string) => {
     if (sharedSlug) {
       router.push({
-        pathname: '/shared/stream',
+        pathname: '/shared/[slug]/[videoSlug]',
         query: { slug: sharedSlug, videoSlug: vSlug }
       });
     } else {
