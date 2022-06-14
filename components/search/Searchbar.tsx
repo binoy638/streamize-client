@@ -48,7 +48,7 @@ function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
   const router = useRouter();
 
   const [query, setQuery] = useState('');
-  const [torrentProvider, setTorrentProvider] = useState('1337x');
+  const [torrentProvider] = useState('1337x');
   const [type, setType] = useState<'search' | 'add'>(def);
   const [magnet, setMagnet] = useState<string>('');
   const toggleHandler = () => {

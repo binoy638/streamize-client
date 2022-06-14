@@ -8,7 +8,7 @@ import {
 import { Avatar } from '@mantine/core';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { useMutation } from 'react-query';
 

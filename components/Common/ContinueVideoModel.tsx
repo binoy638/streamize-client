@@ -1,4 +1,4 @@
-import { Button, Group, Modal, Text } from '@mantine/core';
+import { Button, Modal, Text } from '@mantine/core';
 import React, { FC } from 'react';
 
 import { secondsToHHMMSS } from '../../utils';
