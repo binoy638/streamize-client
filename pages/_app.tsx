@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             withNormalizeCSS
             emotionOptions={{ key: 'mantine', prepend: false }}
             theme={{
-              colorScheme: 'dark'
+              colorScheme: 'light'
             }}
           >
             <NotificationsProvider>

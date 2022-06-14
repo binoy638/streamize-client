@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { postVideoProgress } from '../thunk/player.thunk';
+
 interface Progress {
   currentTime: number;
-  lastUpdate: number;
+  nextUpdateTime: number; //* next timestamp that needs to be sent to the server to save user progress (need better name)
+  lastUpdateTime: number; //* last timestamp that was sent to the server to save user progress
 }
 
 interface PlayerSlice {
@@ -13,7 +16,8 @@ interface PlayerSlice {
 const initialState: PlayerSlice = {
   progressTracker: {
     currentTime: 0,
-    lastUpdate: 0
+    nextUpdateTime: 0,
+    lastUpdateTime: 0
   }
 };
 
@@ -22,9 +26,17 @@ const playerSlice = createSlice({
   initialState,
   reducers: {
     setProgress: (state, action: PayloadAction<number>) => {
-      state.progressTracker.currentTime = action.payload;
-      //   state.progressTracker.lastUpdate = action.payload.lastUpdate;
+      const currentTime = action.payload;
+      state.progressTracker.currentTime = currentTime;
+      if (currentTime % 5 === 0) {
+        state.progressTracker.nextUpdateTime = currentTime;
+      }
     }
+  },
+  extraReducers: builder => {
+    builder.addCase(postVideoProgress.fulfilled, (state, action) => {
+      state.progressTracker.lastUpdateTime = action.payload;
+    });
   }
 });
 

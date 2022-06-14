@@ -50,6 +50,7 @@ export interface IVideo {
   status: VideoState;
   downloadInfo?: IFileDownloadInfo;
   transcodingPercent: number;
+  progress?: number;
 }
 
 export interface ITorrent {

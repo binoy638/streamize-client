@@ -5,6 +5,8 @@ import React, { ReactElement, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import { getTorrent, shareTorrent } from '../API';
+import Loader from '../components/Common/Loader';
+import NotFound from '../components/Common/NotFound';
 import Layout from '../components/Layout';
 import { Header } from '../components/Torrent/Header';
 import { VideoList } from '../components/Torrent/VideoList';
@@ -38,36 +40,13 @@ function TorrentPage() {
   );
 
   if (isLoading) {
-    return (
-      <div>
-        <Skeleton height={50} mb={10} />
-        <Skeleton height={30} />
-      </div>
-    );
+    return <Loader />;
   }
   if (!data) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <div className="flex-col justify-center items-center ">
-          <ExclamationCircleIcon className="h-48 w-48" />
-          <Text size="xl" weight={'bold'} align={'center'}>
-            No Torrent Found
-          </Text>
-        </div>
-      </div>
-    );
+    return <NotFound title="No Torrent Found" />;
   }
   if (isError) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <div className="flex-col justify-center items-center ">
-          <ExclamationCircleIcon className="h-48 w-48" />
-          <Text size="xl" weight={'bold'} align={'center'}>
-            Something went wrong
-          </Text>
-        </div>
-      </div>
-    );
+    return <NotFound title="Somthing went wrong" />;
   }
 
   return (

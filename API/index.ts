@@ -47,10 +47,9 @@ export const getTorrent = async (slug: string): Promise<ITorrent | null> => {
   }
 };
 
-export const getVideo = async (slug: string): Promise<IVideo | null> => {
+export const getVideo = async (slug: string): Promise<IVideo> => {
   try {
     const { data } = await API.get<IVideo>(`/video/${slug}`);
-    if (!data) return null;
     // eslint-disable-next-line unicorn/no-array-for-each
     data.subtitles.forEach(sub => {
       sub.src = `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${data.slug}/${sub.fileName}`;
@@ -118,3 +117,18 @@ export const getSharedPlaylist = async (
 
 export const getSharedVideoLink = (slug: string, videoSlug: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}share/stream/${slug}/${videoSlug}/${videoSlug}.m3u8`;
+
+export const postUserVideoProgress = (videoSlug: string, progress: number) =>
+  API.post(`/video/progress/${videoSlug}`, { progress });
+
+export const getUserVideoProgress = async (videoSlug: string) => {
+  try {
+    const { data } = await API.get<{ progress: number }>(
+      `/video/progress/${videoSlug}`
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return { progress: 0 };
+  }
+};

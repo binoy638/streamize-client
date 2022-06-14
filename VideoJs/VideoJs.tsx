@@ -35,6 +35,7 @@ const defaultOptions: videojs.PlayerOptions = {
 export const VideoJS = ({
   options,
   subtitles = [],
+  seekTo,
   progressBarPreviewUrl,
   onReady,
   onTimeUpdate,
@@ -53,6 +54,7 @@ export const VideoJS = ({
 }: {
   options: videojs.PlayerOptions;
   progressBarPreviewUrl: string | undefined;
+  seekTo?: number;
   onReady?: (player: videojs.Player) => void;
   onTimeUpdate?: (player: videojs.Player) => void;
   onPlay?: (player: videojs.Player) => void;
@@ -115,9 +117,14 @@ export const VideoJS = ({
           onDispose && player.on('dispose', () => onDispose(player));
         }
       ));
+    } else {
+      if (seekTo && seekTo > 0) {
+        playerRef.current.currentTime(seekTo);
+        playerRef.current.play();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [options, videoRef]);
+  }, [options, videoRef, seekTo]);
 
   React.useEffect(() => {
     const player = playerRef.current;
