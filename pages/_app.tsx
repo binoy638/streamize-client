@@ -15,6 +15,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 
+import { ModelProvider } from '../components/ModalProvider';
 import store from '../store';
 
 type NextPageWithLayout = NextPage & {
@@ -52,7 +53,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             }}
           >
             <NotificationsProvider>
-              {getLayout(<Component {...pageProps} />)}
+              <ModelProvider>
+                {getLayout(<Component {...pageProps} />)}
+              </ModelProvider>
             </NotificationsProvider>
           </MantineProvider>
         </ColorSchemeProvider>

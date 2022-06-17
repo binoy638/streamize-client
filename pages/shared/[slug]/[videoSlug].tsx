@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import React, { ReactElement, useEffect, useState } from 'react';
 
 import { IVideo } from '../../../@types';
-import ContinueVideoModel from '../../../components/Common/ContinueVideoModel';
 import Loader from '../../../components/Common/Loader';
 import NotFound from '../../../components/Common/NotFound';
 import Layout from '../../../components/Layout';
 import Player from '../../../components/Player';
 import useFetchSharedPlaylist from '../../../hooks/useFetchSharedPlaylist';
+import useModal from '../../../hooks/useModal';
+import { secondsToHHMMSS } from '../../../utils';
 
 const SharedVideo = () => {
   const router = useRouter();
@@ -19,16 +20,15 @@ const SharedVideo = () => {
 
   const [video, setVideo] = useState<IVideo>();
 
-  const [showModel, setShowModel] = useState(false);
-
   const [continueVideo, setContinueVideo] = useState(false);
 
   const [videoSearchCompleted, setVideoSearchCompleted] = useState(false);
 
   const [videoProgress, setVideoProgress] = useState<number>(0);
 
+  const modal = useModal();
+
   useEffect(() => {
-    console.log('inside video data usefeect');
     if (!data) return;
 
     const video = data.torrent.files.find(file => file.slug === videoSlug);
@@ -37,12 +37,25 @@ const SharedVideo = () => {
       const progress = localStorage.getItem(key);
       if (progress) {
         setVideoProgress(Number(progress));
-        setShowModel(true);
+        modal.showModal({
+          title: `Do you want to continue from where you left? ${secondsToHHMMSS(
+            Number(progress)
+          )}`,
+          positiveLabel: 'Yes',
+          negativeLabel: 'No',
+          onPositiveAction: () => {
+            setContinueVideo(true);
+          },
+          onNegativeAction: () => {
+            setContinueVideo(false);
+          }
+        });
       }
       setVideo(video);
     }
 
     setVideoSearchCompleted(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, videoSlug]);
 
   if (isLoading || !videoSearchCompleted) {
@@ -68,12 +81,6 @@ const SharedVideo = () => {
           {video.name}
         </Text>
       </div>
-      <ContinueVideoModel
-        setContinueVideo={setContinueVideo}
-        opened={showModel}
-        setOpened={setShowModel}
-        progress={videoProgress}
-      />
     </div>
   );
 };

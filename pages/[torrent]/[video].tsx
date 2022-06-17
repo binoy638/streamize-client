@@ -2,12 +2,13 @@ import { Text } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
 
-import ContinueVideoModel from '../../components/Common/ContinueVideoModel';
 import Loader from '../../components/Common/Loader';
 import NotFound from '../../components/Common/NotFound';
 import Layout from '../../components/Layout';
 import Player from '../../components/Player';
 import useFetchVideo from '../../hooks/useFetchVideo';
+import useModal from '../../hooks/useModal';
+import { secondsToHHMMSS } from '../../utils';
 
 const Video = () => {
   const router = useRouter();
@@ -16,14 +17,27 @@ const Video = () => {
 
   const { isError, isLoading, data } = useFetchVideo(video as string);
 
-  const [showModel, setShowModel] = useState(false);
-
   const [continueVideo, setContinueVideo] = useState(false);
+
+  const modal = useModal();
 
   useEffect(() => {
     if (data && data.progress > 0) {
-      setShowModel(true);
+      modal.showModal({
+        title: `Do you want to continue from where you left? ${secondsToHHMMSS(
+          data.progress
+        )}`,
+        positiveLabel: 'Yes',
+        negativeLabel: 'No',
+        onPositiveAction: () => {
+          setContinueVideo(true);
+        },
+        onNegativeAction: () => {
+          setContinueVideo(false);
+        }
+      });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   if (isLoading) {
@@ -47,12 +61,6 @@ const Video = () => {
           {data.name}
         </Text>
       </div>
-      <ContinueVideoModel
-        setContinueVideo={setContinueVideo}
-        opened={showModel}
-        setOpened={setShowModel}
-        progress={data.progress}
-      />
     </div>
   );
 };
