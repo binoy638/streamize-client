@@ -1,10 +1,12 @@
 import React, { FC, useCallback, useEffect, useMemo } from 'react';
+import { io } from 'socket.io-client';
 import { VideoJsPlayer } from 'video.js';
 
 import { IVideo } from '../@types';
 import { getPreviewLink, getSharedVideoLink, getVideoLink } from '../API';
 import { useTypedDispatch } from '../hooks/useTypedDispatch';
 import { useTypedSelector } from '../hooks/useTypedSelector';
+import SyncStream from '../lib/SyncStream';
 import { setProgress } from '../store/slice/player.slice';
 import { postVideoProgress } from '../store/thunk/player.thunk';
 import VideoJS from '../VideoJs/VideoJs';
@@ -13,10 +15,13 @@ interface PlayerProps {
   video: IVideo;
   shareSlug?: string;
   seekTo?: number;
+  isHost?: boolean;
 }
 
-const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo }) => {
+const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo, isHost }) => {
   const dispatch = useTypedDispatch();
+
+  // const socket = useSocket();
 
   const {
     progressTracker: { nextUpdateTime }
@@ -25,6 +30,9 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo }) => {
   const { user } = useTypedSelector(state => state.user);
 
   useEffect(() => {
+    //! check if its a sync stream
+    if (shareSlug) return;
+
     //* If time is 0 then no need to update progress
     if (nextUpdateTime === 0 || !video.slug) return;
 
@@ -38,7 +46,7 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo }) => {
     //* If user is not logged in then update progress in the local storage
     const key = `${video.slug}-progress`;
     localStorage.setItem(key, nextUpdateTime.toString());
-  }, [nextUpdateTime, video.slug, dispatch, user.id]);
+  }, [nextUpdateTime, video.slug, dispatch, user.id, shareSlug]);
 
   const options = useMemo(
     () => ({
@@ -54,6 +62,13 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo }) => {
   );
 
   const onReady = useCallback((player: videojs.VideoJsPlayer) => {
+    if (shareSlug) {
+      const socket = io('http://localhost:8000');
+
+      const host = isHost ? true : false;
+      new SyncStream(io, socket, player, host, shareSlug);
+    }
+
     //* Restore volume from local storage
     const savedVolume = localStorage.getItem('volume');
     if (savedVolume && (savedVolume === '0' || Number(savedVolume))) {

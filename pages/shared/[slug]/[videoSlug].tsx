@@ -9,9 +9,12 @@ import Layout from '../../../components/Layout';
 import Player from '../../../components/Player';
 import useFetchSharedPlaylist from '../../../hooks/useFetchSharedPlaylist';
 import useModal from '../../../hooks/useModal';
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { secondsToHHMMSS } from '../../../utils';
 
 const SharedVideo = () => {
+  const { user } = useTypedSelector(state => state.user);
+
   const router = useRouter();
 
   const { slug, videoSlug } = router.query;
@@ -26,12 +29,17 @@ const SharedVideo = () => {
 
   const [videoProgress, setVideoProgress] = useState<number>(0);
 
+  const [isHost, setIsHost] = useState(false);
+
   const modal = useModal();
 
   useEffect(() => {
     if (!data) return;
 
     const video = data.torrent.files.find(file => file.slug === videoSlug);
+    if (user.username === data.user) {
+      setIsHost(true);
+    }
     if (video) {
       const key = `${video.slug}-progress`;
       const progress = localStorage.getItem(key);
@@ -56,7 +64,7 @@ const SharedVideo = () => {
 
     setVideoSearchCompleted(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, videoSlug]);
+  }, [data, videoSlug, isHost]);
 
   if (isLoading || !videoSearchCompleted) {
     return <Loader />;
@@ -76,6 +84,7 @@ const SharedVideo = () => {
           video={video}
           shareSlug={slug as string}
           seekTo={continueVideo ? videoProgress : undefined}
+          isHost={isHost}
         />
         <Text lineClamp={4} mt={20}>
           {video.name}

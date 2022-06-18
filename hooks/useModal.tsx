@@ -37,7 +37,14 @@ const useModal = () => {
       setTitle(title);
       openModal();
     },
-    []
+    [
+      openModal,
+      setPositiveLabel,
+      setPositiveAction,
+      setNegativeLabel,
+      setNegativeAction,
+      setTitle
+    ]
   );
 
   return { isOpen, showModal, closeModal };

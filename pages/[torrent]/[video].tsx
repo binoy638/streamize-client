@@ -1,6 +1,7 @@
 import { Text } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { ReactElement, useEffect, useState } from 'react';
+import io from 'socket.io-client';
 
 import Loader from '../../components/Common/Loader';
 import NotFound from '../../components/Common/NotFound';

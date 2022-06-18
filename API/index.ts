@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-array-for-each */
 import { AxiosResponse } from 'axios';
 
 import { ITorrent, IVideo } from '../@types';
@@ -117,7 +118,17 @@ export const verifyUser = (): Promise<AxiosResponse<{ user: User }>> =>
 export const getSharedPlaylist = async (
   slug: string
 ): Promise<{ torrent: ITorrent; user: string }> => {
-  const { data } = await API.get(`/share/${slug}`);
+  const { data } = await API.get<{ torrent: ITorrent; user: string }>(
+    `/share/${slug}`
+  );
+
+  data.torrent.files.forEach(file => {
+    file.subtitles.forEach(sub => {
+      sub.src = `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${file.slug}/${sub.fileName}`;
+      return sub;
+    });
+  });
+
   return data;
 };
 

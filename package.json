@@ -37,6 +37,7 @@
     "react-query": "^3.34.13",
     "react-redux": "^7.2.6",
     "sass": "^1.52.1",
+    "socket.io-client": "^4.5.1",
     "tailwind-scrollbar-hide": "^1.1.7",
     "video.js": "^7.17.0",
     "videojs-mobile-ui": "^0.7.0",

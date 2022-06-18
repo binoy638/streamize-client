@@ -36,15 +36,19 @@ const Layout: FC<LayoutProps> = ({ children, needAuth = true }) => {
       setLoading(false);
     },
     onError: () => {
-      router.push('/signin');
+      if (needAuth) {
+        router.push('/signin');
+      } else {
+        setLoading(false);
+      }
     }
   });
 
   useEffect(() => {
-    if (!needAuth) {
-      setLoading(false);
-      return;
-    }
+    // if (!needAuth) {
+    //   setLoading(false);
+    //   return;
+    // }
     if (user.id.length === 0) {
       mutate();
     } else {
