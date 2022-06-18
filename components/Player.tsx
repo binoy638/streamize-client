@@ -63,7 +63,8 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo, isHost }) => {
 
   const onReady = useCallback((player: videojs.VideoJsPlayer) => {
     if (shareSlug) {
-      const socket = io('http://localhost:8000');
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      const socket = io(process.env.NEXT_PUBLIC_BASE_URL!);
 
       const host = isHost ? true : false;
       new SyncStream(io, socket, player, host, shareSlug);
