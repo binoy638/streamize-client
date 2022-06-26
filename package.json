@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier -w \"**/*.{js,ts,tsx,json}\"",
     "prepare": "husky install",
-    "pre-commit": "npm run lint && npm run typecheck "
+    "pre-commit": "npm run lint && npm run typecheck ",
+    "codegen": "graphql-codegen --require dotenv/config --config codegen.yml"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [
@@ -18,6 +19,7 @@
     ]
   },
   "dependencies": {
+    "@apollo/client": "^3.6.9",
     "@heroicons/react": "^1.0.5",
     "@mantine/core": "^4.2.9",
     "@mantine/dates": "^4.2.9",
@@ -28,6 +30,8 @@
     "@reduxjs/toolkit": "^1.7.2",
     "axios": "^0.25.0",
     "dayjs": "^1.11.3",
+    "dotenv": "^16.0.1",
+    "graphql": "^16.5.0",
     "next": "^12.1.6",
     "pretty-bytes": "^5.6.0",
     "react": "17.0.2",
@@ -44,6 +48,10 @@
     "videojs-seek-buttons": "^2.2.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.6.2",
+    "@graphql-codegen/typescript": "2.5.1",
+    "@graphql-codegen/typescript-operations": "^2.4.2",
+    "@graphql-codegen/typescript-react-apollo": "3.2.16",
     "@next/eslint-plugin-next": "^12.0.10",
     "@types/node": "17.0.13",
     "@types/react": "17.0.38",

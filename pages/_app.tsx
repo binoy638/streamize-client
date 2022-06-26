@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import '../styles/globals.scss';
 
+import { ApolloProvider } from '@apollo/client';
 import {
   ColorScheme,
   ColorSchemeProvider,
@@ -16,6 +17,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { Provider } from 'react-redux';
 
 import { ModelProvider } from '../components/ModalProvider';
+import client from '../graphql/client';
 import store from '../store';
 
 type NextPageWithLayout = NextPage & {
@@ -37,30 +39,32 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? (page => page);
 
   return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        <ColorSchemeProvider
-          colorScheme={colorScheme}
-          toggleColorScheme={toggleColorScheme}
-        >
-          <MantineProvider
-            withGlobalStyles
-            withNormalizeCSS
-            emotionOptions={{ key: 'mantine', prepend: false }}
-            theme={{
-              colorScheme: 'dark'
-            }}
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          <ColorSchemeProvider
+            colorScheme={colorScheme}
+            toggleColorScheme={toggleColorScheme}
           >
-            <NotificationsProvider>
-              <ModelProvider>
-                {getLayout(<Component {...pageProps} />)}
-              </ModelProvider>
-            </NotificationsProvider>
-          </MantineProvider>
-        </ColorSchemeProvider>
-      </QueryClientProvider>
-    </Provider>
+            <MantineProvider
+              withGlobalStyles
+              withNormalizeCSS
+              emotionOptions={{ key: 'mantine', prepend: false }}
+              theme={{
+                colorScheme: 'dark'
+              }}
+            >
+              <NotificationsProvider>
+                <ModelProvider>
+                  {getLayout(<Component {...pageProps} />)}
+                </ModelProvider>
+              </NotificationsProvider>
+            </MantineProvider>
+          </ColorSchemeProvider>
+        </QueryClientProvider>
+      </Provider>
+    </ApolloProvider>
   );
 }
 
