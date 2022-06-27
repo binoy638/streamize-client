@@ -42,7 +42,7 @@ export const Header: FC<HeaderProps> = ({ data, showExtraOptions }) => {
           title={data.files.length.toString()}
           icon={<FolderIcon className="h-4 w-4" />}
         />
-        <TorrentStatus status={data.status} />
+        <TorrentStatus status={data?.status || TorrentState.Queued} />
       </div>
       {data.status === TorrentState.Downloading && data.downloadInfo && (
         <div className="py-2 border-y-2 flex gap-6">

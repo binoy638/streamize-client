@@ -46,7 +46,7 @@ export type Query = {
   torrent: Torrent;
   torrents: Array<Torrent>;
   video: Video;
-  videoProgress: Scalars['Int'];
+  videoProgress: Scalars['Float'];
 };
 
 export type QuerySharedPlaylistArgs = {
@@ -102,9 +102,9 @@ export type Torrent = {
   infoHash?: Maybe<Scalars['String']>;
   magnet: Scalars['String'];
   name?: Maybe<Scalars['String']>;
-  size?: Maybe<Scalars['Int']>;
+  size?: Maybe<Scalars['Float']>;
   slug: Scalars['String'];
-  status: TorrentState;
+  status?: Maybe<TorrentState>;
 };
 
 export enum TorrentState {
@@ -120,7 +120,7 @@ export enum TorrentState {
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID'];
-  allocatedMemory: Scalars['Int'];
+  allocatedMemory: Scalars['Float'];
   isAdmin: Scalars['Boolean'];
   torrents: Scalars['String'];
   username: Scalars['ID'];
@@ -134,7 +134,7 @@ export type Video = {
   name: Scalars['String'];
   path: Scalars['String'];
   progressPreview: Scalars['Boolean'];
-  size: Scalars['Int'];
+  size: Scalars['Float'];
   slug: Scalars['String'];
   status: VideoState;
   subtitles: Array<Subtitles>;
@@ -172,7 +172,7 @@ export type TorrentQuery = {
     slug: string;
     name?: string | null;
     size?: number | null;
-    status: TorrentState;
+    status?: TorrentState | null;
     files: Array<{
       __typename?: 'Video';
       name: string;
@@ -206,7 +206,7 @@ export type TorrentsListQuery = {
     magnet: string;
     name?: string | null;
     size?: number | null;
-    status: TorrentState;
+    status?: TorrentState | null;
     downloadInfo?: {
       __typename?: 'DownloadInfo';
       downloadSpeed: number;
@@ -266,7 +266,7 @@ export type SharedPlaylistQuery = {
       slug: string;
       name?: string | null;
       size?: number | null;
-      status: TorrentState;
+      status?: TorrentState | null;
       files: Array<{
         __typename?: 'Video';
         name: string;

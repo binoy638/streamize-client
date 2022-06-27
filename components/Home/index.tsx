@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/no-nested-ternary */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useTorrentsListQuery } from '../../generated/apolloComponents';
 import Empty from './Empty';
@@ -9,6 +9,9 @@ import TorrentList from './TorrentList';
 
 function AddedTorrentList() {
   const { data, loading, error } = useTorrentsListQuery({ pollInterval: 1000 });
+  useEffect(() => {
+    console.log(error);
+  }, [error, data]);
 
   if (loading) return <Loading />;
 
