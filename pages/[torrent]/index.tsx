@@ -9,45 +9,53 @@ import Layout from '../../components/Layout';
 import { ExtraOptionsDrawer } from '../../components/Torrent/ExtraOptions';
 import { Header } from '../../components/Torrent/Header';
 import { VideoList } from '../../components/Torrent/VideoList';
+import { useTorrentQuery } from '../../generated/apolloComponents';
 
 function TorrentPage() {
   const router = useRouter();
 
   const torrentSlug = router.query.torrent as string;
 
-  const { isError, isLoading, data } = useQuery(
-    ['torrent', torrentSlug],
-    () => getTorrent(torrentSlug),
-    {
-      refetchInterval: data => {
-        if (data && data.status === 'done') {
-          return false;
-        }
-        if (!data) {
-          return false;
-        }
-        return 1000;
-      },
-      retry: 3
-    }
-  );
+  // const { isError, isLoading, data } = useQuery(
+  //   ['torrent', torrentSlug],
+  //   () => getTorrent(torrentSlug),
+  //   {
+  //     refetchInterval: data => {
+  //       if (data && data.status === 'done') {
+  //         return false;
+  //       }
+  //       if (!data) {
+  //         return false;
+  //       }
+  //       return 1000;
+  //     },
+  //     retry: 3
+  //   }
+  // );
 
-  if (isLoading) {
+  const { loading, error, data } = useTorrentQuery({
+    variables: { slug: torrentSlug }
+  });
+
+  if (loading) {
     return <Loader />;
   }
   if (!data) {
     return <NotFound title="No Torrent Found" />;
   }
-  if (isError) {
+  if (error) {
     return <NotFound title="Somthing went wrong" />;
   }
-
+  data.torrent;
   return (
     <div>
-      <Header data={data} showExtraOptions={true} />
+      <Header data={data.torrent} showExtraOptions={true} />
 
-      {data.files.length > 0 && (
-        <VideoList videos={data.files} torrentSlug={data.slug} />
+      {data.torrent.files.length > 0 && (
+        <VideoList
+          videos={data.torrent.files}
+          torrentSlug={data.torrent.slug}
+        />
       )}
 
       <ExtraOptionsDrawer />

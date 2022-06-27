@@ -3,10 +3,10 @@ import { Paper, Progress, Text } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 
-import { IVideo } from '../../@types';
+import { TorrentQuery } from '../../generated/apolloComponents';
 
 interface VideoListProps {
-  videos: IVideo[];
+  videos: TorrentQuery['torrent']['files'];
   torrentSlug: string;
   sharedSlug?: string;
 }

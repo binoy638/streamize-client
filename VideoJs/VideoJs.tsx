@@ -10,7 +10,8 @@ import './plugins/videojs-draggable-seekbar/videojs-draggable-seekbar';
 import React from 'react';
 import videojs from 'video.js';
 
-import { ISubtitle } from '../@types';
+import { getSubtitleSrc } from '../API';
+import { VideoQuery } from '../generated/apolloComponents';
 
 const englishLanguageCodes = new Set([
   'en',
@@ -69,7 +70,7 @@ export const VideoJS = ({
   onLoadedMetadata?: (player: videojs.Player) => void;
   onLoadedData?: (player: videojs.Player) => void;
   onDispose?: (player: videojs.Player) => void;
-  subtitles: ISubtitle[];
+  subtitles: VideoQuery['video']['subtitles'];
 }) => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const playerRef = React.useRef<videojs.Player | null>();
@@ -147,7 +148,7 @@ export const VideoJS = ({
                 <track
                   key={sub._id}
                   kind="captions"
-                  src={sub.src}
+                  src={getSubtitleSrc(sub.fileName)}
                   srcLang={sub.language}
                   label={sub.language}
                 />

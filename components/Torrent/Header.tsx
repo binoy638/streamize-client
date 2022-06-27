@@ -10,14 +10,14 @@ import { Paper, Text } from '@mantine/core';
 import prettyBytes from 'pretty-bytes';
 import { FC } from 'react';
 
-import { ITorrent, TorrentState } from '../../@types';
+import { TorrentQuery, TorrentState } from '../../generated/apolloComponents';
 import { prettyTime } from '../../utils';
 import ItemWithIcon from '../Common/ItemWithIcon';
 import { ExtraOptions } from './ExtraOptions';
 import { TorrentStatus } from './TorrentStatus';
 
 interface HeaderProps {
-  data: ITorrent;
+  data: TorrentQuery['torrent'];
   showExtraOptions?: boolean;
 }
 
@@ -44,7 +44,7 @@ export const Header: FC<HeaderProps> = ({ data, showExtraOptions }) => {
         />
         <TorrentStatus status={data.status} />
       </div>
-      {data.status === TorrentState.DOWNLOADING && data.downloadInfo && (
+      {data.status === TorrentState.Downloading && data.downloadInfo && (
         <div className="py-2 border-y-2 flex gap-6">
           <ItemWithIcon
             title={prettyBytes(data.downloadInfo.downloadSpeed)}

@@ -4,6 +4,7 @@ import { VideoJsPlayer } from 'video.js';
 
 import { IVideo } from '../@types';
 import { getPreviewLink, getSharedVideoLink, getVideoLink } from '../API';
+import { VideoQuery } from '../generated/apolloComponents';
 import { useTypedDispatch } from '../hooks/useTypedDispatch';
 import { useTypedSelector } from '../hooks/useTypedSelector';
 import SyncStream from '../lib/SyncStream';
@@ -12,7 +13,7 @@ import { postVideoProgress } from '../store/thunk/player.thunk';
 import VideoJS from '../VideoJs/VideoJs';
 
 interface PlayerProps {
-  video: IVideo;
+  video: VideoQuery['video'];
   shareSlug?: string;
   seekTo?: number;
   isHost?: boolean;

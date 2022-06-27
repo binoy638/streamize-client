@@ -6,31 +6,33 @@ import NotFound from '../../../components/Common/NotFound';
 import Layout from '../../../components/Layout';
 import { Header } from '../../../components/Torrent/Header';
 import { VideoList } from '../../../components/Torrent/VideoList';
-import useFetchSharedPlaylist from '../../../hooks/useFetchSharedPlaylist';
+import { useSharedPlaylistQuery } from '../../../generated/apolloComponents';
 
 const SharedPlaylist = () => {
   const router = useRouter();
 
-  const { slug } = router.query;
+  const slug = router.query.slug as string;
 
-  const { isError, isLoading, data } = useFetchSharedPlaylist(slug as string);
+  const { loading, data, error } = useSharedPlaylistQuery({
+    variables: { slug }
+  });
 
-  if (isLoading) {
+  if (loading) {
     return <Loader />;
   }
   if (!data) {
     return <NotFound title="Playlist doesn't exist." />;
   }
-  if (isError) {
+  if (error) {
     return <NotFound title="Somthing went wrong" />;
   }
   return (
     <div>
-      <Header data={data.torrent} />
-      {data.torrent.files.length > 0 && (
+      <Header data={data.sharedPlaylist.torrent} />
+      {data.sharedPlaylist.torrent.files.length > 0 && (
         <VideoList
-          videos={data.torrent.files}
-          torrentSlug={data.torrent.slug}
+          videos={data.sharedPlaylist.torrent.files}
+          torrentSlug={data.sharedPlaylist.torrent.slug}
           sharedSlug={slug as string}
         />
       )}

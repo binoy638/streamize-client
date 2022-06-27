@@ -2,12 +2,11 @@ import { Text } from '@mantine/core';
 import { useRouter } from 'next/router';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { IVideo } from '../../../@types';
 import Loader from '../../../components/Common/Loader';
 import NotFound from '../../../components/Common/NotFound';
 import Layout from '../../../components/Layout';
 import Player from '../../../components/Player';
-import useFetchSharedPlaylist from '../../../hooks/useFetchSharedPlaylist';
+import { useSharedPlaylistVideoQuery } from '../../../generated/apolloComponents';
 import useModal from '../../../hooks/useModal';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { secondsToHHMMSS } from '../../../utils';
@@ -17,15 +16,15 @@ const SharedVideo = () => {
 
   const router = useRouter();
 
-  const { slug, videoSlug } = router.query;
+  const slug = router.query.slug as string;
 
-  const { isError, isLoading, data } = useFetchSharedPlaylist(slug as string);
+  const videoSlug = router.query.videoSlug as string;
 
-  const [video, setVideo] = useState<IVideo>();
+  const { loading, data, error } = useSharedPlaylistVideoQuery({
+    variables: { input: { slug, videoSlug }, slug }
+  });
 
   const [continueVideo, setContinueVideo] = useState(false);
-
-  const [videoSearchCompleted, setVideoSearchCompleted] = useState(false);
 
   const [videoProgress, setVideoProgress] = useState<number>(0);
 
@@ -36,10 +35,10 @@ const SharedVideo = () => {
   useEffect(() => {
     if (!data) return;
 
-    const video = data.torrent.files.find(file => file.slug === videoSlug);
-    if (user.username === data.user) {
+    if (user.username === data.sharedPlaylist.user.username) {
       setIsHost(true);
     }
+    const video = data.sharedPlaylistVideo;
     if (video) {
       const key = `${video.slug}-progress`;
       const progress = localStorage.getItem(key);
@@ -59,21 +58,16 @@ const SharedVideo = () => {
           }
         });
       }
-      setVideo(video);
     }
 
-    setVideoSearchCompleted(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, videoSlug, isHost]);
 
-  if (isLoading || !videoSearchCompleted) {
+  if (loading || !data?.sharedPlaylistVideo) {
     return <Loader />;
   }
 
-  if (!video) {
-    return <NotFound title="No Torrent Found" />;
-  }
-  if (isError) {
+  if (error) {
     return <NotFound title="Somthing went wrong" />;
   }
 
@@ -81,13 +75,13 @@ const SharedVideo = () => {
     <div className="flex h-full justify-center lg:items-center">
       <div className="lg:h-3/4 lg:w-3/4 flex-col justify-center">
         <Player
-          video={video}
+          video={data.sharedPlaylistVideo}
           shareSlug={slug as string}
           seekTo={continueVideo ? videoProgress : undefined}
           isHost={isHost}
         />
         <Text lineClamp={4} mt={20}>
-          {video.name}
+          {data.sharedPlaylistVideo.name}
         </Text>
       </div>
     </div>

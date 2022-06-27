@@ -63,6 +63,11 @@ export const getVideo = async (slug: string): Promise<IVideo> => {
   }
 };
 
+export const getSubtitleSrc = (filename: string) => {
+  const videoSlug = filename.split('-')[0];
+  return `${process.env.NEXT_PUBLIC_BASE_URL}video/subtitle/${videoSlug}/${filename}`;
+};
+
 export const getVideoLink = (videoSlug: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/stream/${videoSlug}/${videoSlug}.m3u8`;
 
