@@ -128,7 +128,11 @@ function TorrentList({
                           </p>
                           <p>
                             Time Remaining:
-                            {prettyTime(item.downloadInfo.timeRemaining / 1000)}
+                            {item.downloadInfo?.timeRemaining
+                              ? prettyTime(
+                                  item.downloadInfo.timeRemaining / 1000
+                                )
+                              : 'NA'}
                           </p>
                         </div>
                       </>

@@ -34,7 +34,7 @@ export type DownloadInfo = {
   downloadSpeed: Scalars['Float'];
   paused: Scalars['Boolean'];
   progress: Scalars['Float'];
-  timeRemaining: Scalars['Float'];
+  timeRemaining?: Maybe<Scalars['Float']>;
   uploadSpeed: Scalars['Float'];
 };
 
@@ -191,7 +191,7 @@ export type TorrentQuery = {
       downloadSpeed: number;
       uploadSpeed: number;
       progress: number;
-      timeRemaining: number;
+      timeRemaining?: number | null;
     } | null;
   };
 };
@@ -212,7 +212,7 @@ export type TorrentsListQuery = {
       downloadSpeed: number;
       uploadSpeed: number;
       progress: number;
-      timeRemaining: number;
+      timeRemaining?: number | null;
     } | null;
   }>;
   diskUsage: { __typename?: 'DiskUsage'; free: number; size: number };
@@ -285,7 +285,7 @@ export type SharedPlaylistQuery = {
         downloadSpeed: number;
         uploadSpeed: number;
         progress: number;
-        timeRemaining: number;
+        timeRemaining?: number | null;
       } | null;
     };
   };

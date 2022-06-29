@@ -60,7 +60,11 @@ export const Header: FC<HeaderProps> = ({ data, showExtraOptions }) => {
             icon={<SaveIcon className="h-4 w-4" />}
           />
           <ItemWithIcon
-            title={prettyTime(data.downloadInfo.timeRemaining / 1000)}
+            title={
+              data.downloadInfo?.timeRemaining
+                ? prettyTime(data.downloadInfo.timeRemaining / 1000)
+                : 'NA'
+            }
             icon={<ClockIcon className="h-4 w-4" />}
           />
         </div>
