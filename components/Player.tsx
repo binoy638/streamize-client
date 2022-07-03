@@ -32,7 +32,7 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo, isHost }) => {
 
   useEffect(() => {
     //! check if its a sync stream
-    if (shareSlug) return;
+    // if (shareSlug) return;
 
     //* If time is 0 then no need to update progress
     if (nextUpdateTime === 0 || !video.slug) return;
@@ -63,13 +63,13 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo, isHost }) => {
   );
 
   const onReady = useCallback((player: videojs.VideoJsPlayer) => {
-    if (shareSlug) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const socket = io(process.env.NEXT_PUBLIC_BASE_URL!);
+    // if (shareSlug) {
+    //   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    //   const socket = io(process.env.NEXT_PUBLIC_BASE_URL!);
 
-      const host = isHost ? true : false;
-      new SyncStream(io, socket, player, host, shareSlug);
-    }
+    //   const host = isHost ? true : false;
+    //   new SyncStream(io, socket, player, host, shareSlug);
+    // }
 
     //* Restore volume from local storage
     const savedVolume = localStorage.getItem('volume');
