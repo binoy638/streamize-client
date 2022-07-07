@@ -1,17 +1,14 @@
 import {
-  CheckIcon,
   PlusIcon,
   SearchIcon,
   SelectorIcon,
   XIcon
 } from '@heroicons/react/solid';
 import { useNotifications } from '@mantine/notifications';
-import { AxiosError } from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useMutation } from 'react-query';
 
-import { addMagnetLink } from '../../API';
+import useAddMagnet from '../../hooks/useAddMagnet';
 import ProviderSelector from './ProviderSelector';
 
 interface SearchbarProps {
@@ -22,35 +19,23 @@ interface SearchbarProps {
 function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
   const notifications = useNotifications();
 
-  const { mutate } = useMutation(addMagnetLink, {
-    onSuccess: () => {
-      setMagnet('');
-      notifications.showNotification({
-        title: 'Torrent',
-        message: 'successfully added to queue',
-        color: 'teal',
-        icon: <CheckIcon className="h-4 w-4" />
-      });
-    },
-    onError: (error: AxiosError) => {
-      const errMsg =
-        error.response?.data?.error?.message ||
-        'something went wrong while adding to queue';
-      notifications.showNotification({
-        title: 'Torrent',
-        message: errMsg,
-        color: 'red',
-        icon: <XIcon className="h-4 w-4" />
-      });
-    }
-  });
+  const [magnet, setMagnet] = useState<string>('');
 
   const router = useRouter();
 
   const [query, setQuery] = useState('');
+
   const [torrentProvider] = useState('1337x');
+
   const [type, setType] = useState<'search' | 'add'>(def);
-  const [magnet, setMagnet] = useState<string>('');
+
+  const { mutate } = useAddMagnet({
+    successMessage: 'Torrent added to queue',
+    onSuccessAction: () => {
+      setMagnet('');
+    }
+  });
+
   const toggleHandler = () => {
     setType(prev => (prev === 'search' ? 'add' : 'search'));
   };

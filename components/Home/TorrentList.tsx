@@ -1,4 +1,5 @@
 /* eslint-disable unicorn/no-nested-ternary */
+import { RefreshIcon } from '@heroicons/react/outline';
 import {
   CheckIcon,
   DotsVerticalIcon,
@@ -17,6 +18,7 @@ import {
   TorrentsListQuery,
   TorrentState
 } from '../../generated/apolloComponents';
+import useAddMagnet from '../../hooks/useAddMagnet';
 import { prettyTime } from '../../utils';
 
 function TorrentList({
@@ -45,9 +47,18 @@ function TorrentList({
     }
   });
 
+  const { mutate: RetryTorrentMutate } = useAddMagnet({
+    successMessage: 'Torrent refreshed'
+  });
+
   const deleteTorrentHandler = (slug: string) => {
     mutate(slug);
   };
+
+  const RetryHandler = (magnet: string) => {
+    RetryTorrentMutate(magnet);
+  };
+
   return (
     <div className="mt-4 lg:mt-6 flex flex-col gap-4 overflow-hidden text-secondaryText">
       <p>Total: {prettyBytes(diskUsage.size)}</p>
@@ -75,12 +86,6 @@ function TorrentList({
                   <div>
                     <div className=" bg-gray-800 text-white flex">
                       Could not download
-                      <div className="my-auto px-2">
-                        <DotsVerticalIcon
-                          className="h-5 w-5 cursor-pointer"
-                          onClick={() => deleteTorrentHandler(item.slug)}
-                        />
-                      </div>
                     </div>
                     <div className="truncate">{item.magnet}</div>
                   </div>
@@ -141,11 +146,18 @@ function TorrentList({
                 ) : null}
               </div>
             </div>
-            <div className="flex">
+            <div className="py-2 flex gap-2">
               <TrashIcon
-                className="ml-2 h-5 w-5 cursor-pointer mb-2"
+                className=" h-5 w-5 cursor-pointer "
                 onClick={() => deleteTorrentHandler(item.slug)}
               />
+
+              {item.status === TorrentState.Error && (
+                <RefreshIcon
+                  className="w-5 h-5 cursor-pointer"
+                  onClick={() => RetryHandler(item.magnet)}
+                />
+              )}
             </div>
           </div>
         );
