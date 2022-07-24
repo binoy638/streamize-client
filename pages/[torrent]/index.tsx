@@ -15,7 +15,8 @@ function TorrentPage() {
   const torrentSlug = router.query.torrent as string;
 
   const { loading, error, data } = useTorrentQuery({
-    variables: { slug: torrentSlug }
+    variables: { slug: torrentSlug },
+    pollInterval: 1000
   });
 
   if (loading) {

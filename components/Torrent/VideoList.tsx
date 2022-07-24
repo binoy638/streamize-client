@@ -29,7 +29,10 @@ export const VideoList: FC<VideoListProps> = ({
     }
   };
 
-  if (torrent.__typename === 'TorrentWithInfo') {
+  if (
+    torrent.__typename === 'TorrentWithInfo' ||
+    torrent.__typename === 'TorrentWithInfoDownload'
+  ) {
     return (
       <Paper mt={10} shadow={'sm'} p={20} withBorder>
         {torrent.files.map(video => {

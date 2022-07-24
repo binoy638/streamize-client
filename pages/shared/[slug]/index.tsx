@@ -14,7 +14,8 @@ const SharedPlaylist = () => {
   const slug = router.query.slug as string;
 
   const { loading, data, error } = useSharedPlaylistQuery({
-    variables: { slug }
+    variables: { slug },
+    pollInterval: 1000
   });
 
   if (loading) {
