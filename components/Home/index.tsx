@@ -19,7 +19,7 @@ function AddedTorrentList() {
 
   if (data.torrents.length === 0) return <Empty />;
 
-  return <TorrentList data={data} />;
+  return <TorrentList diskUsage={data.diskUsage} torrents={data.torrents} />;
 }
 
 export default AddedTorrentList;

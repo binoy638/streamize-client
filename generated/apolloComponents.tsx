@@ -34,7 +34,7 @@ export type DownloadInfo = {
   downloadSpeed: Scalars['Float'];
   paused: Scalars['Boolean'];
   progress: Scalars['Float'];
-  timeRemaining?: Maybe<Scalars['Float']>;
+  timeRemaining: Scalars['Float'];
   uploadSpeed: Scalars['Float'];
 };
 
@@ -94,18 +94,10 @@ export type Subtitles = {
   title: Scalars['String'];
 };
 
-export type Torrent = {
-  __typename?: 'Torrent';
-  _id: Scalars['ID'];
-  downloadInfo?: Maybe<DownloadInfo>;
-  files: Array<Video>;
-  infoHash?: Maybe<Scalars['String']>;
-  magnet: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  size?: Maybe<Scalars['Float']>;
-  slug: Scalars['String'];
-  status?: Maybe<TorrentState>;
-};
+export type Torrent =
+  | TorrentWithInfo
+  | TorrentWithInfoDownload
+  | TorrentWithoutInfo;
 
 export enum TorrentState {
   Added = 'ADDED',
@@ -116,6 +108,39 @@ export enum TorrentState {
   Processing = 'PROCESSING',
   Queued = 'QUEUED'
 }
+
+export type TorrentWithInfo = {
+  __typename?: 'TorrentWithInfo';
+  _id: Scalars['ID'];
+  files: Array<Video>;
+  infoHash: Scalars['String'];
+  magnet: Scalars['String'];
+  name: Scalars['String'];
+  size: Scalars['Float'];
+  slug: Scalars['String'];
+  status: TorrentState;
+};
+
+export type TorrentWithInfoDownload = {
+  __typename?: 'TorrentWithInfoDownload';
+  _id: Scalars['ID'];
+  downloadInfo: DownloadInfo;
+  files: Array<Video>;
+  infoHash: Scalars['String'];
+  magnet: Scalars['String'];
+  name: Scalars['String'];
+  size: Scalars['Float'];
+  slug: Scalars['String'];
+  status: TorrentState;
+};
+
+export type TorrentWithoutInfo = {
+  __typename?: 'TorrentWithoutInfo';
+  _id: Scalars['ID'];
+  magnet: Scalars['String'];
+  slug: Scalars['String'];
+  status: TorrentState;
+};
 
 export type User = {
   __typename?: 'User';
@@ -166,55 +191,107 @@ export type TorrentQueryVariables = Exact<{
 
 export type TorrentQuery = {
   __typename?: 'Query';
-  torrent: {
-    __typename?: 'Torrent';
-    _id: string;
-    slug: string;
-    name?: string | null;
-    size?: number | null;
-    status?: TorrentState | null;
-    files: Array<{
-      __typename?: 'Video';
-      name: string;
-      size: number;
-      slug: string;
-      status: VideoState;
-      transcodingPercent: number;
-      downloadInfo?: {
-        __typename?: 'VideoDownloadInfo';
-        downloaded: number;
-        progress: number;
-      } | null;
-    }>;
-    downloadInfo?: {
-      __typename?: 'DownloadInfo';
-      downloadSpeed: number;
-      uploadSpeed: number;
-      progress: number;
-      timeRemaining?: number | null;
-    } | null;
-  };
+  torrent:
+    | {
+        __typename?: 'TorrentWithInfo';
+        _id: string;
+        slug: string;
+        magnet: string;
+        name: string;
+        size: number;
+        status: TorrentState;
+        files: Array<{
+          __typename?: 'Video';
+          _id: string;
+          name: string;
+          size: number;
+          slug: string;
+          status: VideoState;
+          transcodingPercent: number;
+          downloadInfo?: {
+            __typename?: 'VideoDownloadInfo';
+            downloaded: number;
+            progress: number;
+          } | null;
+        }>;
+      }
+    | {
+        __typename?: 'TorrentWithInfoDownload';
+        _id: string;
+        slug: string;
+        magnet: string;
+        name: string;
+        size: number;
+        status: TorrentState;
+        files: Array<{
+          __typename?: 'Video';
+          _id: string;
+          name: string;
+          size: number;
+          slug: string;
+          status: VideoState;
+          transcodingPercent: number;
+          downloadInfo?: {
+            __typename?: 'VideoDownloadInfo';
+            downloaded: number;
+            progress: number;
+          } | null;
+        }>;
+        downloadInfo: {
+          __typename?: 'DownloadInfo';
+          downloadSpeed: number;
+          uploadSpeed: number;
+          progress: number;
+          timeRemaining: number;
+        };
+      }
+    | {
+        __typename?: 'TorrentWithoutInfo';
+        _id: string;
+        slug: string;
+        magnet: string;
+        status: TorrentState;
+      };
 };
 
 export type TorrentsListQueryVariables = Exact<{ [key: string]: never }>;
 
 export type TorrentsListQuery = {
   __typename?: 'Query';
-  torrents: Array<{
-    __typename?: 'Torrent';
-    slug: string;
-    magnet: string;
-    name?: string | null;
-    size?: number | null;
-    status?: TorrentState | null;
-    downloadInfo?: {
-      __typename?: 'DownloadInfo';
-      downloadSpeed: number;
-      uploadSpeed: number;
-      progress: number;
-      timeRemaining?: number | null;
-    } | null;
-  }>;
+  torrents: Array<
+    | {
+        __typename?: 'TorrentWithInfo';
+        _id: string;
+        slug: string;
+        magnet: string;
+        name: string;
+        size: number;
+        status: TorrentState;
+      }
+    | {
+        __typename?: 'TorrentWithInfoDownload';
+        _id: string;
+        slug: string;
+        magnet: string;
+        name: string;
+        size: number;
+        status: TorrentState;
+        downloadInfo: {
+          __typename?: 'DownloadInfo';
+          downloadSpeed: number;
+          uploadSpeed: number;
+          progress: number;
+          timeRemaining: number;
+        };
+      }
+    | {
+        __typename?: 'TorrentWithoutInfo';
+        _id: string;
+        slug: string;
+        magnet: string;
+        status: TorrentState;
+      }
+  >;
   diskUsage: { __typename?: 'DiskUsage'; free: number; size: number };
 };
 
@@ -260,34 +337,67 @@ export type SharedPlaylistQuery = {
     slug: string;
     expiresIn: any;
     user: { __typename?: 'User'; username: string };
-    torrent: {
-      __typename?: 'Torrent';
-      _id: string;
-      slug: string;
-      name?: string | null;
-      size?: number | null;
-      status?: TorrentState | null;
-      files: Array<{
-        __typename?: 'Video';
-        name: string;
-        size: number;
-        slug: string;
-        status: VideoState;
-        transcodingPercent: number;
-        downloadInfo?: {
-          __typename?: 'VideoDownloadInfo';
-          downloaded: number;
-          progress: number;
-        } | null;
-      }>;
-      downloadInfo?: {
-        __typename?: 'DownloadInfo';
-        downloadSpeed: number;
-        uploadSpeed: number;
-        progress: number;
-        timeRemaining?: number | null;
-      } | null;
-    };
+    torrent:
+      | {
+          __typename?: 'TorrentWithInfo';
+          _id: string;
+          slug: string;
+          magnet: string;
+          name: string;
+          size: number;
+          status: TorrentState;
+          files: Array<{
+            __typename?: 'Video';
+            _id: string;
+            name: string;
+            size: number;
+            slug: string;
+            status: VideoState;
+            transcodingPercent: number;
+            downloadInfo?: {
+              __typename?: 'VideoDownloadInfo';
+              downloaded: number;
+              progress: number;
+            } | null;
+          }>;
+        }
+      | {
+          __typename?: 'TorrentWithInfoDownload';
+          _id: string;
+          slug: string;
+          magnet: string;
+          name: string;
+          size: number;
+          status: TorrentState;
+          files: Array<{
+            __typename?: 'Video';
+            _id: string;
+            name: string;
+            size: number;
+            slug: string;
+            status: VideoState;
+            transcodingPercent: number;
+            downloadInfo?: {
+              __typename?: 'VideoDownloadInfo';
+              downloaded: number;
+              progress: number;
+            } | null;
+          }>;
+          downloadInfo: {
+            __typename?: 'DownloadInfo';
+            downloadSpeed: number;
+            uploadSpeed: number;
+            progress: number;
+            timeRemaining: number;
+          };
+        }
+      | {
+          __typename?: 'TorrentWithoutInfo';
+          _id: string;
+          slug: string;
+          magnet: string;
+          status: TorrentState;
+        };
   };
 };
 
@@ -322,28 +432,58 @@ export type SharedPlaylistVideoQuery = {
 export const TorrentDocument = gql`
   query Torrent($slug: String!) {
     torrent(slug: $slug) {
-      _id
-      slug
-      name
-      size
-      files {
+      ... on TorrentWithInfoDownload {
+        _id
+        slug
+        magnet
         name
         size
-        slug
+        files {
+          _id
+          name
+          size
+          slug
+          downloadInfo {
+            downloaded
+            progress
+          }
+          status
+          transcodingPercent
+        }
         downloadInfo {
-          downloaded
+          downloadSpeed
+          uploadSpeed
           progress
+          timeRemaining
         }
         status
-        transcodingPercent
       }
-      downloadInfo {
-        downloadSpeed
-        uploadSpeed
-        progress
-        timeRemaining
+      ... on TorrentWithInfo {
+        _id
+        slug
+        magnet
+        name
+        size
+        files {
+          _id
+          name
+          size
+          slug
+          downloadInfo {
+            downloaded
+            progress
+          }
+          status
+          transcodingPercent
+        }
+        status
       }
-      status
+      ... on TorrentWithoutInfo {
+        _id
+        slug
+        magnet
+        status
+      }
     }
   }
 `;
@@ -391,16 +531,33 @@ export type TorrentQueryResult = Apollo.QueryResult<
 export const TorrentsListDocument = gql`
   query TorrentsList {
     torrents {
-      slug
-      magnet
-      name
-      size
-      status
-      downloadInfo {
-        downloadSpeed
-        uploadSpeed
-        progress
-        timeRemaining
+      ... on TorrentWithInfoDownload {
+        _id
+        slug
+        magnet
+        name
+        size
+        status
+        downloadInfo {
+          downloadSpeed
+          uploadSpeed
+          progress
+          timeRemaining
+        }
+      }
+      ... on TorrentWithInfo {
+        _id
+        slug
+        magnet
+        name
+        size
+        status
+      }
+      ... on TorrentWithoutInfo {
+        _id
+        slug
+        magnet
+        status
       }
     }
     diskUsage {
@@ -579,28 +736,58 @@ export const SharedPlaylistDocument = gql`
         username
       }
       torrent {
-        _id
-        slug
-        name
-        size
-        files {
+        ... on TorrentWithInfoDownload {
+          _id
+          slug
+          magnet
           name
           size
-          slug
+          files {
+            _id
+            name
+            size
+            slug
+            downloadInfo {
+              downloaded
+              progress
+            }
+            status
+            transcodingPercent
+          }
           downloadInfo {
-            downloaded
+            downloadSpeed
+            uploadSpeed
             progress
+            timeRemaining
           }
           status
-          transcodingPercent
         }
-        downloadInfo {
-          downloadSpeed
-          uploadSpeed
-          progress
-          timeRemaining
+        ... on TorrentWithInfo {
+          _id
+          slug
+          magnet
+          name
+          size
+          files {
+            _id
+            name
+            size
+            slug
+            downloadInfo {
+              downloaded
+              progress
+            }
+            status
+            transcodingPercent
+          }
+          status
         }
-        status
+        ... on TorrentWithoutInfo {
+          _id
+          slug
+          magnet
+          status
+        }
       }
       expiresIn
     }

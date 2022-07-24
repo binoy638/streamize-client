@@ -8,9 +8,9 @@ interface ItemWithIconProps {
 
 const ItemWithIcon: FC<ItemWithIconProps> = ({ icon, title }) => {
   return (
-    <div className="flex gap-1  items-center">
+    <div className="flex gap-1 ">
       {icon}
-      <Text size="sm"> {title} </Text>
+      <Text size="xs"> {title} </Text>
     </div>
   );
 };

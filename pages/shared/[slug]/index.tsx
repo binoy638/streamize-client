@@ -29,13 +29,11 @@ const SharedPlaylist = () => {
   return (
     <div>
       <Header data={data.sharedPlaylist.torrent} />
-      {data.sharedPlaylist.torrent.files.length > 0 && (
-        <VideoList
-          videos={data.sharedPlaylist.torrent.files}
-          torrentSlug={data.sharedPlaylist.torrent.slug}
-          sharedSlug={slug as string}
-        />
-      )}
+      <VideoList
+        torrent={data.sharedPlaylist.torrent}
+        torrentSlug={data.sharedPlaylist.torrent.slug}
+        sharedSlug={slug as string}
+      />
     </div>
   );
 };

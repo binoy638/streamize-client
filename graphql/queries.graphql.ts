@@ -1,30 +1,59 @@
 import { gql } from '@apollo/client';
-
 export const GET_TORRENT = gql`
   query Torrent($slug: String!) {
     torrent(slug: $slug) {
-      _id
-      slug
-      name
-      size
-      files {
+      ... on TorrentWithInfoDownload {
+        _id
+        slug
+        magnet
         name
         size
-        slug
+        files {
+          _id
+          name
+          size
+          slug
+          downloadInfo {
+            downloaded
+            progress
+          }
+          status
+          transcodingPercent
+        }
         downloadInfo {
-          downloaded
+          downloadSpeed
+          uploadSpeed
           progress
+          timeRemaining
         }
         status
-        transcodingPercent
       }
-      downloadInfo {
-        downloadSpeed
-        uploadSpeed
-        progress
-        timeRemaining
+      ... on TorrentWithInfo {
+        _id
+        slug
+        magnet
+        name
+        size
+        files {
+          _id
+          name
+          size
+          slug
+          downloadInfo {
+            downloaded
+            progress
+          }
+          status
+          transcodingPercent
+        }
+        status
       }
-      status
+      ... on TorrentWithoutInfo {
+        _id
+        slug
+        magnet
+        status
+      }
     }
   }
 `;
@@ -32,16 +61,33 @@ export const GET_TORRENT = gql`
 export const GET_TORRENTS = gql`
   query TorrentsList {
     torrents {
-      slug
-      magnet
-      name
-      size
-      status
-      downloadInfo {
-        downloadSpeed
-        uploadSpeed
-        progress
-        timeRemaining
+      ... on TorrentWithInfoDownload {
+        _id
+        slug
+        magnet
+        name
+        size
+        status
+        downloadInfo {
+          downloadSpeed
+          uploadSpeed
+          progress
+          timeRemaining
+        }
+      }
+      ... on TorrentWithInfo {
+        _id
+        slug
+        magnet
+        name
+        size
+        status
+      }
+      ... on TorrentWithoutInfo {
+        _id
+        slug
+        magnet
+        status
       }
     }
     diskUsage {
@@ -86,28 +132,58 @@ export const GET_SHARED_PLAYLIST = gql`
         username
       }
       torrent {
-        _id
-        slug
-        name
-        size
-        files {
+        ... on TorrentWithInfoDownload {
+          _id
+          slug
+          magnet
           name
           size
-          slug
+          files {
+            _id
+            name
+            size
+            slug
+            downloadInfo {
+              downloaded
+              progress
+            }
+            status
+            transcodingPercent
+          }
           downloadInfo {
-            downloaded
+            downloadSpeed
+            uploadSpeed
             progress
+            timeRemaining
           }
           status
-          transcodingPercent
         }
-        downloadInfo {
-          downloadSpeed
-          uploadSpeed
-          progress
-          timeRemaining
+        ... on TorrentWithInfo {
+          _id
+          slug
+          magnet
+          name
+          size
+          files {
+            _id
+            name
+            size
+            slug
+            downloadInfo {
+              downloaded
+              progress
+            }
+            status
+            transcodingPercent
+          }
+          status
         }
-        status
+        ... on TorrentWithoutInfo {
+          _id
+          slug
+          magnet
+          status
+        }
       }
       expiresIn
     }

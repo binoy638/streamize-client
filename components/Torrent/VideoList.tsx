@@ -6,13 +6,13 @@ import { FC } from 'react';
 import { TorrentQuery } from '../../generated/apolloComponents';
 
 interface VideoListProps {
-  videos: TorrentQuery['torrent']['files'];
+  torrent: TorrentQuery['torrent'];
   torrentSlug: string;
   sharedSlug?: string;
 }
 
 export const VideoList: FC<VideoListProps> = ({
-  videos,
+  torrent,
   torrentSlug,
   sharedSlug
 }) => {
@@ -28,39 +28,44 @@ export const VideoList: FC<VideoListProps> = ({
       router.push(`/${torrentSlug}/${vSlug}`);
     }
   };
-  return (
-    <Paper mt={10} shadow={'sm'} p={20} withBorder>
-      {videos.map(video => {
-        return (
-          <Paper key={video.slug} withBorder py={10} px={10}>
-            <div
-              className="flex gap-2 cursor-pointer items-center "
-              onClick={() => handleClick(video.slug)}
-            >
-              <ArrowNarrowRightIcon className="w-5 h-5" />
-              <Text size="md" lineClamp={2}>
-                {video.name}
-              </Text>
-            </div>
 
-            {video.downloadInfo ? (
-              <Progress
-                color="green"
-                size={'lg'}
-                label={Math.round(video.downloadInfo.progress * 100) + '%'}
-                value={Math.round(video.downloadInfo.progress * 100)}
-              />
-            ) : video.transcodingPercent < 1 ? (
-              <Progress
-                color="green"
-                size={'lg'}
-                label={Math.round(video.transcodingPercent * 100) + '%'}
-                value={Math.round(video.transcodingPercent * 100)}
-              />
-            ) : null}
-          </Paper>
-        );
-      })}
-    </Paper>
-  );
+  if (torrent.__typename === 'TorrentWithInfo') {
+    return (
+      <Paper mt={10} shadow={'sm'} p={20} withBorder>
+        {torrent.files.map(video => {
+          return (
+            <Paper key={video.slug} withBorder py={10} px={10}>
+              <div
+                className="flex gap-2 cursor-pointer items-center "
+                onClick={() => handleClick(video.slug)}
+              >
+                <ArrowNarrowRightIcon className="w-5 h-5" />
+                <Text size="md" lineClamp={2}>
+                  {video.name}
+                </Text>
+              </div>
+
+              {video.downloadInfo ? (
+                <Progress
+                  color="green"
+                  size={'lg'}
+                  label={Math.round(video.downloadInfo.progress * 100) + '%'}
+                  value={Math.round(video.downloadInfo.progress * 100)}
+                />
+              ) : video.transcodingPercent < 1 ? (
+                <Progress
+                  color="green"
+                  size={'lg'}
+                  label={Math.round(video.transcodingPercent * 100) + '%'}
+                  value={Math.round(video.transcodingPercent * 100)}
+                />
+              ) : null}
+            </Paper>
+          );
+        })}
+      </Paper>
+    );
+  }
+
+  return null;
 };
