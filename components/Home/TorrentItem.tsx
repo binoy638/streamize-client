@@ -13,7 +13,7 @@ import {
   TrashIcon,
   ViewBoardsIcon
 } from '@heroicons/react/solid';
-import { Anchor, Box, Menu, Progress, Text } from '@mantine/core';
+import { Anchor, Box, Menu, Paper, Progress, Text } from '@mantine/core';
 import Link from 'next/link';
 import prettyBytes from 'pretty-bytes';
 import React from 'react';
@@ -219,12 +219,7 @@ const TorrentItem = ({
   retryHandler
 }: TorrentItemProps) => {
   return (
-    <Box
-      sx={theme => ({
-        backgroundColor: theme.colors.gray[2],
-        position: 'relative'
-      })}
-    >
+    <Paper shadow={'sm'} sx={{ position: 'relative' }}>
       <div className="absolute right-0 p-2">
         <Menu control={<DotsHorizontalIcon className="w-4 h-4" />}>
           <Menu.Item
@@ -242,7 +237,7 @@ const TorrentItem = ({
         </Menu>
       </div>
       <Attributes torrent={torrent} />
-    </Box>
+    </Paper>
   );
 };
 
