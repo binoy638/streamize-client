@@ -142,7 +142,7 @@ export const VideoJS = ({
 
   return (
     <div data-vjs-player>
-      <video ref={videoRef} className="video-js">
+      <video ref={videoRef} className="video-js vjs-big-play-centered">
         {subtitles.length > 0 &&
           subtitles
             .filter((sub) =>

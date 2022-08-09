@@ -50,7 +50,7 @@ export const VideoList: FC<VideoListProps> = ({
         query: { slug: sharedSlug, videoSlug: vSlug },
       });
     } else {
-      if (status === VideoState.Done) {
+      if (status !== VideoState.Done) {
         showNotification({
           message: 'Video is not ready to play.',
           color: 'red',
