@@ -8,3 +8,4 @@ tailwind.config.js
 postcss.config.js 
 .eslintrc.js
 .eslintignore
+out

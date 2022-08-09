@@ -1,1 +1,0 @@
-# Streamize Client

@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,700&family=Lato:wght@100;300;400;700;900&family=Public+Sans:wght@100;300;400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Teko:wght@500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$purple: #6116c3;
+$purpleDark: rgba(97, 22, 195, 0.3);
+$white: #ffffff;
+$whiteLight: rgba(255, 255, 255, 0.6);
+$blackDark: rgba(0, 0, 0, 0.6);
+$blackLight: rgba(0, 0, 0, 0.2);
+
+.video {
+    width: 100%;
+    max-width: 500px;
+    height: 300px;
+    margin: 3em auto;
+}
+.vjs-tech:focus-visible {
+    outline: none;
+}
+.video-js {
+    width: 100%;
+    min-height: 320px;
+}
+.video-js .vjs-loading-spinner {
+    border-color: $blackDark;
+}
+.video-js .vjs-loading-spinner:before {
+    border-top-color: $white !important;
+}
+.video-js .vjs-loading-spinner:after {
+    border-top-color: $whiteLight !important;
+}
+.video-js .vjs-control-bar {
+    display: flex;
+}
+.video-js .vjs-control-bar {
+    background-color: $blackDark !important;
+}
+.video-js .vjs-playback-rate .vjs-playback-rate-value {
+    font-size: 1em;
+    line-height: 3;
+}
+.video-js .vjs-play-progress {
+    background-color: $purple;
+}
+.video-js .vjs-play-progress:before {
+    color: $purple;
+}
+.video-js .vjs-load-progress div {
+    background-color: $whiteLight;
+}
+.video-js .vjs-slider {
+    background-color: $purpleDark;
+}
+.video-js .vjs-big-play-button {
+    display: block;
+    line-height: 50px;
+    height: 50px;
+    width: 50px;
+    left: 50%;
+    top: 50%;
+    margin-left: -25px;
+    margin-top: -25px;
+    border-radius: 100%;
+    border: none;
+    background-color: $blackLight !important;
+}
+.video-js:hover .vjs-big-play-button,
+.video-js .vjs-big-play-button:focus {
+    background-color: $blackDark !important;
+}
+.video-js {
+    &.vjs-vtt-thumbnails {
+        display: block;
+    }
+    .vjs-vtt-thumbnail-display {
+        position: absolute;
+        transition: transform 0.1s, opacity 0.2s;
+        bottom: 85%;
+        pointer-events: none;
+        box-shadow: 0 0 7px rgba(0, 0, 0, 0.6);
+    }
+}
