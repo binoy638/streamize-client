@@ -8,6 +8,7 @@ import {
   createEmotionCache,
   MantineProvider,
 } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { NotificationsProvider } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -17,7 +18,6 @@ import type { ReactElement, ReactNode } from 'react';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 
-import { ModelProvider } from '../components/ModalProvider';
 import client from '../graphql/client';
 import store from '../store';
 
@@ -59,9 +59,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
               }}
             >
               <NotificationsProvider>
-                <ModelProvider>
+                <ModalsProvider>
                   {getLayout(<Component {...pageProps} />)}
-                </ModelProvider>
+                </ModalsProvider>
               </NotificationsProvider>
             </MantineProvider>
           </ColorSchemeProvider>

@@ -1,120 +1,90 @@
-import {
-  PlusIcon,
-  SearchIcon,
-  SelectorIcon,
-  XIcon,
-} from '@heroicons/react/solid';
-import { showNotification } from '@mantine/notifications';
+import { Button, Chip, Input } from '@mantine/core';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import type { ChangeEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+import { ImSearch } from 'react-icons/im';
 
-import useAddMagnet from '../../hooks/useAddMagnet';
-import ProviderSelector from './ProviderSelector';
-
-interface SearchbarProps {
-  def: 'search' | 'add';
-  showProviderSelector?: boolean;
-}
-
-function Searchbar({ def, showProviderSelector = false }: SearchbarProps) {
-  const [magnet, setMagnet] = useState<string>('');
-
+function SearchBar() {
   const router = useRouter();
 
-  const [query, setQuery] = useState('');
+  const site = router.query.site as string;
 
-  const [torrentProvider] = useState('1337x');
+  const query = router.query.query as string;
 
-  const [type, setType] = useState<'search' | 'add'>(def);
+  const page = router.query.page as string;
 
-  const { mutate } = useAddMagnet({
-    successMessage: 'Torrent added to queue',
-    onSuccessAction: () => {
-      setMagnet('');
-    },
-  });
+  const [provider, setProvider] = useState<string>('1337x');
 
-  const toggleHandler = () => {
-    setType((prev) => (prev === 'search' ? 'add' : 'search'));
-  };
-
-  const onSubmitHandler = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (type === 'search') {
-      router.push({
-        pathname: '/search',
-        query: { q: query, p: torrentProvider },
-      });
-      return;
-    }
-    if (type === 'add') {
-      if (magnet.length === 0) return;
-      if (!magnet.startsWith('magnet:?xt=urn:btih:')) {
-        showNotification({
-          title: 'Torrent',
-          message: 'invalid magnet link',
-          color: 'red',
-          icon: <XIcon className="h-4 w-4" />,
-        });
-
-        return;
+  useEffect(() => {
+    if (!router.isReady) return;
+    if (site === undefined || query === undefined) {
+      if (router.pathname !== '/') {
+        router.push('/');
       }
-      router.push({
-        pathname: '/',
-      });
-      mutate(magnet);
     }
+    if (
+      site === '1337x' ||
+      site === 'tpb' ||
+      site === 'rarbg' ||
+      site === 'nyaa'
+    ) {
+      setProvider(site);
+    }
+  }, [site, query, router, router.isReady]);
+
+  useEffect(() => {
+    if (provider === site || site === undefined) return;
+    if (!query || query.length === 0) return;
+    router.push({
+      pathname: '/search',
+      query: { query, site: provider, page },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [provider]);
+
+  const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    router.push({
+      pathname: '/search',
+      query: { query: event.target.query.value, site: provider, page: 1 },
+    });
   };
-
+  const rightSection = (
+    <Button
+      sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+      type="submit"
+      color="red"
+    >
+      <ImSearch />
+    </Button>
+  );
   return (
-    <div className="flex flex-col gap-2 text-black">
-      <form onSubmit={onSubmitHandler} className="flex h-10">
-        <button
-          type="button"
-          onClick={toggleHandler}
-          className="flex items-center justify-center gap-2 rounded-l border-y border-l border-gray-400 bg-gray-200 pl-4 pr-2 hover:opacity-80"
-        >
-          {type === 'search' ? 'Search' : 'Add'}
-          <SelectorIcon className="h-5 w-5" />
-        </button>
-        {type === 'search' ? (
-          <>
-            <input
-              type="text"
-              onChange={(e) => setQuery(e.target.value)}
-              value={query}
-              placeholder="Enter movie name"
-              className="w-full border-y border-gray-400 pl-4 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="rounded-r border-y border-r border-primary bg-primary px-4 hover:opacity-80"
-            >
-              <SearchIcon className="h-5 w-5 text-white" />
-            </button>
-          </>
-        ) : (
-          <>
-            <input
-              type="text"
-              onChange={(e) => setMagnet(e.target.value)}
-              value={magnet}
-              placeholder="Add magnet link"
-              className="w-full border-y border-gray-400 pl-4 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="rounded-r border-y border-r border-primary bg-primary px-4 hover:opacity-80"
-            >
-              <PlusIcon className="h-5 w-5 text-white" />
-            </button>
-          </>
-        )}
-      </form>
-
-      {type === 'search' && showProviderSelector && <ProviderSelector />}
-    </div>
+    <form onSubmit={submitHandler} className="flex flex-col gap-6  ">
+      <Input
+        name="query"
+        defaultValue={query}
+        placeholder="Search..."
+        rightSection={rightSection}
+      />
+      <div className="flex justify-center">
+        <Chip.Group value={provider} multiple={false} onChange={setProvider}>
+          <Chip color="red" value="1337x">
+            1337x
+          </Chip>
+          <Chip color="red" value="rarbg">
+            Rarbg
+          </Chip>
+          <Chip color="red" value="tpb">
+            The Pirate Bay
+          </Chip>
+          <Chip color="red" value="nyaa">
+            Nyaa
+          </Chip>
+        </Chip.Group>
+      </div>
+    </form>
   );
 }
 
-export default Searchbar;
+export default SearchBar;

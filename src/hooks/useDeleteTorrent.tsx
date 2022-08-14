@@ -4,24 +4,21 @@ import { useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 import React from 'react';
 
-import { addMagnetLink } from '../API';
+import { deleteTorrent } from '../API';
 
 interface Props {
-  successMessage: string;
   onSuccessAction?: () => void;
   onErrorAction?: () => void;
 }
 
-const useAddMagnet = ({
-  successMessage,
-  onSuccessAction,
-  onErrorAction,
-}: Props) => {
-  return useMutation(addMagnetLink, {
+const useDeleteTorrent = ({ onSuccessAction, onErrorAction }: Props) => {
+  return useMutation(deleteTorrent, {
     onSuccess: () => {
       if (onSuccessAction) onSuccessAction();
+
       showNotification({
-        message: successMessage,
+        title: 'Torrent',
+        message: 'Successfully deleted torrent',
         color: 'teal',
         icon: <CheckIcon className="h-4 w-4" />,
       });
@@ -31,6 +28,7 @@ const useAddMagnet = ({
       const errMsg =
         error.response?.data?.error?.message ||
         'something went wrong while adding to queue';
+
       showNotification({
         message: errMsg,
         color: 'red',
@@ -40,4 +38,4 @@ const useAddMagnet = ({
   });
 };
 
-export default useAddMagnet;
+export default useDeleteTorrent;

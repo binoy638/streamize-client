@@ -33,9 +33,15 @@ const userSlice = createSlice({
       state.user.username = action.payload.username;
       state.user.allocatedMemory = action.payload.allocatedMemory;
     },
+    clearUser: (state) => {
+      state.user.id = '';
+      state.user.isAdmin = false;
+      state.user.username = '';
+      state.user.allocatedMemory = 0;
+    },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, clearUser } = userSlice.actions;
 
 export default userSlice.reducer;

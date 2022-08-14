@@ -3,20 +3,41 @@ import { DotsVerticalIcon, ShareIcon, TrashIcon } from '@heroicons/react/solid';
 import { Button, Drawer, Loader, Menu, Text, Tooltip } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+
+import useDeleteTorrent from '@/hooks/useDeleteTorrent';
 
 import { shareTorrent } from '../../API';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { setShareDrawer } from '../../store/slice/UI.slice';
 
-export const ExtraOptions = ({ torrentId }: { torrentId: string }) => {
+export const ExtraOptions = ({
+  torrentId,
+  slug,
+}: {
+  torrentId: string;
+  slug: string;
+}) => {
   const dispatch = useTypedDispatch();
 
-  const handleClick = () => {
+  const router = useRouter();
+
+  const { mutate } = useDeleteTorrent({
+    onSuccessAction: () => {
+      router.push('/');
+    },
+  });
+
+  const handleShare = () => {
     dispatch(setShareDrawer({ isOpen: true, torrentId }));
+  };
+
+  const handleDelete = () => {
+    mutate(slug);
   };
 
   return (
@@ -27,11 +48,15 @@ export const ExtraOptions = ({ torrentId }: { torrentId: string }) => {
       <Menu.Dropdown>
         <Menu.Item
           icon={<ShareIcon className="h-4 w-4" />}
-          onClick={handleClick}
+          onClick={handleShare}
         >
           Share
         </Menu.Item>
-        <Menu.Item color="red" icon={<TrashIcon className="h-4 w-4" />}>
+        <Menu.Item
+          color="red"
+          icon={<TrashIcon className="h-4 w-4" />}
+          onClick={handleDelete}
+        >
           Delete
         </Menu.Item>
       </Menu.Dropdown>

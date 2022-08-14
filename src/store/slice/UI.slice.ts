@@ -2,10 +2,15 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
+export type SidebarItems = 'home' | 'lib' | 'search' | 'add-torrent';
+
 interface UISlice {
   shareDrawer: {
     isOpen: boolean;
     torrentId: string;
+  };
+  sidebar: {
+    activeItem: SidebarItems;
   };
 }
 
@@ -14,6 +19,9 @@ const initialState: UISlice = {
   shareDrawer: {
     isOpen: false,
     torrentId: '',
+  },
+  sidebar: {
+    activeItem: 'home',
   },
 };
 
@@ -30,6 +38,9 @@ const uiSlice = createSlice({
         state.shareDrawer.torrentId = action.payload.torrentId;
       }
     },
+    setActiveItem: (state, action: PayloadAction<SidebarItems>) => {
+      state.sidebar.activeItem = action.payload;
+    },
   },
   //   extraReducers: builder => {
   //     builder.addCase(postVideoProgress.fulfilled, (state, action) => {
@@ -38,6 +49,6 @@ const uiSlice = createSlice({
   //   }
 });
 
-export const { setShareDrawer } = uiSlice.actions;
+export const { setShareDrawer, setActiveItem } = uiSlice.actions;
 
 export default uiSlice.reducer;

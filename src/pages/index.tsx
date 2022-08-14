@@ -1,14 +1,33 @@
-import AddedTorrentList from '../components/Home';
-import Layout from '../components/Layout';
-import Searchbar from '../components/search/Searchbar';
+import type { ReactElement } from 'react';
 
-const Home = () => {
+import Loader from '@/components/Common/Loader';
+import NotFound from '@/components/Common/NotFound';
+import DiskUsage from '@/components/Library/DiskUsage';
+import TorrentList from '@/components/Library/TorrentList';
+import { useTorrentsListQuery } from '@/generated/apolloComponents';
+
+import Layout from '../components/Layout';
+
+const Library = () => {
+  const { data, loading, error } = useTorrentsListQuery({ pollInterval: 1000 });
+
+  if (loading) return <Loader />;
+
+  if (error || !data) return <NotFound title="Something went wrong" />;
+
+  if (data.torrents.length === 0) return <NotFound title="Library is empty" />;
+
   return (
-    <Layout needAuth={true}>
-      <Searchbar def="search" />
-      <AddedTorrentList />
-    </Layout>
+    <div className=" mt-4 flex flex-col gap-4 overflow-hidden lg:mt-6">
+      <DiskUsage />
+
+      <TorrentList torrents={data.torrents} />
+    </div>
   );
 };
 
-export default Home;
+Library.getLayout = (page: ReactElement) => (
+  <Layout needAuth={true}>{page}</Layout>
+);
+
+export default Library;

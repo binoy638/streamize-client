@@ -91,10 +91,6 @@ export const GET_TORRENTS = gql`
         status
       }
     }
-    diskUsage {
-      free
-      size
-    }
   }
 `;
 

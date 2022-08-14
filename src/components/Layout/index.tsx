@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 
-import { verifyUser } from '../API';
-import { useTypedDispatch } from '../hooks/useTypedDispatch';
-import { useTypedSelector } from '../hooks/useTypedSelector';
-import { setUser } from '../store/slice/user.slice';
+import { verifyUser } from '../../API';
+import { useTypedDispatch } from '../../hooks/useTypedDispatch';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { setUser } from '../../store/slice/user.slice';
+import ScreenLoader from '../ScreenLoader';
 import Header from './Header';
-import ScreenLoader from './ScreenLoader';
 import Sidebar from './Sidebar';
 
 interface LayoutProps {

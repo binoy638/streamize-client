@@ -1,25 +1,61 @@
 /* eslint-disable no-console */
 import type { AxiosResponse } from 'axios';
 
-import type { ITorrent, IVideo } from '../@types';
+import type { ITorrent, IVideo, SortMode, SortType } from '../@types';
 import type { Provider, TorrentData } from '../@types/store';
 import type { User } from '../store/slice/user.slice';
 import { API, TorrentScrapper } from './config';
 
 export const searchTorrentAPI = async (
   query: string,
-  provider: Provider
-): Promise<TorrentData[]> => {
+  provider: Provider,
+  page: number,
+  sortType: SortType = null,
+  sortMode: SortMode = null
+): Promise<{ torrents: TorrentData[]; totalPages: number }> => {
   try {
-    const { data } = await TorrentScrapper.get(`search/${provider}?q=${query}`);
+    if (!query || !provider || !page)
+      throw new Error('Invalid query or provider');
 
-    return data.results.map((item: TorrentData) => ({
+    const isNSFW = query.split(' ')[0] === '!x';
+
+    // eslint-disable-next-line no-param-reassign
+    if (isNSFW) query = query.split(' ').slice(1).join(' ').trim();
+
+    let url = `search/${provider}?q=${query}&page=${page}&nsfw=${isNSFW}`;
+
+    if (sortMode && sortType)
+      url += `&sort_type=${sortType}&sort_mode=${sortMode}`;
+
+    if (sortType === 'time') url += '&cache=false';
+
+    const { data } = await TorrentScrapper.get<{
+      torrents: TorrentData[];
+      totalPages: number;
+    }>(url);
+
+    const torrents = data.torrents.map((item: TorrentData) => ({
       ...item,
       provider,
     }));
+
+    return { torrents, totalPages: data.totalPages };
   } catch (error) {
     console.log(error);
     throw new Error('Error while searching torrents');
+  }
+};
+
+export const fetchTorrentMagnet = async (provider: Provider, link: string) => {
+  try {
+    const { data } = await TorrentScrapper.get(`get/${provider}?link=${link}`);
+    const magnet = data.data?.magnet;
+    if (!magnet.startsWith('magnet:?xt=urn:btih:'))
+      throw new Error('Invalid magnet');
+    return magnet;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error while fetching magnet link');
   }
 };
 
@@ -77,7 +113,7 @@ export const getDownloadLink = (videoSlug: string) =>
 export const getPreviewLink = (videoSlug: string, filename: string) =>
   `${process.env.NEXT_PUBLIC_BASE_URL}video/preview/${videoSlug}/${filename}`;
 
-export const addMagnetLink = (magnet: string) =>
+export const addMagnetLink = ({ magnet }: { magnet: string }) =>
   API.post('/torrent', { magnet });
 
 export const deleteTorrent = (slug: string) => API.delete(`/torrent/${slug}`);

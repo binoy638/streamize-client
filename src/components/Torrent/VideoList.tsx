@@ -67,10 +67,10 @@ export const VideoList: FC<VideoListProps> = ({
     torrent.__typename === 'TorrentWithInfoDownload'
   ) {
     return (
-      <Paper mt={10} shadow={'sm'} p={20} withBorder>
+      <div className="mt-6 flex flex-col gap-4">
         {torrent.files.map((video) => {
           return (
-            <div key={video.slug}>
+            <Paper key={video.slug} p={15}>
               <div
                 className="flex cursor-pointer items-center gap-2 "
                 onClick={() => handleClick(video.slug, video.status)}
@@ -82,10 +82,10 @@ export const VideoList: FC<VideoListProps> = ({
               </div>
 
               <VideoDownloadProgress video={video as Video} />
-            </div>
+            </Paper>
           );
         })}
-      </Paper>
+      </div>
     );
   }
 

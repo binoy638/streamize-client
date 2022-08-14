@@ -2,7 +2,7 @@ import {
   CheckIcon,
   ClockIcon,
   CogIcon,
-  DotsHorizontalIcon,
+  DotsVerticalIcon,
   DownloadIcon,
   ExclamationCircleIcon,
   FilmIcon,
@@ -16,6 +16,7 @@ import {
 import { Anchor, Menu, Paper, Progress, Text } from '@mantine/core';
 import Link from 'next/link';
 import prettyBytes from 'pretty-bytes';
+import type { ReactNode } from 'react';
 import React from 'react';
 
 import type { TorrentsListQuery } from '../../generated/apolloComponents';
@@ -29,6 +30,10 @@ const downloadedSize = (totalSize: number, progress: number) => {
   );
 };
 
+const Wrapper = ({ children }: { children: ReactNode }) => {
+  return <div className="flex items-center gap-4 px-4 pb-4">{children}</div>;
+};
+
 const Attributes = ({
   torrent,
 }: {
@@ -39,7 +44,7 @@ const Attributes = ({
     torrent.__typename === 'TorrentWithInfoDownload'
   ) {
     return (
-      <div className="flex items-center gap-4 p-4">
+      <Wrapper>
         <div>
           <FilmIcon className="h-14 w-14" />
           <div>
@@ -81,7 +86,7 @@ const Attributes = ({
             />
           </div>
         </div>
-      </div>
+      </Wrapper>
     );
   }
 
@@ -90,7 +95,7 @@ const Attributes = ({
     torrent.__typename === 'TorrentWithInfo'
   ) {
     return (
-      <div className="flex items-center gap-4 p-4">
+      <Wrapper>
         <div>
           <FilmIcon className="h-14 w-14" />
         </div>
@@ -112,13 +117,13 @@ const Attributes = ({
             />
           </div>
         </div>
-      </div>
+      </Wrapper>
     );
   }
 
   if (torrent.status === TorrentState.Added) {
     return (
-      <div className="flex items-center gap-4 p-4">
+      <Wrapper>
         <div>
           <FilmIcon className="h-14 w-14" />
         </div>
@@ -131,7 +136,7 @@ const Attributes = ({
             />
           </div>
         </div>
-      </div>
+      </Wrapper>
     );
   }
 
@@ -140,7 +145,7 @@ const Attributes = ({
     torrent.__typename === 'TorrentWithInfo'
   ) {
     return (
-      <div className="flex items-center gap-4 p-4">
+      <Wrapper>
         <div>
           <FilmIcon className="h-14 w-14" />
         </div>
@@ -157,13 +162,13 @@ const Attributes = ({
             />
           </div>
         </div>
-      </div>
+      </Wrapper>
     );
   }
 
   if (torrent.status === TorrentState.Error) {
     return (
-      <div className="flex items-center gap-4 p-4">
+      <Wrapper>
         <div>
           <FilmIcon className="h-14 w-14 text-red-500" />
         </div>
@@ -176,13 +181,13 @@ const Attributes = ({
             />
           </div>
         </div>
-      </div>
+      </Wrapper>
     );
   }
 
   if (torrent.__typename === 'TorrentWithInfo') {
     return (
-      <div className="flex items-center gap-4 p-4">
+      <Wrapper>
         <div>
           <FilmIcon className="h-14 w-14" />
         </div>
@@ -199,7 +204,7 @@ const Attributes = ({
             />
           </div>
         </div>
-      </div>
+      </Wrapper>
     );
   }
   return null;
@@ -217,24 +222,24 @@ const TorrentItem = ({
   retryHandler,
 }: TorrentItemProps) => {
   return (
-    <Paper shadow={'sm'} sx={{ position: 'relative' }}>
-      <div className="absolute right-0 p-2">
-        <Menu>
+    <Paper shadow="sm">
+      <div className="flex justify-end p-1">
+        <Menu position="bottom-end">
           <Menu.Target>
-            <DotsHorizontalIcon className="h-4 w-4" />
+            <DotsVerticalIcon className="h-4 w-4 cursor-pointer " />
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Item
-              onClick={() => deleteTorrentHandler(torrent.slug)}
-              icon={<TrashIcon className="h-4 w-4" />}
-            >
-              Delete
-            </Menu.Item>
             <Menu.Item
               onClick={() => retryHandler(torrent.magnet)}
               icon={<RefreshIcon className="h-4 w-4" />}
             >
               Refresh
+            </Menu.Item>
+            <Menu.Item
+              onClick={() => deleteTorrentHandler(torrent.slug)}
+              icon={<TrashIcon className="h-4 w-4" />}
+            >
+              Delete
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

@@ -27,7 +27,7 @@ export const Header = ({ data, showExtraOptions }: HeaderProps) => {
       <Paper shadow={'sm'} p={20}>
         {showExtraOptions && (
           <div className="flex justify-end pl-2">
-            <ExtraOptions torrentId={data._id} />
+            <ExtraOptions torrentId={data._id} slug={data.slug} />
           </div>
         )}
 
@@ -46,7 +46,7 @@ export const Header = ({ data, showExtraOptions }: HeaderProps) => {
       <Paper shadow={'sm'} p={20}>
         {showExtraOptions && (
           <div className="flex justify-end pl-2">
-            <ExtraOptions torrentId={data._id} />
+            <ExtraOptions torrentId={data._id} slug={data.slug} />
           </div>
         )}
 
@@ -65,7 +65,7 @@ export const Header = ({ data, showExtraOptions }: HeaderProps) => {
           <TorrentStatus status={data?.status || TorrentState.Queued} />
         </div>
         {data.status === TorrentState.Downloading && data.downloadInfo && (
-          <div className="flex gap-6 border-y-2 py-2">
+          <div className="flex gap-6  py-2">
             <ItemWithIcon
               title={prettyBytes(data.downloadInfo.downloadSpeed)}
               icon={<ArrowNarrowDownIcon className="h-4 w-4" />}
@@ -97,7 +97,7 @@ export const Header = ({ data, showExtraOptions }: HeaderProps) => {
       <Paper shadow={'sm'} p={20}>
         {showExtraOptions && (
           <div className="flex justify-end pl-2">
-            <ExtraOptions torrentId={data._id} />
+            <ExtraOptions torrentId={data._id} slug={data.slug} />
           </div>
         )}
 

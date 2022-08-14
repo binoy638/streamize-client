@@ -1,9 +1,10 @@
-import { UserIcon } from '@heroicons/react/solid';
+import { LogoutIcon } from '@heroicons/react/outline';
 import {
   Avatar,
   Burger,
   Header as HeaderComp,
   MediaQuery,
+  Menu,
   useMantineTheme,
 } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
@@ -12,7 +13,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { signOut } from '../API';
+import { useTypedDispatch } from '@/hooks/useTypedDispatch';
+import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { clearUser } from '@/store/slice/user.slice';
+
+import { signOut } from '../../API';
 
 interface HeaderProps {
   opened: boolean;
@@ -21,9 +26,16 @@ interface HeaderProps {
 }
 
 const Header = ({ opened, setOpened, needAuth }: HeaderProps) => {
+  const {
+    user: { username },
+  } = useTypedSelector((state) => state.user);
+
+  const dispatch = useTypedDispatch();
+
   const router = useRouter();
   const { mutate } = useMutation(signOut, {
     onSuccess: () => {
+      dispatch(clearUser());
       router.push('/signin');
     },
   });
@@ -66,15 +78,26 @@ const Header = ({ opened, setOpened, needAuth }: HeaderProps) => {
             {needAuth && (
               <span
                 className="flex cursor-pointer items-center justify-center"
-                onClick={handleLogout}
+                // onClick={handleLogout}
               >
-                <Avatar color="cyan" radius="xl">
-                  <UserIcon className="h-5 w-5" />
-                </Avatar>
+                <Menu position="bottom-end">
+                  <Menu.Target>
+                    <Avatar color="cyan" radius="xl">
+                      {username.charAt(0).toUpperCase()}
+                    </Avatar>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item
+                      onClick={handleLogout}
+                      icon={<LogoutIcon className="h-4 w-4" />}
+                    >
+                      Log out
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
               </span>
             )}
           </div>
-          {/* <Text className="font-balsamiqSans">Application header</Text> */}
         </div>
       </HeaderComp>
     </>

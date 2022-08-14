@@ -293,7 +293,6 @@ export type TorrentsListQuery = {
         status: TorrentState;
       }
   >;
-  diskUsage: { __typename?: 'DiskUsage'; free: number; size: number };
 };
 
 export type VideoQueryVariables = Exact<{
@@ -560,10 +559,6 @@ export const TorrentsListDocument = gql`
         magnet
         status
       }
-    }
-    diskUsage {
-      free
-      size
     }
   }
 `;
