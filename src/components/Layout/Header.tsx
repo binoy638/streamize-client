@@ -7,7 +7,7 @@ import {
   Menu,
   useMantineTheme,
 } from '@mantine/core';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -31,12 +31,13 @@ const Header = ({ opened, setOpened, needAuth }: HeaderProps) => {
   } = useTypedSelector((state) => state.user);
 
   const dispatch = useTypedDispatch();
-
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { mutate } = useMutation(signOut, {
     onSuccess: () => {
-      dispatch(clearUser());
       router.push('/signin');
+      dispatch(clearUser());
+      queryClient.clear();
     },
   });
 
