@@ -1,7 +1,6 @@
 import { PlayIcon, SearchIcon } from '@heroicons/react/solid';
 import { Navbar } from '@mantine/core';
 import Link from 'next/link';
-import type { FC } from 'react';
 import React from 'react';
 
 import { useTypedSelector } from '@/hooks/useTypedSelector';
@@ -33,7 +32,10 @@ const MenuItem = ({ name, icon, label, href }: MenuItemProps) => {
 interface SidebarProps {
   show: boolean;
 }
-const Sidebar: FC<SidebarProps> = ({ show }) => {
+const Sidebar = ({ show }: SidebarProps) => {
+  const { user } = useTypedSelector((state) => state.user);
+
+  if (!user.username) return null;
   return (
     <Navbar
       p="md"

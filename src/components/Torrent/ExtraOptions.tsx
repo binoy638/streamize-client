@@ -1,13 +1,25 @@
-import { ClipboardIcon } from '@heroicons/react/outline';
-import { DotsVerticalIcon, ShareIcon, TrashIcon } from '@heroicons/react/solid';
-import { Button, Drawer, Loader, Menu, Text, Tooltip } from '@mantine/core';
+import {
+  ClipboardIcon,
+  DotsVerticalIcon,
+  ShareIcon,
+  TrashIcon,
+} from '@heroicons/react/solid';
+import {
+  ActionIcon,
+  Button,
+  CheckIcon,
+  CopyButton,
+  Drawer,
+  Loader,
+  Menu,
+  Text,
+  Tooltip,
+} from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
 import { openConfirmModal } from '@mantine/modals';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import type { FC } from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import useDeleteTorrent from '@/hooks/useDeleteTorrent';
 
@@ -75,7 +87,7 @@ export const ExtraOptions = ({
   );
 };
 
-export const ExtraOptionsDrawer: FC = () => {
+export const ExtraOptionsDrawer = () => {
   const [shareLink, setShareLink] = useState('');
 
   const { mutate, isLoading, isError } = useMutation(shareTorrent, {
@@ -84,8 +96,6 @@ export const ExtraOptionsDrawer: FC = () => {
       setShareLink(link);
     },
   });
-
-  const [copied, setCopied] = useState(false);
 
   const dispatch = useTypedDispatch();
 
@@ -98,18 +108,6 @@ export const ExtraOptionsDrawer: FC = () => {
   };
 
   const [date, setDate] = useState<Date | null>(null);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (copied === true) {
-      timer = setTimeout(() => {
-        setCopied(false);
-      }, 3000);
-    }
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [copied]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -158,22 +156,23 @@ export const ExtraOptionsDrawer: FC = () => {
           <Text lineClamp={1} mr={10}>
             {`https://${shareLink}`}
           </Text>
-          <CopyToClipboard
-            text={`https://${shareLink}`}
-            onCopy={() => setCopied(true)}
-          >
-            <Tooltip
-              label="link copied"
-              withArrow
-              opened={copied}
-              closeDelay={500}
-            >
-              <ClipboardIcon
-                className="h-5 w-5 cursor-pointer"
-                color={copied ? 'green' : 'gray'}
-              />
-            </Tooltip>
-          </CopyToClipboard>
+          <CopyButton value={`https://${shareLink}`}>
+            {({ copied, copy }) => (
+              <Tooltip
+                label={copied ? 'Copied' : 'Copy'}
+                withArrow
+                position="right"
+              >
+                <ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy}>
+                  {copied ? (
+                    <CheckIcon className="h-4 w-4" />
+                  ) : (
+                    <ClipboardIcon className="h-4 w-4" />
+                  )}
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </CopyButton>
         </div>
       )}
 
@@ -185,3 +184,7 @@ export const ExtraOptionsDrawer: FC = () => {
     </Drawer>
   );
 };
+
+// const ShareTorrentModal = () => {
+//   return <div></div>;
+// };

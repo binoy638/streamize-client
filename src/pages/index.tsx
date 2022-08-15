@@ -18,7 +18,7 @@ const Library = () => {
   if (data.torrents.length === 0) return <NotFound title="Library is empty" />;
 
   return (
-    <div className=" mt-4 flex flex-col gap-4 overflow-hidden lg:mt-6">
+    <div className=" relative mt-4 flex flex-col gap-4 overflow-hidden lg:mt-6">
       <Header />
 
       <TorrentList torrents={data.torrents} />

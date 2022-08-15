@@ -38,7 +38,7 @@ function TorrentList({ torrents }: TorrentListProps) {
   };
 
   return (
-    <>
+    <div className="flex h-[calc(100vh-10rem)] flex-col gap-4 overflow-scroll scrollbar-hide">
       {torrents.map((torrent) => {
         return (
           <TorrentItem
@@ -49,7 +49,7 @@ function TorrentList({ torrents }: TorrentListProps) {
           />
         );
       })}
-    </>
+    </div>
   );
 }
 
