@@ -45,6 +45,11 @@ If you want to search torrent then you need to add the below env variable (check
 
 [Server Repo](https://github.com/binoy638/streamize-api)
 
+## Disclaimer
+
+Streamize is developed only for educational purposes and is not intended for commercial use.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
