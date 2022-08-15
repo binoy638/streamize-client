@@ -36,6 +36,7 @@ const Video = () => {
         ),
         withCloseButton: false,
         labels: { confirm: 'Yes', cancel: 'No' },
+        centered: true,
         onCancel: () => {
           setContinueVideo(false);
         },

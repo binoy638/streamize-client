@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 
+import useTrackCurrentPage from '@/hooks/useTrackCurrentPage';
+
 import { verifyUser } from '../../API';
 import { useTypedDispatch } from '../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
@@ -19,6 +21,8 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children, needAuth = true }) => {
   const theme = useMantineTheme();
+
+  useTrackCurrentPage();
 
   const [opened, setOpened] = useState(false);
 

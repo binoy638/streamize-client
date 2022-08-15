@@ -52,6 +52,7 @@ const SharedVideo = () => {
             </Text>
           ),
           withCloseButton: false,
+          centered: true,
           labels: { confirm: 'Yes', cancel: 'No' },
           onCancel: () => {
             setContinueVideo(false);

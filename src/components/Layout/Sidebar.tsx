@@ -1,58 +1,32 @@
-import {
-  HomeIcon,
-  PlayIcon,
-  SearchIcon,
-  UserAddIcon,
-} from '@heroicons/react/solid';
+import { PlayIcon, SearchIcon } from '@heroicons/react/solid';
 import { Navbar } from '@mantine/core';
-import { openModal } from '@mantine/modals';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import type { FC } from 'react';
 import React from 'react';
 
-import { useTypedDispatch } from '@/hooks/useTypedDispatch';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
-import type { SidebarItems } from '@/store/slice/UI.slice';
-import { setActiveItem } from '@/store/slice/UI.slice';
-
-import AddMagnetForm from '../forms/AddMagnet';
+import type { Pages } from '@/store/slice/UI.slice';
 
 interface MenuItemProps {
-  name: SidebarItems;
+  name: Pages;
   label: string;
   icon: JSX.Element;
+  href: string;
 }
-const MenuItem = ({ name, icon, label }: MenuItemProps) => {
-  const {
-    sidebar: { activeItem },
-  } = useTypedSelector((state) => state.UI);
+const MenuItem = ({ name, icon, label, href }: MenuItemProps) => {
+  const { currentPage } = useTypedSelector((state) => state.UI);
 
-  const dispatch = useTypedDispatch();
-
-  const router = useRouter();
-
-  const handleClick = () => {
-    dispatch(setActiveItem(name));
-    if (name === 'add-torrent') {
-      openModal({
-        title: 'Add Torrent',
-        children: <AddMagnetForm />,
-      });
-    }
-    if (name === 'home') {
-      router.push('/');
-    }
-  };
   return (
-    <div
-      onClick={handleClick}
-      className={`flex cursor-pointer items-center gap-2 rounded-sm  ${
-        activeItem === name && 'bg-red-600 text-white'
-      } px-2 py-1  `}
-    >
-      {icon}
-      <span>{label}</span>
-    </div>
+    <Link href={href} passHref>
+      <a
+        className={`flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1  ${
+          currentPage === name && 'bg-red-600 text-white'
+        } `}
+      >
+        {icon}
+        <span>{label}</span>
+      </a>
+    </Link>
   );
 };
 
@@ -69,25 +43,17 @@ const Sidebar: FC<SidebarProps> = ({ show }) => {
       style={{ gap: '5px' }}
     >
       <MenuItem
-        label="Home"
-        name="home"
-        icon={<HomeIcon className="h-5 w-5" />}
-      />
-      <MenuItem
+        href="/"
         label="Library"
-        name="lib"
+        name="home"
         icon={<PlayIcon className="h-5 w-5" />}
       />
 
       <MenuItem
+        href="/search"
         name="search"
         label="Search"
         icon={<SearchIcon className="h-5 w-5" />}
-      />
-      <MenuItem
-        label="Add Torrent"
-        name="add-torrent"
-        icon={<UserAddIcon className="h-5 w-5" />}
       />
     </Navbar>
   );

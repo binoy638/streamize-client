@@ -1,4 +1,5 @@
 // components/RouterTransition.tsx
+import { closeAllModals } from '@mantine/modals';
 import {
   NavigationProgress,
   resetNavigationProgress,
@@ -11,8 +12,13 @@ export function RouterTransition() {
   const router = useRouter();
 
   useEffect(() => {
-    const handleStart = (url: string) =>
-      url !== router.asPath && startNavigationProgress();
+    const handleStart = (url: string) => {
+      if (url !== router.asPath) {
+        startNavigationProgress();
+      }
+      closeAllModals();
+    };
+
     const handleComplete = () => resetNavigationProgress();
 
     router.events.on('routeChangeStart', handleStart);

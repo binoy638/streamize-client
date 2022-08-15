@@ -2,10 +2,11 @@ import { ClipboardIcon } from '@heroicons/react/outline';
 import { DotsVerticalIcon, ShareIcon, TrashIcon } from '@heroicons/react/solid';
 import { Button, Drawer, Loader, Menu, Text, Tooltip } from '@mantine/core';
 import { DatePicker } from '@mantine/dates';
+import { openConfirmModal } from '@mantine/modals';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import useDeleteTorrent from '@/hooks/useDeleteTorrent';
@@ -36,14 +37,24 @@ export const ExtraOptions = ({
     dispatch(setShareDrawer({ isOpen: true, torrentId }));
   };
 
-  const handleDelete = () => {
-    mutate(slug);
-  };
+  const handleDelete = useCallback(() => {
+    openConfirmModal({
+      children: (
+        <Text size="sm">Are you sure you want to delete this torrent?</Text>
+      ),
+      withCloseButton: false,
+      labels: { confirm: 'Yes', cancel: 'No' },
+      centered: true,
+      onConfirm: () => {
+        mutate(slug);
+      },
+    });
+  }, []);
 
   return (
     <Menu position="left-start">
       <Menu.Target>
-        <DotsVerticalIcon className="h-5 w-5 cursor-pointer" />
+        <DotsVerticalIcon className="h-4 w-4 cursor-pointer" />
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item

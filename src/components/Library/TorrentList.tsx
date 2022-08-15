@@ -1,3 +1,5 @@
+import { Text } from '@mantine/core';
+import { openConfirmModal } from '@mantine/modals';
 import React from 'react';
 
 import useDeleteTorrent from '@/hooks/useDeleteTorrent';
@@ -18,7 +20,17 @@ function TorrentList({ torrents }: TorrentListProps) {
   });
 
   const deleteTorrentHandler = (slug: string) => {
-    mutate(slug);
+    openConfirmModal({
+      children: (
+        <Text size="sm">Are you sure you want to delete this torrent?</Text>
+      ),
+      withCloseButton: false,
+      labels: { confirm: 'Yes', cancel: 'No' },
+      centered: true,
+      onConfirm: () => {
+        mutate(slug);
+      },
+    });
   };
 
   const RetryHandler = (magnet: string) => {

@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 
 import Loader from '@/components/Common/Loader';
 import NotFound from '@/components/Common/NotFound';
-import DiskUsage from '@/components/Library/DiskUsage';
+import Header from '@/components/Library/Header';
 import TorrentList from '@/components/Library/TorrentList';
 import { useTorrentsListQuery } from '@/generated/apolloComponents';
 
@@ -19,7 +19,7 @@ const Library = () => {
 
   return (
     <div className=" mt-4 flex flex-col gap-4 overflow-hidden lg:mt-6">
-      <DiskUsage />
+      <Header />
 
       <TorrentList torrents={data.torrents} />
     </div>

@@ -1,13 +1,19 @@
-import { ExclamationCircleIcon, ServerIcon } from '@heroicons/react/outline';
+import {
+  ExclamationCircleIcon,
+  PlusIcon,
+  ServerIcon,
+} from '@heroicons/react/outline';
 import { Loader } from '@mantine/core';
+import { openModal } from '@mantine/modals';
 import prettyBytes from 'pretty-bytes';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { useDiskUsageLazyQuery } from '@/generated/apolloComponents';
 
 import ItemWithIcon from '../Common/ItemWithIcon';
+import AddMagnetForm from '../forms/AddMagnet';
 
-const DiskUsage = () => {
+const LibraryHeader = () => {
   const [getDiskUsage, { loading, data, error }] = useDiskUsageLazyQuery();
 
   const [show, setShow] = useState(false);
@@ -19,9 +25,9 @@ const DiskUsage = () => {
       return (
         <ItemWithIcon
           icon={<ServerIcon className="h-4 w-4" />}
-          title={`${prettyBytes(data.diskUsage.free)} / ${prettyBytes(
-            data.diskUsage.size
-          )}`}
+          title={`${prettyBytes(
+            data.diskUsage.size - data.diskUsage.free
+          )} / ${prettyBytes(data.diskUsage.size)}`}
         />
       );
 
@@ -31,6 +37,13 @@ const DiskUsage = () => {
   const handleClick = () => {
     getDiskUsage();
     setShow(!show);
+  };
+
+  const handleTorrentAdd = () => {
+    openModal({
+      title: 'Add Torrent',
+      children: <AddMagnetForm />,
+    });
   };
 
   useEffect(() => {
@@ -43,7 +56,11 @@ const DiskUsage = () => {
 
   if (!show) {
     return (
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <PlusIcon
+          className="h-4 w-4 cursor-pointer"
+          onClick={handleTorrentAdd}
+        />
         <ServerIcon className="h-4 w-4 cursor-pointer" onClick={handleClick} />
       </div>
     );
@@ -51,4 +68,4 @@ const DiskUsage = () => {
   return <div className="flex justify-end">{displayUsage}</div>;
 };
 
-export default DiskUsage;
+export default LibraryHeader;

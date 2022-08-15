@@ -2,16 +2,16 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
-export type SidebarItems = 'home' | 'lib' | 'search' | 'add-torrent';
+export type SidebarItems = 'lib' | 'search' | 'add-torrent';
+
+export type Pages = 'home' | 'search' | 'torrent' | 'video' | 'signin';
 
 interface UISlice {
   shareDrawer: {
     isOpen: boolean;
     torrentId: string;
   };
-  sidebar: {
-    activeItem: SidebarItems;
-  };
+  currentPage: Pages;
 }
 
 // Define the initial state using that type
@@ -20,9 +20,7 @@ const initialState: UISlice = {
     isOpen: false,
     torrentId: '',
   },
-  sidebar: {
-    activeItem: 'home',
-  },
+  currentPage: 'home',
 };
 
 const uiSlice = createSlice({
@@ -38,8 +36,8 @@ const uiSlice = createSlice({
         state.shareDrawer.torrentId = action.payload.torrentId;
       }
     },
-    setActiveItem: (state, action: PayloadAction<SidebarItems>) => {
-      state.sidebar.activeItem = action.payload;
+    setCurrentPage: (state, action: PayloadAction<Pages>) => {
+      state.currentPage = action.payload;
     },
   },
   //   extraReducers: builder => {
@@ -49,6 +47,6 @@ const uiSlice = createSlice({
   //   }
 });
 
-export const { setShareDrawer, setActiveItem } = uiSlice.actions;
+export const { setShareDrawer, setCurrentPage } = uiSlice.actions;
 
 export default uiSlice.reducer;
