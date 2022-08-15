@@ -75,8 +75,8 @@ const SharedVideo = () => {
   }
 
   return (
-    <div className="flex h-full justify-center lg:items-center">
-      <div className="flex-col justify-center">
+    <div className="h-full justify-center overflow-hidden  lg:flex  ">
+      <div className="lg:w-10/12 ">
         <Player
           video={data.sharedPlaylistVideo}
           shareSlug={slug as string}

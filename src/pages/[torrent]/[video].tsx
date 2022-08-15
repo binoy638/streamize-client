@@ -59,8 +59,8 @@ const Video = () => {
   }
 
   return (
-    <div className="h-full flex-col justify-center overflow-hidden lg:items-center">
-      <div className="flex-col justify-center ">
+    <div className="h-full justify-center overflow-hidden  lg:flex  ">
+      <div className="lg:w-10/12 ">
         <Player
           video={data.video}
           seekTo={continueVideo ? data.videoProgress : undefined}
