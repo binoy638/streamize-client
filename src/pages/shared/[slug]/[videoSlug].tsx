@@ -1,4 +1,5 @@
 import { Text } from '@mantine/core';
+import { openConfirmModal } from '@mantine/modals';
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -8,7 +9,6 @@ import NotFound from '../../../components/Common/NotFound';
 import Layout from '../../../components/Layout';
 import Player from '../../../components/Player';
 import { useSharedPlaylistVideoQuery } from '../../../generated/apolloComponents';
-import useModal from '../../../hooks/useModal';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { secondsToHHMMSS } from '../../../utils';
 
@@ -31,8 +31,6 @@ const SharedVideo = () => {
 
   const [isHost, setIsHost] = useState(false);
 
-  const modal = useModal();
-
   useEffect(() => {
     if (!data) return;
 
@@ -45,17 +43,21 @@ const SharedVideo = () => {
       const progress = localStorage.getItem(key);
       if (progress) {
         setVideoProgress(Number(progress));
-        modal.showModal({
-          title: `Do you want to continue from where you left? ${secondsToHHMMSS(
-            Number(progress)
-          )}`,
-          positiveLabel: 'Yes',
-          negativeLabel: 'No',
-          onPositiveAction: () => {
-            setContinueVideo(true);
-          },
-          onNegativeAction: () => {
+        openConfirmModal({
+          children: (
+            <Text size="sm">
+              {`Do you want to continue from where you left? ${secondsToHHMMSS(
+                Number(progress)
+              )}`}
+            </Text>
+          ),
+          withCloseButton: false,
+          labels: { confirm: 'Yes', cancel: 'No' },
+          onCancel: () => {
             setContinueVideo(false);
+          },
+          onConfirm: () => {
+            setContinueVideo(true);
           },
         });
       }
@@ -69,12 +71,12 @@ const SharedVideo = () => {
   }
 
   if (error) {
-    return <NotFound title="Somthing went wrong" />;
+    return <NotFound title="Something went wrong" />;
   }
 
   return (
     <div className="flex h-full justify-center lg:items-center">
-      <div className="flex-col justify-center lg:h-3/4 lg:w-3/4">
+      <div className="flex-col justify-center">
         <Player
           video={data.sharedPlaylistVideo}
           shareSlug={slug as string}

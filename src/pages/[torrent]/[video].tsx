@@ -1,4 +1,5 @@
 import { Text } from '@mantine/core';
+import { openConfirmModal } from '@mantine/modals';
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
 import { useEffect, useState } from 'react';
@@ -9,7 +10,6 @@ import Loader from '../../components/Common/Loader';
 import NotFound from '../../components/Common/NotFound';
 import Player from '../../components/Player';
 import { useVideoQuery } from '../../generated/apolloComponents';
-import useModal from '../../hooks/useModal';
 import { secondsToHHMMSS } from '../../utils';
 
 const Video = () => {
@@ -24,24 +24,27 @@ const Video = () => {
 
   const [continueVideo, setContinueVideo] = useState(false);
 
-  const modal = useModal();
-
   useEffect(() => {
     if (data && data.videoProgress > 0) {
-      modal.showModal({
-        title: `Do you want to continue from where you left? ${secondsToHHMMSS(
-          data.videoProgress
-        )}`,
-        positiveLabel: 'Yes',
-        negativeLabel: 'No',
-        onPositiveAction: () => {
-          setContinueVideo(true);
-        },
-        onNegativeAction: () => {
+      openConfirmModal({
+        children: (
+          <Text size="sm">
+            {`Do you want to continue from where you left? ${secondsToHHMMSS(
+              data.videoProgress
+            )}`}
+          </Text>
+        ),
+        withCloseButton: false,
+        labels: { confirm: 'Yes', cancel: 'No' },
+        onCancel: () => {
           setContinueVideo(false);
+        },
+        onConfirm: () => {
+          setContinueVideo(true);
         },
       });
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
@@ -57,7 +60,7 @@ const Video = () => {
 
   return (
     <div className="h-full flex-col justify-center overflow-hidden lg:items-center">
-      <div className="flex-col justify-center lg:h-3/4 lg:w-3/4 ">
+      <div className="flex-col justify-center ">
         <Player
           video={data.video}
           seekTo={continueVideo ? data.videoProgress : undefined}
