@@ -1,7 +1,7 @@
 import { ArrowNarrowDownIcon, ArrowNarrowUpIcon } from '@heroicons/react/solid';
 import { Pagination, Table } from '@mantine/core';
 import { useRouter } from 'next/router';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import BarsSvg from '@/components/Common/BarsSvg';
@@ -14,6 +14,15 @@ import type { Provider, SortMode, SortType } from '../@types';
 import useSearch from '../hooks/useSearch';
 import { nextSortState } from '../utils';
 
+const SearchPageWrapper = ({ children }: { children: ReactNode }) => {
+  return (
+    <div>
+      <SearchBar />
+      {children}
+    </div>
+  );
+};
+
 interface SortHeadersProps {
   label: string;
   sortState: SortMode;
@@ -23,11 +32,11 @@ interface SortHeadersProps {
 const SortHeaders = ({ label, sortState, clickHandler }: SortHeadersProps) => {
   const Icon = useMemo(() => {
     if (sortState === 'asc') {
-      return <ArrowNarrowUpIcon className="h-4 w-4 text-primary" />;
+      return <ArrowNarrowUpIcon className="h-4 w-4 text-green-500" />;
     }
 
     if (sortState === 'desc') {
-      return <ArrowNarrowDownIcon className="h-4 w-4 text-primary" />;
+      return <ArrowNarrowDownIcon className="h-4 w-4 text-green-500" />;
     }
     return null;
   }, [sortState]);
@@ -88,26 +97,38 @@ const Search = () => {
     });
   };
 
-  if (isError) return <NotFound title="Something went wrong" />;
+  if (!query) {
+    return <SearchPageWrapper>{null}</SearchPageWrapper>;
+  }
+
+  if (isError)
+    return (
+      <SearchPageWrapper>
+        <NotFound title="Something went wrong" />
+      </SearchPageWrapper>
+    );
 
   if (isLoading || !data)
     return (
-      <div className="flex h-96 items-center justify-center">
-        <BarsSvg />
-      </div>
+      <SearchPageWrapper>
+        <div className="flex h-96 items-center justify-center">
+          <BarsSvg />
+        </div>
+      </SearchPageWrapper>
     );
 
   if (data.torrents.length === 0) {
     return (
-      <div className="flex h-96 items-center justify-center">
-        <NotFound title="No results found" />
-      </div>
+      <SearchPageWrapper>
+        <div className="flex h-96 items-center justify-center">
+          <NotFound title="No results found" />
+        </div>
+      </SearchPageWrapper>
     );
   }
 
   return (
-    <div>
-      <SearchBar />
+    <SearchPageWrapper>
       <div className="mt-8 overflow-hidden overflow-x-scroll scrollbar-hide lg:overflow-x-hidden">
         <Table highlightOnHover>
           <thead>
@@ -145,14 +166,14 @@ const Search = () => {
         </Table>
       </div>
 
-      <div className="flex items-center justify-center">
+      <div className="mt-4 flex items-center justify-center">
         <Pagination
           page={pageNo}
           onChange={handlePagination}
           total={data.totalPages}
         />
       </div>
-    </div>
+    </SearchPageWrapper>
   );
 };
 

@@ -46,7 +46,10 @@ export const searchTorrentAPI = async (
   }
 };
 
-export const fetchTorrentMagnet = async (provider: Provider, link: string) => {
+export const fetchTorrentMagnet = async (
+  provider: Provider,
+  link: string
+): Promise<string> => {
   try {
     const { data } = await TorrentScrapper.get(`get/${provider}?link=${link}`);
     const magnet = data.data?.magnet;

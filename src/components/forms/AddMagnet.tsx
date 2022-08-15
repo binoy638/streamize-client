@@ -28,7 +28,7 @@ function AddMagnetForm() {
   });
 
   const { mutate } = useAddMagnet({
-    successMessage: 'successfully added to queue',
+    successMessage: 'Successfully added to queue',
     onSuccessAction: () => {
       closeAllModals();
     },

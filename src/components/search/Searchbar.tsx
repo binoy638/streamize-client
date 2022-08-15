@@ -17,11 +17,7 @@ function SearchBar() {
 
   useEffect(() => {
     if (!router.isReady) return;
-    if (site === undefined || query === undefined) {
-      if (router.pathname !== '/') {
-        router.push('/');
-      }
-    }
+
     if (
       site === '1337x' ||
       site === 'tpb' ||
@@ -30,7 +26,7 @@ function SearchBar() {
     ) {
       setProvider(site);
     }
-  }, [site, query, router, router.isReady]);
+  }, [site, router.isReady]);
 
   useEffect(() => {
     if (provider === site || site === undefined) return;
@@ -54,7 +50,6 @@ function SearchBar() {
     <Button
       sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
       type="submit"
-      color="red"
     >
       <ImSearch />
     </Button>
@@ -69,18 +64,10 @@ function SearchBar() {
       />
       <div className="flex justify-center">
         <Chip.Group value={provider} multiple={false} onChange={setProvider}>
-          <Chip color="red" value="1337x">
-            1337x
-          </Chip>
-          <Chip color="red" value="rarbg">
-            Rarbg
-          </Chip>
-          <Chip color="red" value="tpb">
-            The Pirate Bay
-          </Chip>
-          <Chip color="red" value="nyaa">
-            Nyaa
-          </Chip>
+          <Chip value="1337x">1337x</Chip>
+          <Chip value="rarbg">Rarbg</Chip>
+          <Chip value="tpb">The Pirate Bay</Chip>
+          <Chip value="nyaa">Nyaa</Chip>
         </Chip.Group>
       </div>
     </form>
