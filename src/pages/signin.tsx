@@ -45,7 +45,7 @@ const GuestUserLoginDetails = () => {
   return (
     <Popover
       width={200}
-      position="bottom"
+      position="bottom-end"
       opened={opened}
       onChange={setOpened}
       shadow="md"
@@ -101,7 +101,7 @@ export default function SignIn() {
         <title>Streamize - Sign in</title>
       </Head>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center overflow-hidden ">
         <Paper withBorder sx={{ position: 'relative' }}>
           <div className="absolute right-0 p-4">
             <GuestUserLoginDetails />

@@ -12,6 +12,16 @@ $whiteLight: rgba(255, 255, 255, 0.6);
 $blackDark: rgba(0, 0, 0, 0.6);
 $blackLight: rgba(0, 0, 0, 0.2);
 
+#nprogress .bar {
+  background: #fc7a69 !important;
+  height: 4px !important;
+}
+
+#nprogress .peg {
+  box-shadow: none !important;
+}
+
+
 .video {
     width: 100%;
     max-width: 500px;

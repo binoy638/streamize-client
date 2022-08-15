@@ -18,6 +18,8 @@ import type { ReactElement, ReactNode } from 'react';
 import { useState } from 'react';
 import { Provider } from 'react-redux';
 
+import { RouterTransition } from '@/components/Common/RouterTransition';
+
 import client from '../graphql/client';
 import store from '../store';
 
@@ -60,6 +62,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             >
               <NotificationsProvider>
                 <ModalsProvider>
+                  <RouterTransition />
                   {getLayout(<Component {...pageProps} />)}
                 </ModalsProvider>
               </NotificationsProvider>

@@ -7,12 +7,13 @@ import {
   Menu,
   useMantineTheme,
 } from '@mantine/core';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import client from '@/graphql/client';
 import { useTypedDispatch } from '@/hooks/useTypedDispatch';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
 import { clearUser } from '@/store/slice/user.slice';
@@ -31,13 +32,13 @@ const Header = ({ opened, setOpened, needAuth }: HeaderProps) => {
   } = useTypedSelector((state) => state.user);
 
   const dispatch = useTypedDispatch();
-  const queryClient = useQueryClient();
+
   const router = useRouter();
   const { mutate } = useMutation(signOut, {
     onSuccess: () => {
-      router.push('/signin');
       dispatch(clearUser());
-      queryClient.clear();
+      client.clearStore();
+      router.push('/signin');
     },
   });
 
