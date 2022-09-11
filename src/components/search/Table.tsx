@@ -55,6 +55,10 @@ export const TableBody = ({ torrents }: TableBodyProps) => {
       centered: true,
       onConfirm: async () => {
         try {
+          if (link.startsWith('magnet:?xt=urn:btih:')) {
+            mutate({ magnet: link });
+            return;
+          }
           const magnet = await fetchTorrentMagnet(provider, link);
           mutate({ magnet });
         } catch (error) {
