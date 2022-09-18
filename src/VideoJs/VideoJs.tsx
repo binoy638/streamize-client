@@ -119,6 +119,12 @@ export const VideoJS = ({
           onPlaying && player.on('playing', () => onPlaying(player));
           onWaiting && player.on('waiting', () => onWaiting(player));
           onDispose && player.on('dispose', () => onDispose(player));
+
+          window.addEventListener('visibilitychange', () => {
+            if (window.document.visibilityState === 'hidden') {
+              player.pause();
+            }
+          });
         }
       ));
     } else if (seekTo && seekTo > 0) {
