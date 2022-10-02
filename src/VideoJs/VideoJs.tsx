@@ -39,6 +39,7 @@ const defaultOptions: videojs.PlayerOptions = {
 export const VideoJS = ({
   options,
   subtitles = [],
+  videoSlug,
   seekTo,
   progressBarPreviewUrl,
   onReady,
@@ -74,6 +75,7 @@ export const VideoJS = ({
   onLoadedData?: (player: videojs.Player) => void;
   onDispose?: (player: videojs.Player) => void;
   subtitles: VideoQuery['video']['subtitles'];
+  videoSlug: VideoQuery['video']['slug'];
 }) => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const playerRef = React.useRef<videojs.Player | null>();
@@ -159,7 +161,7 @@ export const VideoJS = ({
                 <track
                   key={sub._id}
                   kind="captions"
-                  src={getSubtitleSrc(sub.fileName)}
+                  src={getSubtitleSrc(videoSlug, sub.fileName)}
                   srcLang={sub.language}
                   label={sub.language}
                 />

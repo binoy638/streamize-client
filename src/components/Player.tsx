@@ -87,13 +87,13 @@ const Player: FC<PlayerProps> = ({ video, shareSlug, seekTo }) => {
   const onVolumeChange = useCallback((player: VideoJsPlayer) => {
     localStorage.setItem('volume', player.volume().toString());
   }, []);
-
   return (
     <VideoJS
       onReady={onReady}
       options={options}
       seekTo={seekTo}
       subtitles={video.subtitles}
+      videoSlug={video.slug}
       onTimeUpdate={onTimeUpdate}
       onVolumeChange={onVolumeChange}
       progressBarPreviewUrl={
