@@ -1,6 +1,7 @@
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import { ExclamationCircleIcon, XIcon } from '@heroicons/react/outline';
 import { Text, Tooltip } from '@mantine/core';
 import { closeAllModals, openConfirmModal } from '@mantine/modals';
+import { showNotification } from '@mantine/notifications';
 import React, { useMemo } from 'react';
 
 import type { Provider, TorrentData } from '@/@types';
@@ -62,6 +63,11 @@ export const TableBody = ({ torrents }: TableBodyProps) => {
           const magnet = await fetchTorrentMagnet(provider, link);
           mutate({ magnet });
         } catch (error) {
+          showNotification({
+            message: 'Error while fetching magnet link',
+            color: 'red',
+            icon: <XIcon className="h-4 w-4" />,
+          });
           console.log(error);
         }
       },
