@@ -23,6 +23,13 @@ export type Scalars = {
   DateTime: any;
 };
 
+/** New watch party data */
+export type AddWatchPartyInput = {
+  maxViewers: Scalars['Float'];
+  name: Scalars['String'];
+  partyPlayerControl: Scalars['Boolean'];
+};
+
 export type DiskUsage = {
   __typename?: 'DiskUsage';
   free: Scalars['Float'];
@@ -39,16 +46,21 @@ export type DownloadInfo = {
   uploadSpeed: Scalars['Float'];
 };
 
-export type Query = {
-  __typename?: 'Query';
-  diskUsage: DiskUsage;
-  sharedPlaylist: SharedPlaylist;
-  sharedPlaylistVideo: Video;
-  torrent: Torrent;
-  torrents: Array<Torrent>;
-  video: Video;
-  videoProgress: Scalars['Float'];
+export type Mutation = {
+  __typename?: 'Mutation';
+  addWatchParty: WatchParty;
+  removeWatchParty: Scalars['Boolean'];
 };
+
+export type MutationAddWatchPartyArgs = {
+  data: AddWatchPartyInput;
+};
+
+export type MutationRemoveWatchPartyArgs = {
+  slug: Scalars['String'];
+};
+
+export type Query = { Mutation: any };
 
 export type QuerySharedPlaylistArgs = {
   slug: Scalars['String'];
@@ -156,6 +168,7 @@ export type Video = {
   __typename?: 'Video';
   _id: Scalars['ID'];
   downloadInfo?: Maybe<VideoDownloadInfo>;
+  duration: Scalars['Float'];
   ext: Scalars['String'];
   name: Scalars['String'];
   path: Scalars['String'];
@@ -185,6 +198,42 @@ export enum VideoState {
   Processing = 'PROCESSING',
   Queued = 'QUEUED',
 }
+
+export type WatchParty = {
+  __typename?: 'WatchParty';
+  _id: Scalars['ID'];
+  host: User;
+  maxViewers: Scalars['Float'];
+  name: Scalars['String'];
+  partyPlayerControl: Scalars['Boolean'];
+  slug: Scalars['String'];
+};
+
+export type AddWatchPartyMutationVariables = Exact<{
+  data: AddWatchPartyInput;
+}>;
+
+export type AddWatchPartyMutation = {
+  __typename?: 'Mutation';
+  addWatchParty: {
+    __typename?: 'WatchParty';
+    _id: string;
+    slug: string;
+    name: string;
+    partyPlayerControl: boolean;
+    maxViewers: number;
+    host: { __typename?: 'User'; username: string; _id: string };
+  };
+};
+
+export type RemoveWatchPartyMutationVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+export type RemoveWatchPartyMutation = {
+  __typename?: 'Mutation';
+  removeWatchParty: boolean;
+};
 
 export type TorrentQueryVariables = Exact<{
   slug: Scalars['String'];
@@ -429,6 +478,144 @@ export type SharedPlaylistVideoQuery = {
   };
 };
 
+export type GetWatchPartyQueryVariables = Exact<{
+  slug: Scalars['String'];
+}>;
+
+export type GetWatchPartyQuery = {
+  __typename?: 'Query';
+  getWatchParty: {
+    __typename?: 'WatchParty';
+    _id: string;
+    slug: string;
+    name: string;
+    partyPlayerControl: boolean;
+    maxViewers: number;
+    host: { __typename?: 'User'; username: string; _id: string };
+  };
+};
+
+export type GetUserWatchPartiesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetUserWatchPartiesQuery = {
+  __typename?: 'Query';
+  getUserWatchParties: Array<{
+    __typename?: 'WatchParty';
+    _id: string;
+    slug: string;
+    name: string;
+    partyPlayerControl: boolean;
+    maxViewers: number;
+    host: { __typename?: 'User'; username: string; _id: string };
+  }>;
+};
+
+export const AddWatchPartyDocument = gql`
+  mutation addWatchParty($data: AddWatchPartyInput!) {
+    addWatchParty(data: $data) {
+      _id
+      slug
+      name
+      host {
+        username
+        _id
+      }
+      partyPlayerControl
+      maxViewers
+    }
+  }
+`;
+export type AddWatchPartyMutationFn = Apollo.MutationFunction<
+  AddWatchPartyMutation,
+  AddWatchPartyMutationVariables
+>;
+
+/**
+ * __useAddWatchPartyMutation__
+ *
+ * To run a mutation, you first call `useAddWatchPartyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddWatchPartyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addWatchPartyMutation, { data, loading, error }] = useAddWatchPartyMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useAddWatchPartyMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddWatchPartyMutation,
+    AddWatchPartyMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddWatchPartyMutation,
+    AddWatchPartyMutationVariables
+  >(AddWatchPartyDocument, options);
+}
+export type AddWatchPartyMutationHookResult = ReturnType<
+  typeof useAddWatchPartyMutation
+>;
+export type AddWatchPartyMutationResult =
+  Apollo.MutationResult<AddWatchPartyMutation>;
+export type AddWatchPartyMutationOptions = Apollo.BaseMutationOptions<
+  AddWatchPartyMutation,
+  AddWatchPartyMutationVariables
+>;
+export const RemoveWatchPartyDocument = gql`
+  mutation removeWatchParty($slug: String!) {
+    removeWatchParty(slug: $slug)
+  }
+`;
+export type RemoveWatchPartyMutationFn = Apollo.MutationFunction<
+  RemoveWatchPartyMutation,
+  RemoveWatchPartyMutationVariables
+>;
+
+/**
+ * __useRemoveWatchPartyMutation__
+ *
+ * To run a mutation, you first call `useRemoveWatchPartyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveWatchPartyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeWatchPartyMutation, { data, loading, error }] = useRemoveWatchPartyMutation({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useRemoveWatchPartyMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveWatchPartyMutation,
+    RemoveWatchPartyMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemoveWatchPartyMutation,
+    RemoveWatchPartyMutationVariables
+  >(RemoveWatchPartyDocument, options);
+}
+export type RemoveWatchPartyMutationHookResult = ReturnType<
+  typeof useRemoveWatchPartyMutation
+>;
+export type RemoveWatchPartyMutationResult =
+  Apollo.MutationResult<RemoveWatchPartyMutation>;
+export type RemoveWatchPartyMutationOptions = Apollo.BaseMutationOptions<
+  RemoveWatchPartyMutation,
+  RemoveWatchPartyMutationVariables
+>;
 export const TorrentDocument = gql`
   query Torrent($slug: String!) {
     torrent(slug: $slug) {
@@ -913,4 +1100,135 @@ export type SharedPlaylistVideoLazyQueryHookResult = ReturnType<
 export type SharedPlaylistVideoQueryResult = Apollo.QueryResult<
   SharedPlaylistVideoQuery,
   SharedPlaylistVideoQueryVariables
+>;
+export const GetWatchPartyDocument = gql`
+  query getWatchParty($slug: String!) {
+    getWatchParty(slug: $slug) {
+      _id
+      slug
+      name
+      host {
+        username
+        _id
+      }
+      partyPlayerControl
+      maxViewers
+    }
+  }
+`;
+
+/**
+ * __useGetWatchPartyQuery__
+ *
+ * To run a query within a React component, call `useGetWatchPartyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetWatchPartyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetWatchPartyQuery({
+ *   variables: {
+ *      slug: // value for 'slug'
+ *   },
+ * });
+ */
+export function useGetWatchPartyQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetWatchPartyQuery,
+    GetWatchPartyQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetWatchPartyQuery, GetWatchPartyQueryVariables>(
+    GetWatchPartyDocument,
+    options
+  );
+}
+export function useGetWatchPartyLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetWatchPartyQuery,
+    GetWatchPartyQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetWatchPartyQuery, GetWatchPartyQueryVariables>(
+    GetWatchPartyDocument,
+    options
+  );
+}
+export type GetWatchPartyQueryHookResult = ReturnType<
+  typeof useGetWatchPartyQuery
+>;
+export type GetWatchPartyLazyQueryHookResult = ReturnType<
+  typeof useGetWatchPartyLazyQuery
+>;
+export type GetWatchPartyQueryResult = Apollo.QueryResult<
+  GetWatchPartyQuery,
+  GetWatchPartyQueryVariables
+>;
+export const GetUserWatchPartiesDocument = gql`
+  query getUserWatchParties {
+    getUserWatchParties {
+      _id
+      slug
+      name
+      host {
+        username
+        _id
+      }
+      partyPlayerControl
+      maxViewers
+    }
+  }
+`;
+
+/**
+ * __useGetUserWatchPartiesQuery__
+ *
+ * To run a query within a React component, call `useGetUserWatchPartiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserWatchPartiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserWatchPartiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserWatchPartiesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetUserWatchPartiesQuery,
+    GetUserWatchPartiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetUserWatchPartiesQuery,
+    GetUserWatchPartiesQueryVariables
+  >(GetUserWatchPartiesDocument, options);
+}
+export function useGetUserWatchPartiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUserWatchPartiesQuery,
+    GetUserWatchPartiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetUserWatchPartiesQuery,
+    GetUserWatchPartiesQueryVariables
+  >(GetUserWatchPartiesDocument, options);
+}
+export type GetUserWatchPartiesQueryHookResult = ReturnType<
+  typeof useGetUserWatchPartiesQuery
+>;
+export type GetUserWatchPartiesLazyQueryHookResult = ReturnType<
+  typeof useGetUserWatchPartiesLazyQuery
+>;
+export type GetUserWatchPartiesQueryResult = Apollo.QueryResult<
+  GetUserWatchPartiesQuery,
+  GetUserWatchPartiesQueryVariables
 >;

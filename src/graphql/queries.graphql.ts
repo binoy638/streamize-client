@@ -209,3 +209,35 @@ export const GET_SHARED_PLAYLIST_VIDEO = gql`
     }
   }
 `;
+
+export const GET_WATCH_PARTY = gql`
+  query getWatchParty($slug: String!) {
+    getWatchParty(slug: $slug) {
+      _id
+      slug
+      name
+      host {
+        username
+        _id
+      }
+      partyPlayerControl
+      maxViewers
+    }
+  }
+`;
+
+export const GET_USER_WATCH_PARTIES = gql`
+  query getUserWatchParties {
+    getUserWatchParties {
+      _id
+      slug
+      name
+      host {
+        username
+        _id
+      }
+      partyPlayerControl
+      maxViewers
+    }
+  }
+`;

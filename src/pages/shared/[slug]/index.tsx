@@ -1,23 +1,36 @@
 import { useRouter } from 'next/router';
 import type { ReactElement } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Loader from '../../../components/Common/Loader';
 import NotFound from '../../../components/Common/NotFound';
 import Layout from '../../../components/Layout';
 import { Header } from '../../../components/Torrent/Header';
 import { VideoList } from '../../../components/Torrent/VideoList';
-import { useSharedPlaylistQuery } from '../../../generated/apolloComponents';
+import {
+  TorrentState,
+  useSharedPlaylistQuery,
+} from '../../../generated/apolloComponents';
 
 const SharedPlaylist = () => {
   const router = useRouter();
 
   const slug = router.query.slug as string;
 
-  const { loading, data, error } = useSharedPlaylistQuery({
+  const { loading, data, error, stopPolling } = useSharedPlaylistQuery({
     variables: { slug },
     pollInterval: 1000,
   });
+
+  useEffect(() => {
+    if (!data) return;
+
+    const finished = data.sharedPlaylist.torrent.status === TorrentState.Done;
+
+    if (finished) {
+      stopPolling();
+    }
+  }, [data]);
 
   if (loading) {
     return <Loader />;
