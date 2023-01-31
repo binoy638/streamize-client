@@ -2,26 +2,26 @@ import { ExclamationCircleIcon, XIcon } from '@heroicons/react/outline';
 import { Text, Tooltip } from '@mantine/core';
 import { closeAllModals, openConfirmModal } from '@mantine/modals';
 import { showNotification } from '@mantine/notifications';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import type { Provider, TorrentData } from '@/@types';
 import { fetchTorrentMagnet } from '@/API';
 import client from '@/graphql/client';
 import useAddMagnet from '@/hooks/useAddMagnet';
 
-export const TorrentName = ({ name }: { name: string }) => {
-  const notSupported = useMemo(() => {
-    if (name.includes('x265') || name.includes('HEVC')) {
-      return true;
-    }
+const isCodecSupported = (name: string) => {
+  if (name.includes('x265') || name.includes('HEVC')) {
     return false;
-  }, [name]);
+  }
+  return true;
+};
 
+export const TorrentName = ({ name }: { name: string }) => {
   return (
     <td className={`flex cursor-pointer gap-2  `}>
       {name}
 
-      {notSupported && (
+      {!isCodecSupported(name) && (
         <Tooltip
           label="Unsupported media detected, processing duration will be high."
           withArrow
@@ -35,9 +35,10 @@ export const TorrentName = ({ name }: { name: string }) => {
 
 interface TableBodyProps {
   torrents: TorrentData[];
+  showUnsupported: boolean;
 }
 
-export const TableBody = ({ torrents }: TableBodyProps) => {
+export const TableBody = ({ torrents, showUnsupported }: TableBodyProps) => {
   const { mutate } = useAddMagnet({
     successMessage: 'Torrent successfully added to queue',
     onSuccessAction: () => {
@@ -76,6 +77,7 @@ export const TableBody = ({ torrents }: TableBodyProps) => {
   return (
     <tbody>
       {torrents.map((torrent, index) => {
+        if (!showUnsupported && !isCodecSupported(torrent.name)) return null;
         return (
           <tr
             key={torrent.name + index}

@@ -1,5 +1,5 @@
 import { ArrowNarrowDownIcon, ArrowNarrowUpIcon } from '@heroicons/react/solid';
-import { Pagination, Table } from '@mantine/core';
+import { Pagination, Switch, Table } from '@mantine/core';
 import { useRouter } from 'next/router';
 import type { ReactElement, ReactNode } from 'react';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -63,7 +63,7 @@ const Search = () => {
 
   const [sortType, setSortType] = useState<SortType>(null);
   const [sortMode, setSortMode] = useState<SortMode>(null);
-
+  const [showUnsupported, setShowUnsupported] = useState(false);
   const { isLoading, isError, data } = useSearch(
     query,
     site,
@@ -130,6 +130,16 @@ const Search = () => {
   return (
     <SearchPageWrapper>
       <div className="mt-8 overflow-hidden overflow-x-scroll scrollbar-hide lg:overflow-x-hidden">
+        <div className="mb-4 flex justify-end">
+          <Switch
+            label="Show unsupported"
+            checked={showUnsupported}
+            color="red"
+            onChange={(event) =>
+              setShowUnsupported(event.currentTarget.checked)
+            }
+          />
+        </div>
         <Table highlightOnHover>
           <thead>
             <tr>
@@ -162,7 +172,10 @@ const Search = () => {
             </tr>
           </thead>
 
-          <TableBody torrents={data.torrents} />
+          <TableBody
+            torrents={data.torrents}
+            showUnsupported={showUnsupported}
+          />
         </Table>
       </div>
 
