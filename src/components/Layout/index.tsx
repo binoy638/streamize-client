@@ -24,8 +24,6 @@ const Layout: FC<LayoutProps> = ({ children, needAuth = true }) => {
 
   useTrackCurrentPage();
 
-  const [opened, setOpened] = useState(false);
-
   const dispatch = useTypedDispatch();
 
   const router = useRouter();
@@ -78,10 +76,8 @@ const Layout: FC<LayoutProps> = ({ children, needAuth = true }) => {
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       fixed
-      navbar={<Sidebar show={opened} />}
-      header={
-        <Header needAuth={needAuth} opened={opened} setOpened={setOpened} />
-      }
+      navbar={<Sidebar />}
+      header={<Header needAuth={needAuth} />}
     >
       {children}
     </AppShell>

@@ -12,6 +12,7 @@ interface UISlice {
     torrentId: string;
   };
   currentPage: Pages;
+  showSidebar: boolean;
 }
 
 // Define the initial state using that type
@@ -21,6 +22,7 @@ const initialState: UISlice = {
     torrentId: '',
   },
   currentPage: 'home',
+  showSidebar: false,
 };
 
 const uiSlice = createSlice({
@@ -39,6 +41,9 @@ const uiSlice = createSlice({
     setCurrentPage: (state, action: PayloadAction<Pages>) => {
       state.currentPage = action.payload;
     },
+    setShowSidebar: (state, action: PayloadAction<boolean>) => {
+      state.showSidebar = action.payload;
+    },
   },
   //   extraReducers: builder => {
   //     builder.addCase(postVideoProgress.fulfilled, (state, action) => {
@@ -47,6 +52,7 @@ const uiSlice = createSlice({
   //   }
 });
 
-export const { setShareDrawer, setCurrentPage } = uiSlice.actions;
+export const { setShareDrawer, setCurrentPage, setShowSidebar } =
+  uiSlice.actions;
 
 export default uiSlice.reducer;

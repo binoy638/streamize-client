@@ -16,23 +16,22 @@ import React from 'react';
 import client from '@/graphql/client';
 import { useTypedDispatch } from '@/hooks/useTypedDispatch';
 import { useTypedSelector } from '@/hooks/useTypedSelector';
+import { setShowSidebar } from '@/store/slice/UI.slice';
 import { clearUser } from '@/store/slice/user.slice';
 
 import { signOut } from '../../API';
 
 interface HeaderProps {
-  opened: boolean;
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
   needAuth: boolean;
 }
 
-const Header = ({ opened, setOpened, needAuth }: HeaderProps) => {
+const Header = ({ needAuth }: HeaderProps) => {
   const {
     user: { username },
   } = useTypedSelector((state) => state.user);
 
   const dispatch = useTypedDispatch();
-
+  const { showSidebar } = useTypedSelector((state) => state.UI);
   const router = useRouter();
   const { mutate } = useMutation(signOut, {
     onSuccess: () => {
@@ -64,8 +63,8 @@ const Header = ({ opened, setOpened, needAuth }: HeaderProps) => {
         >
           <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
             <Burger
-              opened={opened}
-              onClick={() => setOpened((o) => !o)}
+              opened={showSidebar}
+              onClick={() => dispatch(setShowSidebar(!showSidebar))}
               size="sm"
               color={theme.colors.gray[6]}
               mr="xl"
