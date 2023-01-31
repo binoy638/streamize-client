@@ -181,6 +181,7 @@ const Search = () => {
 
       <div className="mt-4 flex items-center justify-center">
         <Pagination
+          color="red"
           page={pageNo}
           onChange={handlePagination}
           total={data.totalPages}
